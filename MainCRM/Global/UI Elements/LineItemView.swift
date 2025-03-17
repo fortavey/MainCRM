@@ -1,0 +1,26 @@
+//
+//  LineItemView.swift
+//  MainCRM
+//
+//  Created by Main on 13.03.2025.
+//
+
+import SwiftUI
+
+struct LineItemView: View {
+    var text: String
+    var width: CGFloat
+    var color: Color?
+    
+    var body: some View {
+        HStack{
+            Text(text)
+                .foregroundStyle(Color.white)
+                .lineLimit(1)
+            Spacer()
+        }
+        .frame(width: width)
+        .padding(.horizontal, 5)
+        .background((color != nil) ? color : Color.sectionBG)
+    }
+}
