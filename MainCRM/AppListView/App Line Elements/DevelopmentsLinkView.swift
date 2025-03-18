@@ -42,17 +42,6 @@ struct DevelopmentsLinkView: View {
             } message: {
                 Text("Вставьте ссылку")
             }
-            if let link = URL(string: app.devLink) {
-                if app.devLink.matches("https"){
-                    Link(destination: link) {
-                        Image("GoogleDriveIcon")
-                            .resizable()
-                            .frame(width: 17, height: 17)
-                    }
-                }
-            }
-            Spacer()
         }
-        .frame(width: 140)
     }
 }

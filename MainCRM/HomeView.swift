@@ -32,6 +32,10 @@ struct HomeView: View {
                 .tabItem {
                     Text("Самофарм")
                 }
+            TasksListView()
+                .tabItem {
+                    Text("Задачи")
+                }
         }
     }
 }

@@ -13,6 +13,7 @@ struct AppModel: Identifiable {
     var firstAppName: String
     var devLink: String
     var createAccount: String
+    var transferAccount: String?
     var moderationStatus: String
     var moderationChangeTime: Date
     var updateType: String

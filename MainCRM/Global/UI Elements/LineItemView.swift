@@ -19,7 +19,7 @@ struct LineItemView: View {
                 .lineLimit(1)
             Spacer()
         }
-        .frame(width: width)
+        .frame(width: width, height: 20)
         .padding(.horizontal, 5)
         .background((color != nil) ? color : Color.sectionBG)
     }

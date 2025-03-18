@@ -69,7 +69,7 @@ struct NewAppNameSheet: View {
             HStack{
                 Button("Отмена") { isPresented = false }
                 Button("Сохранить") {
-                    var localizationsArr = langs.map{ "\($0.lang.title) - \($0.value)" }
+                    let localizationsArr = langs.map{ "\($0.lang.title) - \($0.value)" }
                     addNewAppName(id: app.id, newAppName: mainName, localizations: localizationsArr)
                 }
             }

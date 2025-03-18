@@ -15,6 +15,7 @@ struct AppListView: View {
     @State private var isCreoMode = false
     @State private var isPresented = false
     @State private var isBanMode = false
+    @State private var isSelfMode = false
     
     private func showBannedApp(app: AppModel) -> Bool{
         if isBanMode {
@@ -35,7 +36,8 @@ struct AppListView: View {
                     isCompMode: $isCompMode,
                     isCreoMode: $isCreoMode,
                     isPresented: $isPresented,
-                    isBanMode: $isBanMode
+                    isBanMode: $isBanMode,
+                    isSelfMode: $isSelfMode
                 )
                 
                 List(sortAccountsByName().filter{showBannedApp(app: $0)}){ app in
@@ -63,6 +65,10 @@ struct AppListView: View {
                             ChangeUpdateTypeButton(app: app, width: 150)
                             // Статус модерации
                             ChangeModerationStatusButton(app: app, width: 100)
+                            // Самофарм аккаунт
+                            if isSelfMode {
+                                ChangeSelfAccountButton(app: app, width: 100)
+                            }
                             // Новое название приложения
                             NewAppNameButton(app: app, width: 150)
                             ZStack{
@@ -73,7 +79,9 @@ struct AppListView: View {
                             .frame(width: 30)
                             
                             if isLinkMode {
-                                if let link = URL(string: app.storeLink) {
+                                let appNameLow = String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased()
+                                let gpLink = "https://play.google.com/store/apps/details?id=com."
+                                if let link = URL(string: gpLink + appNameLow) {
                                     Link(destination: link) {
                                         Image("GooglePlayIcon")
                                             .resizable()
@@ -81,11 +89,47 @@ struct AppListView: View {
                                     }
                                 }
                             }
+                            if isLinkMode {
+                                if let link = URL(string: app.devLink) {
+                                    if app.devLink.matches("https"){
+                                        Link(destination: link) {
+                                            Image("Github")
+                                                .resizable()
+                                                .frame(width: 17, height: 17)
+                                        }
+                                    }
+                                }
+                            }
+                            if isLinkMode {
+                                if let link = URL(string: app.driveLink) {
+                                    if app.driveLink.matches("https"){
+                                        Link(destination: link) {
+                                            Image("GoogleDriveIcon")
+                                                .resizable()
+                                                .frame(width: 17, height: 17)
+                                        }
+                                    }
+                                }
+                            }
                             if isCreoMode {
                                 AddCreoButton(app: app)
                             }
+                            
                             Spacer()
-                        }
+                            
+                            NavigationLink {
+                                CreateNewTaskView(app: app)
+                            } label: {
+                                ZStack{
+                                    HStack{
+                                        Text("Создать задание")
+                                        Image(systemName: "rectangle.center.inset.filled.badge.plus")
+                                    }
+                                }
+                                .frame(width: 150, height: 20)
+                                .background(Color.sectionBG)
+                            }
+                        } // Hstack
                         if app.isBan != nil && app.isBan == true{
                             HStack{
                                 Spacer()
@@ -93,7 +137,7 @@ struct AppListView: View {
                             .frame(height: 1)
                             .background(Color.red)
                         }
-                    }
+                    } // Zstack
                 }
             }
             .padding()
