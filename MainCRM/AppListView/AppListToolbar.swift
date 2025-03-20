@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct AppListToolbar: View {
+    @EnvironmentObject private var trustAccountsVM: TrustAccountsViewModel
     @EnvironmentObject private var appListVM: AppListViewModel
+    @EnvironmentObject private var selfAccountsVM: SelfAccountsViewModel
+    @EnvironmentObject private var tasksListVM: TasksListViewModel
+    @EnvironmentObject private var blankAppsListVM: BlankAppsListViewModel
     @Binding var isRemoveMode: Bool
     @Binding var isLinkMode: Bool
     @Binding var isCompMode: Bool
@@ -72,7 +76,11 @@ struct AppListToolbar: View {
             }
             Spacer()
             Button {
+                trustAccountsVM.getAccountsList()
                 appListVM.getAppsList()
+                selfAccountsVM.getAccountsList()
+                tasksListVM.getTasksFMList()
+                blankAppsListVM.getAppsList()
             } label: {
                 MenuIconView(systemName: "arrow.clockwise.circle.fill")
             }

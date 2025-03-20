@@ -12,23 +12,26 @@ struct DashboardView: View {
     @EnvironmentObject private var appListVM: AppListViewModel
     @EnvironmentObject private var selfAccountsVM: SelfAccountsViewModel
     @EnvironmentObject private var tasksListVM: TasksListViewModel
+    @EnvironmentObject private var blankAppsListVM: BlankAppsListViewModel
     
     var body: some View {
         VStack{
             if trustAccountsVM.isLoad() {
-                Text("Hello, Dashboard!")
+                Text("Успешно!")
             }else {
                 Button {
                     trustAccountsVM.getAccountsList()
                     appListVM.getAppsList()
                     selfAccountsVM.getAccountsList()
                     tasksListVM.getTasksFMList()
+                    blankAppsListVM.getAppsList()
                 } label: {
                     Text("Сформировать списки")
                 }
             }
             HStack{
                 Text("Трастовые аккаунты")
+                Spacer()
                 if trustAccountsVM.isLoad() {
                     Image(systemName: "checkmark.circle")
                         .foregroundStyle(Color.green)
@@ -40,6 +43,7 @@ struct DashboardView: View {
             }
             HStack{
                 Text("Список приложений")
+                Spacer()
                 if appListVM.isLoad() {
                     Image(systemName: "checkmark.circle")
                         .foregroundStyle(Color.green)
@@ -51,6 +55,7 @@ struct DashboardView: View {
             }
             HStack{
                 Text("Самофарм аккаунты")
+                Spacer()
                 if selfAccountsVM.isLoad() {
                     Image(systemName: "checkmark.circle")
                         .foregroundStyle(Color.green)
@@ -62,6 +67,7 @@ struct DashboardView: View {
             }
             HStack{
                 Text("Список задач")
+                Spacer()
                 if trustAccountsVM.isLoad() {
                     Image(systemName: "checkmark.circle")
                         .foregroundStyle(Color.green)
@@ -71,6 +77,19 @@ struct DashboardView: View {
                 }
                 
             }
+            HStack{
+                Text("Список заготовок")
+                Spacer()
+                if blankAppsListVM.isLoad() {
+                    Image(systemName: "checkmark.circle")
+                        .foregroundStyle(Color.green)
+                }else {
+                    Image(systemName: "xmark.circle")
+                        .foregroundStyle(Color.red)
+                }
+                
+            }
         }
+        .frame(width: 200)
     }
 }

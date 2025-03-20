@@ -113,7 +113,15 @@ struct AppListView: View {
                             if tasksListVM.isTaskExists(id: app.id) {
                                 if let res = tasksListVM.isTaskDone(id: app.id) {
                                     if res {
-                                        Image(systemName: "paperplane")
+                                        HStack{
+                                            Image(systemName: "flag.pattern.checkered.2.crossed")
+                                                .foregroundStyle(Color.green)
+                                            RemoveButtonView(title: "?",
+                                                             id: app.id,
+                                                             collection: "taskfirsmoderation") {
+                                                tasksListVM.getTasksFMList()
+                                            }
+                                        }
                                     }else {
                                         Image(systemName: "paperplane.fill")
                                     }
@@ -151,7 +159,7 @@ struct AppListView: View {
     private func sortAccountsByName() -> [AppModel]{
         return appListVM.appsList.sorted{
             
-            return $0.firstAppName < $1.firstAppName
+            return $0.updateType < $1.updateType
         }
     }
     

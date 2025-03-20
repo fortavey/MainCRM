@@ -16,7 +16,16 @@ struct ChangeModerationStatusButton: View {
         Button {
             isPresented = true
         } label: {
-            LineItemView(text: app.moderationStatus, width: width, color: Helpers().getItemColor(app: app))
+            if app.updateType == "Готово" {
+                ZStack {
+                    Image(systemName: "checkmark.diamond")
+                        .foregroundStyle(Color.green)
+                }
+                .frame(width: 100, height: 20)
+                .padding(.horizontal, 5)
+            }else {
+                LineItemView(text: app.moderationStatus, width: width, color: Helpers().getItemColor(app: app))
+            }
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $isPresented) {

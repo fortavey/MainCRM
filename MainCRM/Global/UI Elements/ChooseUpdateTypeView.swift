@@ -12,6 +12,7 @@ enum UpdateType: String, CaseIterable {
     case naming = "Изменено название"
     case kreo = "Добавлены креативы"
     case webview = "Добавлено Webview"
+    case ready = "Готово"
 }
 
 struct ChooseUpdateTypeView: View {

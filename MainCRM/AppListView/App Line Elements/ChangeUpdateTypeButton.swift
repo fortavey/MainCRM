@@ -16,7 +16,16 @@ struct ChangeUpdateTypeButton: View {
         Button {
             isPresented = true
         } label: {
-            LineItemView(text: app.updateType, width: 150, color: Helpers().getItemColor(app: app))
+            if app.updateType == "Готово" {
+                ZStack {
+                    Image(systemName: "checkmark.diamond")
+                        .foregroundStyle(Color.green)
+                }
+                .frame(width: 150, height: 20)
+                .padding(.horizontal, 5)
+            }else {
+                LineItemView(text: app.updateType, width: 150, color: Helpers().getItemColor(app: app))
+            }
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $isPresented) {
