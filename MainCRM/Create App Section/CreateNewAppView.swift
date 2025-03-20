@@ -14,6 +14,7 @@ struct CreateNewAppView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var sections: [Int] = [1]
     @State private var driveLink: String = ""
+    @State private var webviewDomain: String = ""
     var delegate: BlankAppsListView
     var app: BlankAppModel
     var devLink: String
@@ -38,10 +39,11 @@ struct CreateNewAppView: View {
                 if sections.contains(12) {Section12AddIcon(appName: app.name, sections: $sections, index: 12)}
                 if sections.contains(13) {SectionStartProcess(appName: app.name, sections: $sections, index: 13)}
                 if sections.contains(14) {Section14MakeScreens(appName: app.name, sections: $sections, index: 14)}
-                if sections.contains(15) {Section15EndSettings(appName: app.name, sections: $sections, index: 15)}
-                if sections.contains(16) {Section16Build(appName: app.name, sections: $sections, index: 16)}
-                if sections.contains(17) {Section17DownloadFiles(appName: app.name, sections: $sections, driveLink: $driveLink, index: 17)}
-                if sections.contains(18) {
+                if sections.contains(15) {Section15AddWebview(sections: $sections, webviewDomain: $webviewDomain, index: 15, appName: app.name)}
+                if sections.contains(16) {Section25EndSettings(appName: app.name, sections: $sections, index: 16)}
+                if sections.contains(17) {Section26Build(appName: app.name, sections: $sections, index: 17)}
+                if sections.contains(18) {Section27DownloadFiles(appName: app.name, sections: $sections, driveLink: $driveLink, index: 18)}
+                if sections.contains(19) {
                     VStack{
                         Text("Завершение создания приложения")
                             .font(.title)
@@ -93,7 +95,8 @@ struct CreateNewAppView: View {
                 "devComp": MainConfig.comp,
                 "firstAppName": app.name,
                 "devLink": devLink,
-                "driveLink": driveLink
+                "driveLink": driveLink,
+                "webviewDomain": webviewDomain
             ], merge: true) { err in
                 if err == nil {
                     print("Saved")

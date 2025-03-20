@@ -17,6 +17,8 @@ struct Section03TerminalError: View {
             HStack{
                 Spacer()
                 Image(systemName: "03.square")
+                    .resizable()
+                    .frame(width: 20, height: 20)
             }
             Text("Если терминал выдал ошибку")
                 .font(.title)

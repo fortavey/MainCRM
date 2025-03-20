@@ -9,11 +9,11 @@ import Foundation
 
 struct TaskFirstModerationModel: Identifiable {
     var id: String
-    var appId: String
     var firstAppName: String
     var createAccount: String
     var moderationStatus: String
     var updateType: String
     var driveLink: String
     var isDone: Bool
+    var message: String
 }

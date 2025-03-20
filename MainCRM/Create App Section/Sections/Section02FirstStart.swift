@@ -17,6 +17,8 @@ struct Section02FirstStart: View {
             HStack{
                 Spacer()
                 Image(systemName: "02.square")
+                    .resizable()
+                    .frame(width: 20, height: 20)
             }
             Text("Первый запуск приложения")
                 .font(.title)

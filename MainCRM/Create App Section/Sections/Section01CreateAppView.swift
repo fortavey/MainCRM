@@ -17,6 +17,8 @@ struct Section01CreateAppView: View {
             HStack{
                 Spacer()
                 Image(systemName: "01.square")
+                    .resizable()
+                    .frame(width: 20, height: 20)
             }
             Text("Создание приложения")
                 .font(.title)

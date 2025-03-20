@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Section15EndSettings: View {
+struct Section25EndSettings: View {
     var appName: String
     @Binding var sections: [Int]
     var index: Int
@@ -17,7 +17,9 @@ struct Section15EndSettings: View {
             VStack(alignment: .leading) {
                 HStack{
                     Spacer()
-                    Image(systemName: "15.square")
+                    Image(systemName: "25.square")
+                        .resizable()
+                        .frame(width: 20, height: 20)
                 }
                 Text("Завершение настройки")
                     .font(.title)

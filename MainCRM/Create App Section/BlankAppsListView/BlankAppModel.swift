@@ -11,4 +11,5 @@ struct BlankAppModel: Identifiable {
     var id: String
     var name: String
     var devLink: String
+    var webviewDomain: String
 }

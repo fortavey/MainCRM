@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AppListView: View {
     @EnvironmentObject private var appListVM: AppListViewModel
+    @EnvironmentObject private var tasksListVM: TasksListViewModel
     @State private var isRemoveMode = false
     @State private var isLinkMode = false
     @State private var isCompMode = false
@@ -16,16 +17,6 @@ struct AppListView: View {
     @State private var isPresented = false
     @State private var isBanMode = false
     @State private var isSelfMode = false
-    
-    private func showBannedApp(app: AppModel) -> Bool{
-        if isBanMode {
-            return true
-        }
-        if app.isBan == true {
-            return false
-        }
-        return true
-    }
     
     var body: some View {
         NavigationStack {
@@ -78,6 +69,8 @@ struct AppListView: View {
                             }
                             .frame(width: 30)
                             
+                            LineItemView(text: app.webviewDomain ?? "", width: 250)
+                            
                             if isLinkMode {
                                 let appNameLow = String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased()
                                 let gpLink = "https://play.google.com/store/apps/details?id=com."
@@ -117,18 +110,29 @@ struct AppListView: View {
                             
                             Spacer()
                             
-                            NavigationLink {
-                                CreateNewTaskView(app: app)
-                            } label: {
-                                ZStack{
-                                    HStack{
-                                        Text("Создать задание")
-                                        Image(systemName: "rectangle.center.inset.filled.badge.plus")
+                            if tasksListVM.isTaskExists(id: app.id) {
+                                if let res = tasksListVM.isTaskDone(id: app.id) {
+                                    if res {
+                                        Image(systemName: "paperplane")
+                                    }else {
+                                        Image(systemName: "paperplane.fill")
                                     }
                                 }
-                                .frame(width: 150, height: 20)
-                                .background(Color.sectionBG)
+                            }else {
+                                NavigationLink {
+                                    CreateNewTaskView(app: app)
+                                } label: {
+                                    ZStack{
+                                        HStack{
+                                            Text("Создать задание")
+                                            Image(systemName: "rectangle.center.inset.filled.badge.plus")
+                                        }
+                                    }
+                                    .frame(width: 150, height: 20)
+                                    .background(Color.sectionBG)
+                                }
                             }
+                            
                         } // Hstack
                         if app.isBan != nil && app.isBan == true{
                             HStack{
@@ -149,6 +153,16 @@ struct AppListView: View {
             
             return $0.firstAppName < $1.firstAppName
         }
+    }
+    
+    private func showBannedApp(app: AppModel) -> Bool{
+        if isBanMode {
+            return true
+        }
+        if app.isBan == true {
+            return false
+        }
+        return true
     }
 }
 

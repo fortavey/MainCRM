@@ -18,6 +18,8 @@ struct Section12AddIcon: View {
                 HStack{
                     Spacer()
                     Image(systemName: "12.square")
+                        .resizable()
+                        .frame(width: 20, height: 20)
                 }
                 Text("Добавляем иконку в приложение")
                     .font(.title)

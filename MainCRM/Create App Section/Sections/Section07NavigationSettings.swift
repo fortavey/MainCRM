@@ -18,6 +18,8 @@ struct Section07NavigationSettings: View {
                 HStack{
                     Spacer()
                     Image(systemName: "07.square")
+                        .resizable()
+                        .frame(width: 20, height: 20)
                 }
                 Text("Настройки навигации")
                     .font(.title)

@@ -19,6 +19,8 @@ struct Section09CopyFiles: View {
                 HStack{
                     Spacer()
                     Image(systemName: "09.square")
+                        .resizable()
+                        .frame(width: 20, height: 20)
                 }
                 Text("Копируем файлы в проект")
                     .font(.title)
@@ -44,9 +46,7 @@ struct Section09CopyFiles: View {
                 Text("Папки - src, assets")
                 
                 Text("Копируем с заменой в корневую папку приложения")
-                
-                Text("Удаляем файл App.tsx (Если есть)")
-                
+                                
                 DefaultButtonView(title: "Готово") {
                     sections.append(index+1)
                 }

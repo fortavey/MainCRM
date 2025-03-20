@@ -18,6 +18,8 @@ struct Section08CreateKeytool: View {
                 HStack{
                     Spacer()
                     Image(systemName: "08.square")
+                        .resizable()
+                        .frame(width: 20, height: 20)
                 }
                 Text("Создание Keytool для GooglePlay")
                     .font(.title)

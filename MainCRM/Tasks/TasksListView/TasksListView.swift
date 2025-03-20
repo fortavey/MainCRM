@@ -43,6 +43,14 @@ struct TasksListView: View {
                         LineItemView(text: task.createAccount, width: 150)
                         LineItemView(text: task.updateType, width: 150)
                         LineItemView(text: task.moderationStatus, width: 100)
+                        LineItemView(text: task.message, width: 200)
+                        
+                        if task.isDone {
+                            Image(systemName: "paperplane")
+                        }else {
+                            Image(systemName: "paperplane.fill")
+                        }
+                    
                     }
                 }
             }

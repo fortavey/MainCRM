@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Section17DownloadFiles: View {
+struct Section27DownloadFiles: View {
     var appName: String
     @Binding var sections: [Int]
     @Binding var driveLink: String
@@ -17,7 +17,9 @@ struct Section17DownloadFiles: View {
         VStack(alignment: .leading) {
                 HStack{
                     Spacer()
-                    Image(systemName: "17.square")
+                    Image(systemName: "27.square")
+                        .resizable()
+                        .frame(width: 20, height: 20)
                 }
             Text("Загрузка готовых файлов")
                 .font(.title)
@@ -30,7 +32,7 @@ struct Section17DownloadFiles: View {
             if let link = URL(string: "https://drive.google.com/drive/folders/1O38VJSDx0fM1y3yv5G_TznKnhTI8pQlO?usp=drive_link") {
                 Link(destination: link) {
                     HStack{
-                        Text("Загрузить")
+                        Text("Открыть Google Диск")
                         Image("GoogleDriveIcon")
                             .resizable()
                             .frame(width: 17, height: 17)

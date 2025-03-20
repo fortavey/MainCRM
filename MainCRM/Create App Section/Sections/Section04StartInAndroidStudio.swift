@@ -18,6 +18,8 @@ struct Section04StartInAndroidStudio: View {
                 HStack{
                     Spacer()
                     Image(systemName: "04.square")
+                        .resizable()
+                        .frame(width: 20, height: 20)
                 }
                 Text("Запуск приложения в Andriod Studio")
                     .font(.title)

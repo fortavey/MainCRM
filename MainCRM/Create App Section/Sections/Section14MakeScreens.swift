@@ -18,6 +18,8 @@ struct Section14MakeScreens: View {
                 HStack{
                     Spacer()
                     Image(systemName: "14.square")
+                        .resizable()
+                        .frame(width: 20, height: 20)
                 }
                 Text("Сохраняем скриншоты")
                     .font(.title)

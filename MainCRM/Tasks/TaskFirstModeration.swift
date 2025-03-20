@@ -9,9 +9,11 @@ import SwiftUI
 import FirebaseFirestore
 
 struct TaskFirstModeration: View {
+    @EnvironmentObject private var tasksListVM: TasksListViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var app: AppModel
     @State private var isIndicator: Bool = false
+    @State private var textForTextEditor: String = ""
     
     var body: some View {
         Text(app.firstAppName)
@@ -19,6 +21,9 @@ struct TaskFirstModeration: View {
         Text("Аккаунт - \(app.createAccount)")
         Text(app.updateType)
         Text(app.moderationStatus)
+        TextEditor(text: $textForTextEditor)
+            .frame(width: 500, height: 200)
+            .padding()
         if let link = URL(string: app.driveLink) {
             Link(destination: link) {
                 Image(systemName: "link.icloud")
@@ -48,22 +53,23 @@ struct TaskFirstModeration: View {
         isIndicator = true
         Firestore.firestore()
             .collection("taskfirsmoderation")
-            .document()
+            .document(app.id)
             .setData([
-                "appId":app.id,
                 "firstAppName": app.firstAppName,
                 "createAccount": app.createAccount,
                 "moderationStatus": app.moderationStatus,
                 "updateType": app.updateType,
                 "driveLink": app.driveLink,
+                "message": textForTextEditor,
                 "isDone": false
             ], merge: true) { err in
                 if err == nil {
                     print("Saved")
+                    tasksListVM.getTasksFMList()
                     self.presentationMode.wrappedValue.dismiss()
                     isIndicator = false
                 }else{
-                    print("ERR", err)
+                    print("ERR")
                 }
             }
     }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Section16Build: View {
+struct Section26Build: View {
     var appName: String
     @Binding var sections: [Int]
     var index: Int
@@ -16,7 +16,9 @@ struct Section16Build: View {
         VStack(alignment: .leading) {
                 HStack{
                     Spacer()
-                    Image(systemName: "16.square")
+                    Image(systemName: "26.square")
+                        .resizable()
+                        .frame(width: 20, height: 20)
                 }
             Text("Собираем билд")
                 .font(.title)

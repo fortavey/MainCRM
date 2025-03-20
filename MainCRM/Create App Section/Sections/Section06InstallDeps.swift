@@ -18,12 +18,14 @@ struct Section06InstallDeps: View {
                 HStack{
                     Spacer()
                     Image(systemName: "06.square")
+                        .resizable()
+                        .frame(width: 20, height: 20)
                 }
                 Text("Устанавливаем зависимости")
                     .font(.title)
                 Text("Работа в терминале. Удостоверится что выбрана папка \(appName)")
                 Text("Вводим команду для установки зависимостей приложения:")
-                CopyTextView(text: "npm i @fortawesome/fontawesome-svg-core @fortawesome/react-native-fontawesome @react-native-async-storage/async-storage @react-navigation/bottom-tabs @react-navigation/drawer @react-navigation/native @react-navigation/stack react-native-gesture-handler react-native-qrcode-svg react-native-reanimated react-native-safe-area-context react-native-screens react-native-svg react-native-vector-icons mobx mobx-react-lite @fortawesome/free-solid-svg-icons @react-navigation/native-stack")
+                CopyTextView(text: "npm i @fortawesome/fontawesome-svg-core @fortawesome/react-native-fontawesome @react-native-async-storage/async-storage @react-navigation/bottom-tabs @react-navigation/drawer @react-navigation/native @react-navigation/stack react-native-gesture-handler react-native-qrcode-svg react-native-reanimated react-native-safe-area-context react-native-screens react-native-svg react-native-vector-icons mobx mobx-react-lite @fortawesome/free-solid-svg-icons @react-navigation/native-stack react-native-webview")
                 Text("Дожидаемся окончания процесса")
                 DefaultButtonView(title: "Готово") {
                     sections.append(index+1)

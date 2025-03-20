@@ -23,4 +23,5 @@ struct AppModel: Identifiable {
     var driveLink: String
     var creoLink: String?
     var isBan: Bool?
+    var webviewDomain: String?
 }
