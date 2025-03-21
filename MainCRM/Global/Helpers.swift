@@ -33,4 +33,11 @@ struct Helpers {
         }
             
     }
+    
+    func getSectionImageName(number: Int) -> String {
+        if number < 10 {
+            return "0\(number).square"
+        }
+        return "\(number).square"
+    }
 }

@@ -22,12 +22,14 @@ final class BlankAppsListViewModel: ObservableObject {
                 let name = doc["name"] as? String
                 let devLink = doc["devLink"] as? String
                 let webviewDomain = doc["webviewDomain"] as? String
+                let driveLink = doc["driveLink"] as? String
                 array.append(
                     BlankAppModel(
                         id: id,
                         name: name ?? "",
                         devLink: devLink ?? "",
-                        webviewDomain: webviewDomain ?? ""
+                        webviewDomain: webviewDomain ?? "",
+                        driveLink: driveLink ?? ""
                     )
                 )
             }

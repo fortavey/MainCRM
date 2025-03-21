@@ -12,6 +12,7 @@ import FirebaseFirestore
 struct AddNewBlankAppView: View {
     @State private var name = ""
     @State private var devLink = ""
+    @State private var driveLink = ""
         
     @Binding var isPresented: Bool
     
@@ -37,6 +38,16 @@ struct AddNewBlankAppView: View {
                 .font(.title)
             
             TextField("Первое название", text: $name)
+            HStack{
+                TextField("Ссылка исходников", text: $driveLink)
+                if let link = URL(string: "https://drive.google.com/drive/folders/1O38VJSDx0fM1y3yv5G_TznKnhTI8pQlO") {
+                    Link(destination: link) {
+                        Image("GoogleDriveIcon")
+                            .resizable()
+                            .frame(width: 17, height: 17)
+                    }
+                }
+            }
             TextField("Ссылка разработки", text: $devLink)
             Button {
                 addNewApp()
@@ -54,7 +65,7 @@ struct AddNewBlankAppView: View {
     }
     
     private func isValid() -> Bool{
-        if name != "" && devLink != ""{
+        if name != "" && devLink != "" && driveLink != "" {
             return true
         }
         return false
@@ -67,13 +78,14 @@ struct AddNewBlankAppView: View {
             .setData([
                 "name": name,
                 "devLink": devLink,
+                "driveLink": driveLink
             ], merge: true) { err in
                 if err == nil {
                     print("Saved")
                     blankAppsListVM.getAppsList()
                     isPresented = false
                 }else{
-                    print("ERR", err)
+                    print("ERR")
                 }
             }
     }

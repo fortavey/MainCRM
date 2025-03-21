@@ -15,7 +15,12 @@ struct SectionStartProcess: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text("\(index)")
+                HStack{
+                    Spacer()
+                    Image(systemName: Helpers().getSectionImageName(number: index))
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                }
                 Text("Запускаем приложение")
                     .font(.title)
                 

@@ -7,6 +7,14 @@
 import Foundation
 import SwiftUI
 
+enum SortingType: String, CaseIterable {
+    case firstAppName = "Первое название"
+    case newAppName = "Новое название"
+    case createAccount = "Аккаунт создания"
+    case devComp = "Компьютер"
+    case updateType = "Тип обновления"
+}
+
 struct AppListView: View {
     @EnvironmentObject private var appListVM: AppListViewModel
     @EnvironmentObject private var tasksListVM: TasksListViewModel
@@ -17,6 +25,10 @@ struct AppListView: View {
     @State private var isPresented = false
     @State private var isBanMode = false
     @State private var isSelfMode = false
+    @State private var isWebviewMode = false
+    @State private var isFilterMode = false
+    
+    @State private var sortingType: SortingType = .updateType
     
     var body: some View {
         NavigationStack {
@@ -28,28 +40,49 @@ struct AppListView: View {
                     isCreoMode: $isCreoMode,
                     isPresented: $isPresented,
                     isBanMode: $isBanMode,
-                    isSelfMode: $isSelfMode
+                    isSelfMode: $isSelfMode,
+                    isWebviewMode: $isWebviewMode,
+                    isFilterMode: $isFilterMode
                 )
                 
-                List(sortAccountsByName().filter{showBannedApp(app: $0)}){ app in
+                if isFilterMode {
+                    Picker(selection: $sortingType) {
+                        ForEach(SortingType.allCases, id: \.rawValue) { type in
+                            Text(type.rawValue).tag(type)
+                        }
+                    }label: { }
+                }
+                
+                List(sortingList().filter{showBannedApp(app: $0)}){ app in
                     ZStack{
                         HStack{
+                            
+                            // Кнопка удаления
                             if isRemoveMode {
                                 RemoveButtonView(title: app.firstAppName, id: app.id, collection: "apps") {
                                     appListVM.getAppsList()
                                 }
                             }
+                            
+                            // Кнапка бана
                             if isBanMode {
                                 AddBanButton(app: app)
                             }
+                            
+                            // Компьютер
                             if isCompMode {
                                 LineItemView(text: app.devComp, width: 40)
                             }
+                            
+                            // Первое название
                             LineItemView(text: app.firstAppName, width: 150)
+                            
                             // Ссылка на разработку
-                            if isLinkMode {
-                                DevelopmentsLinkView(app: app, itemWidth: 100)
-                            }
+//                            if isLinkMode {
+//                                DevelopmentsLinkView(app: app, itemWidth: 100)
+//                            }
+                            
+                            
                             // Трастовый аккаунт
                             ChangeTrustAccountButton(app: app, width: 100)
                             // Тип обновления приложения
@@ -63,14 +96,21 @@ struct AppListView: View {
                             // Новое название приложения
                             NewAppNameButton(app: app, width: 150)
                             ZStack{
-                                if app.localizations != nil {
-                                    LocalizationButton(app: app)
+                                if let local = app.localizations {
+                                    if local.count > 0 {
+                                        LocalizationButton(app: app)
+                                    }
                                 }
                             }
                             .frame(width: 30)
                             
-                            LineItemView(text: app.webviewDomain ?? "", width: 250)
                             
+                            // Домен webview
+                            if isWebviewMode {
+                                LineItemView(text: app.webviewDomain ?? "", width: 250)
+                            }
+                            
+                            // Ссылка на приложение в GooglePlay
                             if isLinkMode {
                                 let appNameLow = String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased()
                                 let gpLink = "https://play.google.com/store/apps/details?id=com."
@@ -82,6 +122,8 @@ struct AppListView: View {
                                     }
                                 }
                             }
+                            
+                            // Cсылка на исходники разработки
                             if isLinkMode {
                                 if let link = URL(string: app.devLink) {
                                     if app.devLink.matches("https"){
@@ -93,6 +135,8 @@ struct AppListView: View {
                                     }
                                 }
                             }
+                            
+                            // Cсылка на исходники для первой модерации
                             if isLinkMode {
                                 if let link = URL(string: app.driveLink) {
                                     if app.driveLink.matches("https"){
@@ -104,12 +148,16 @@ struct AppListView: View {
                                     }
                                 }
                             }
+                            
+                            // Креативы
                             if isCreoMode {
                                 AddCreoButton(app: app)
                             }
                             
                             Spacer()
                             
+                            
+                            // Задачи
                             if tasksListVM.isTaskExists(id: app.id) {
                                 if let res = tasksListVM.isTaskDone(id: app.id) {
                                     if res {
@@ -153,6 +201,25 @@ struct AppListView: View {
                 }
             }
             .padding()
+        }
+    }
+    
+    private func sortingList() -> [AppModel]{
+        return appListVM.appsList.sorted{ sortAppsBy(app1: $0, app2: $1) }
+    }
+    
+    func sortAppsBy(app1: AppModel, app2: AppModel) -> Bool {
+        switch sortingType {
+        case .firstAppName:
+            return app1.firstAppName < app2.firstAppName
+        case .newAppName:
+            return app1.newAppName < app2.newAppName
+        case .createAccount:
+            return app1.createAccount < app2.createAccount
+        case .devComp:
+            return app1.devComp < app2.devComp
+        case .updateType:
+            return app1.updateType < app2.updateType
         }
     }
     

@@ -36,8 +36,9 @@ struct BlankAppsListView: View {
                     HStack{
                         LineItemView(text: app.name, width: 150)
                         LineItemView(text: app.devLink, width: 150)
+                        LineItemView(text: app.driveLink, width: 150)
                         NavigationLink {
-                            CreateNewAppView(delegate: self, app: app, devLink: app.devLink)
+                            CreateNewAppView(delegate: self, app: app)
                         } label: {
                             Label {
                                 Text("Начать")

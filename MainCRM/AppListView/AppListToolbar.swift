@@ -20,14 +20,20 @@ struct AppListToolbar: View {
     @Binding var isPresented: Bool
     @Binding var isBanMode: Bool
     @Binding var isSelfMode: Bool
+    @Binding var isWebviewMode: Bool
+    @Binding var isFilterMode: Bool
     
     var body: some View {
+        
         HStack{
             // Кнопка добавить
             Button{
                 isPresented.toggle()
             } label: {
                 MenuIconView(systemName: "plus.circle.fill")
+                    .contextMenu {
+                        Text("Добавить новое приложение")
+                    }
             }
             .sheet(isPresented: $isPresented) {
                 AddNewApp(isPresented: $isPresented, appListVM: appListVM)
@@ -38,6 +44,9 @@ struct AppListToolbar: View {
             } label: {
                 MenuIconView(systemName: "macpro.gen3")
                     .foregroundStyle(isCompMode ? Color.red : Color.white)
+                    .contextMenu {
+                        Text("Показать компьютеры")
+                    }
             }
             // Кнопка ссылки
             Button {
@@ -45,6 +54,9 @@ struct AppListToolbar: View {
             } label: {
                 MenuIconView(systemName: "link.circle.fill")
                     .foregroundStyle(isLinkMode ? Color.red : Color.white)
+                    .contextMenu {
+                        Text("Показать ссылки")
+                    }
             }
             // Кнопка креативы
             Button {
@@ -52,6 +64,9 @@ struct AppListToolbar: View {
             } label: {
                 MenuIconView(systemName: "photo.on.rectangle.angled")
                     .foregroundStyle(isCreoMode ? Color.red : Color.white)
+                    .contextMenu {
+                        Text("Показать креативы")
+                    }
             }
             // Кнопка БАН
             Button {
@@ -59,6 +74,9 @@ struct AppListToolbar: View {
             } label: {
                 MenuIconView(systemName: "circle.slash")
                     .foregroundStyle(isBanMode ? Color.red : Color.white)
+                    .contextMenu {
+                        Text("Показать забаненные приложения")
+                    }
             }
             // Кнопка Самофарм
             Button {
@@ -66,6 +84,19 @@ struct AppListToolbar: View {
             } label: {
                 MenuIconView(systemName: "tray.and.arrow.down.fill")
                     .foregroundStyle(isSelfMode ? Color.red : Color.white)
+                    .contextMenu {
+                        Text("Показать трансфер аккаунты")
+                    }
+            }
+            // Кнопка Webview
+            Button {
+                isWebviewMode.toggle()
+            } label: {
+                MenuIconView(systemName: "wonsign.gauge.chart.lefthalf.righthalf")
+                    .foregroundStyle(isWebviewMode ? Color.red : Color.white)
+                    .contextMenu {
+                        Text("Показать ссылку Webview")
+                    }
             }
             // Кнопка удаление
             Button {
@@ -73,8 +104,21 @@ struct AppListToolbar: View {
             } label: {
                 MenuIconView(systemName: "trash.circle.fill")
                     .foregroundStyle(isRemoveMode ? Color.red : Color.white)
+                    .contextMenu {
+                        Text("Показать кнопки удаления")
+                    }
             }
             Spacer()
+            // Кнопка фильтра
+            Button {
+                isFilterMode.toggle()
+            } label: {
+                MenuIconView(systemName: "arrow.up.arrow.down.circle.fill")
+                    .foregroundStyle(isFilterMode ? Color.red : Color.white)
+                    .contextMenu {
+                        Text("Показать фильтры")
+                    }
+            }
             Button {
                 trustAccountsVM.getAccountsList()
                 appListVM.getAppsList()
@@ -83,6 +127,9 @@ struct AppListToolbar: View {
                 blankAppsListVM.getAppsList()
             } label: {
                 MenuIconView(systemName: "arrow.clockwise.circle.fill")
+                    .contextMenu {
+                        Text("Обновить список")
+                    }
             }
         }
     }

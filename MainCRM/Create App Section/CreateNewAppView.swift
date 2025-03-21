@@ -13,11 +13,9 @@ struct CreateNewAppView: View {
     @EnvironmentObject private var appListVM: AppListViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var sections: [Int] = [1]
-    @State private var driveLink: String = ""
     @State private var webviewDomain: String = ""
     var delegate: BlankAppsListView
     var app: BlankAppModel
-    var devLink: String
     @State private var saved = false
     
     var body: some View {
@@ -33,21 +31,21 @@ struct CreateNewAppView: View {
                 if sections.contains(6) {Section06InstallDeps(appName: app.name, sections: $sections, index: 6)}
                 if sections.contains(7) {Section07NavigationSettings(appName: app.name, sections: $sections, index: 7)}
                 if sections.contains(8) {Section08CreateKeytool(appName: app.name, sections: $sections, index: 8)}
-                if sections.contains(9) {Section09CopyFiles(sections: $sections, appName: app.name, devLink: devLink, index: 9)}
+                if sections.contains(9) {Section09CopyFiles(sections: $sections, appName: app.name, devLink: app.devLink, index: 9)}
                 if sections.contains(10) {SectionStartProcess(appName: app.name, sections: $sections, index: 10)}
                 if sections.contains(11) {SectionStopProcess(appName: app.name, sections: $sections, index: 11)}
                 if sections.contains(12) {Section12AddIcon(appName: app.name, sections: $sections, index: 12)}
                 if sections.contains(13) {SectionStartProcess(appName: app.name, sections: $sections, index: 13)}
                 if sections.contains(14) {Section14MakeScreens(appName: app.name, sections: $sections, index: 14)}
                 if sections.contains(15) {Section15AddWebview(sections: $sections, webviewDomain: $webviewDomain, index: 15, appName: app.name)}
-                if sections.contains(16) {Section25EndSettings(appName: app.name, sections: $sections, index: 16)}
-                if sections.contains(17) {Section26Build(appName: app.name, sections: $sections, index: 17)}
-                if sections.contains(18) {Section27DownloadFiles(appName: app.name, sections: $sections, driveLink: $driveLink, index: 18)}
+                if sections.contains(16) {Section16EndSettings(appName: app.name, sections: $sections, index: 16)}
+                if sections.contains(17) {Section17Build(appName: app.name, sections: $sections, index: 17)}
+                if sections.contains(18) {Section18DownloadFiles(app: app, sections: $sections, index: 18)}
                 if sections.contains(19) {
                     VStack{
                         Text("Завершение создания приложения")
                             .font(.title)
-                        if driveLink != "", driveLink.matches("https") {
+                        if app.driveLink != "", app.driveLink.matches("https") {
                             HStack{
                                 Button {
                                     saved.toggle()
@@ -94,8 +92,8 @@ struct CreateNewAppView: View {
             .setData([
                 "devComp": MainConfig.comp,
                 "firstAppName": app.name,
-                "devLink": devLink,
-                "driveLink": driveLink,
+                "devLink": app.devLink,
+                "driveLink": app.driveLink,
                 "webviewDomain": webviewDomain
             ], merge: true) { err in
                 if err == nil {

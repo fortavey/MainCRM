@@ -7,29 +7,28 @@
 
 import SwiftUI
 
-struct Section27DownloadFiles: View {
-    var appName: String
+struct Section18DownloadFiles: View {
+    var app: BlankAppModel
     @Binding var sections: [Int]
-    @Binding var driveLink: String
     var index: Int
     
     var body: some View {
         VStack(alignment: .leading) {
                 HStack{
                     Spacer()
-                    Image(systemName: "27.square")
+                    Image(systemName: "18.square")
                         .resizable()
                         .frame(width: 20, height: 20)
                 }
             Text("Загрузка готовых файлов")
                 .font(.title)
-            Text("Откройте Google Диск и загрузите архив с файлами:")
+            Text("Откройте Google Диск и загрузите указанные файлы и папки:")
             Text(" - app-release.aab")
-            Text(" - \(appName.lowercased()).keystore")
+            Text(" - \(app.name.lowercased()).keystore")
             Text(" - скриншоты")
             Text(" - иконка 512х512")
             
-            if let link = URL(string: "https://drive.google.com/drive/folders/1O38VJSDx0fM1y3yv5G_TznKnhTI8pQlO?usp=drive_link") {
+            if let link = URL(string: app.driveLink) {
                 Link(destination: link) {
                     HStack{
                         Text("Открыть Google Диск")
@@ -39,13 +38,6 @@ struct Section27DownloadFiles: View {
                     }
                 }
             }
-            
-            Text("Вставьте ссылку на загруженный архив")
-                .font(.title2)
-            
-            TextField("Ссылка на архив", text: $driveLink)
-                .background(Color.black)
-                .textFieldStyle(.squareBorder)
             
             DefaultButtonView(title: "Готово") {
                 sections.append(index+1)
