@@ -24,4 +24,5 @@ struct AppModel: Identifiable {
     var creoLink: String?
     var isBan: Bool?
     var webviewDomain: String?
+    var countries: [String]?
 }

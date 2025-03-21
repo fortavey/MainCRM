@@ -65,7 +65,7 @@ struct AddNewBlankAppView: View {
     }
     
     private func isValid() -> Bool{
-        if name != "" && devLink != "" && driveLink != "" {
+        if name != "" && devLink != "" && driveLink.matches("https://drive.google.com/drive/folders") {
             return true
         }
         return false

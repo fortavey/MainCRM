@@ -104,6 +104,8 @@ struct AppListView: View {
                             }
                             .frame(width: 30)
                             
+                            // Страны
+                            ChooseCountryButtonView(app: app)
                             
                             // Домен webview
                             if isWebviewMode {

@@ -34,6 +34,7 @@ final class AppListViewModel: ObservableObject {
                 let creoLink = doc["creoLink"] as? String
                 let isBan = doc["isBan"] as? Bool
                 let webviewDomain = doc["webviewDomain"] as? String
+                let countries = doc["countries"] as? [String]
                 array.append(
                     AppModel(
                         id: id,
@@ -51,7 +52,8 @@ final class AppListViewModel: ObservableObject {
                         driveLink: driveLink ?? "",
                         creoLink: creoLink,
                         isBan: isBan,
-                        webviewDomain: webviewDomain
+                        webviewDomain: webviewDomain,
+                        countries: countries
                     )
                 )
             }
