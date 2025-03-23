@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum ModerationStatus: String, CaseIterable {
-    case created = "Создано"
+    case created = "Подготовлено"
     case review =  "Модерация"
     case approve = "Одобрено"
     case reject = "Отклон"

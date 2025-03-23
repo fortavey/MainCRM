@@ -11,6 +11,8 @@ enum TaskType {
     case release
     case rename
     case creo
+    case asomobile
+    case transfer
 }
 
 struct CreateNewTaskView: View {
@@ -40,6 +42,20 @@ struct CreateNewTaskView: View {
                     Text("Добавление креативов")
                 }
                 .background(getButtonColor(taskType: .creo))
+                
+                Button {
+                    taskType = .asomobile
+                } label: {
+                    Text("Добавление ASOMobile")
+                }
+                .background(getButtonColor(taskType: .asomobile))
+                
+                Button {
+                    taskType = .transfer
+                } label: {
+                    Text("Трансфер приложения")
+                }
+                .background(getButtonColor(taskType: .transfer))
             }
             .padding()
             
@@ -47,9 +63,13 @@ struct CreateNewTaskView: View {
             case .release:
                 TaskFirstModeration(app: app)
             case .rename:
-                TaskRename()
+                TaskRename(app: app)
             case .creo:
-                TaskCreo()
+                TaskCreo(app: app)
+            case .asomobile:
+                TaskAsoMobile()
+            case .transfer:
+                TaskTransfer()
             }
             
             Spacer()

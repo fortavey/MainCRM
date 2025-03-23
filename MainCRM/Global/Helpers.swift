@@ -40,4 +40,8 @@ struct Helpers {
         }
         return "\(number).square"
     }
+    
+    func getAppStoreId(appName: String) -> String {
+        return String(appName.filter { !" \n\t\r".contains($0) }).lowercased()
+    }
 }

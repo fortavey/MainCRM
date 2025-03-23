@@ -69,14 +69,17 @@ struct ChooseCountrySheetView: View {
             Text("Выберите страны для доступа")
                 .font(.title)
             
-            Grid(alignment: .leading) {
-                ForEach(Countries.allCases, id: \.rawValue) { country in
-                    HStack{
-                        OneCountryView(countryName: country.rawValue, countries: $countries)
+            ScrollView {
+                Grid(alignment: .leading) {
+                    ForEach(Countries.allCases, id: \.rawValue) { country in
+                        HStack{
+                            OneCountryView(countryName: country.rawValue, countries: $countries)
+                        }
                     }
                 }
+                .padding()
             }
-            
+            .frame(height: 600)
             HStack{
                 Button("Отмена") {
                     isPresented = false
@@ -87,11 +90,10 @@ struct ChooseCountrySheetView: View {
                             appListVM.getAppsList()
                             isPresented = false
                         }else {
-                            print("Ошибка обновления трастового аккаунта")
+                            print("Ошибка обновления")
                         }
                     }
                 }
-                .disabled(countries.count == 0)
             }
             .padding()
 

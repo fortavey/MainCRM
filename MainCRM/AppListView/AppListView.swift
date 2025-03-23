@@ -160,36 +160,7 @@ struct AppListView: View {
                             
                             
                             // Задачи
-                            if tasksListVM.isTaskExists(id: app.id) {
-                                if let res = tasksListVM.isTaskDone(id: app.id) {
-                                    if res {
-                                        HStack{
-                                            Image(systemName: "flag.pattern.checkered.2.crossed")
-                                                .foregroundStyle(Color.green)
-                                            RemoveButtonView(title: "?",
-                                                             id: app.id,
-                                                             collection: "taskfirsmoderation") {
-                                                tasksListVM.getTasksFMList()
-                                            }
-                                        }
-                                    }else {
-                                        Image(systemName: "paperplane.fill")
-                                    }
-                                }
-                            }else {
-                                NavigationLink {
-                                    CreateNewTaskView(app: app)
-                                } label: {
-                                    ZStack{
-                                        HStack{
-                                            Text("Создать задание")
-                                            Image(systemName: "rectangle.center.inset.filled.badge.plus")
-                                        }
-                                    }
-                                    .frame(width: 150, height: 20)
-                                    .background(Color.sectionBG)
-                                }
-                            }
+                            TasksAppLineElement(app: app)
                             
                         } // Hstack
                         if app.isBan != nil && app.isBan == true{

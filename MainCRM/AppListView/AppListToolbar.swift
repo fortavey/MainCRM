@@ -124,6 +124,7 @@ struct AppListToolbar: View {
                 appListVM.getAppsList()
                 selfAccountsVM.getAccountsList()
                 tasksListVM.getTasksFMList()
+                tasksListVM.getTasksRNList()
                 blankAppsListVM.getAppsList()
             } label: {
                 MenuIconView(systemName: "arrow.clockwise.circle.fill")
