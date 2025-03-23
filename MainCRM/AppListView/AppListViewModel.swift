@@ -25,7 +25,7 @@ final class AppListViewModel: ObservableObject {
                 let createAccount = doc["createAccount"] as? String
                 let transferAccount = doc["transferAccount"] as? String
                 let moderationStatus = doc["moderationStatus"] as? String
-                let moderationChangeTime = doc["moderationChangeTime"] as? Date
+                let moderationChangeTime = doc["moderationChangeTime"] as? Int
                 let updateType = doc["updateStatus"] as? String
                 let localizations = doc["localizations"] as? [String]
                 let newAppName = doc["newAppName"] as? String
@@ -44,7 +44,7 @@ final class AppListViewModel: ObservableObject {
                         createAccount: createAccount ?? "",
                         transferAccount: transferAccount,
                         moderationStatus: moderationStatus ?? "",
-                        moderationChangeTime: moderationChangeTime ?? Date(),
+                        moderationChangeTime: moderationChangeTime,
                         updateType: updateType ?? "",
                         newAppName: newAppName ?? "",
                         localizations: localizations,

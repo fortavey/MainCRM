@@ -53,7 +53,12 @@ struct ChangeModerationStatusSheet: View {
                     isPresented = false
                 }
                 Button("Сохранить") {
-                    FirebaseServices().updateDocument(id: app.id, collection: "apps", fields: ["moderationStatus" : moderationStatus.rawValue]) { result in
+                    FirebaseServices().updateDocument(id: app.id,
+                                                      collection: "apps",
+                                                      fields: [
+                                                        "moderationStatus" : moderationStatus.rawValue,
+                                                        "moderationChangeTime" : Int(Date().timeIntervalSince1970)
+                                                      ]) { result in
                         if result {
                             appListVM.getAppsList()
                             isPresented = false

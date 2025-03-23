@@ -89,6 +89,14 @@ struct AppListView: View {
                             ChangeUpdateTypeButton(app: app, width: 150)
                             // Статус модерации
                             ChangeModerationStatusButton(app: app, width: 100)
+                            
+                            // Время после изменения статуса модерации
+                            ZStack{
+                                Text(Helpers().getTimeCount(timestamp: app.moderationChangeTime))
+                            }
+                            .frame(width: 40, height: 25)
+                            .background(Color.sectionBG)
+                            
                             // Самофарм аккаунт
                             if isSelfMode {
                                 ChangeSelfAccountButton(app: app, width: 100)

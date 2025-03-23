@@ -44,4 +44,19 @@ struct Helpers {
     func getAppStoreId(appName: String) -> String {
         return String(appName.filter { !" \n\t\r".contains($0) }).lowercased()
     }
+    
+    func getTimeCount(timestamp: Int?) -> String {
+        guard let timestamp else { return "" }
+        let now = Int(Date().timeIntervalSince1970)
+        
+        if now - timestamp < 60 {
+            return "\(now - timestamp)с"
+        } else if now - timestamp < 3600 {
+            return "\((now - timestamp)/60)м"
+        } else if now - timestamp < 86400 {
+            return "\((now - timestamp)/3600)ч"
+        }
+
+        return ""
+    }
 }
