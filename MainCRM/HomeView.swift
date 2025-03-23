@@ -18,24 +18,25 @@ struct HomeView: View {
                     Text("Дашборд")
                 }
                 .navigationTitle("DASH")
-            if trustAccountsVM.isLoad() {
+            if MainConfig.isAdmin {
                 TrustAccountsView()
                     .tabItem {
                         Text("Аккаунты")
                     }
+                AppListView()
+                    .tabItem {
+                        Text("Приложения")
+                    }
+                SelfAccountsView()
+                    .tabItem {
+                        Text("Самофарм")
+                    }
+                TasksListView()
+                    .tabItem {
+                        Text("Задачи")
+                    }
             }
-            AppListView()
-                .tabItem {
-                    Text("Приложения")
-                }
-            SelfAccountsView()
-                .tabItem {
-                    Text("Самофарм")
-                }
-            TasksListView()
-                .tabItem {
-                    Text("Задачи")
-                }
+            
         }
     }
 }
