@@ -25,8 +25,7 @@ struct TasksAppLineElement: View {
                             RemoveButtonView(title: "?",
                                              id: app.id,
                                              collection: collection) {
-                                tasksListVM.getTasksFMList()
-                                tasksListVM.getTasksRNList()
+                                tasksListVM.updateAll()
                             }
                         }
                     }

@@ -23,9 +23,7 @@ struct DashboardView: View {
                     trustAccountsVM.getAccountsList()
                     appListVM.getAppsList()
                     selfAccountsVM.getAccountsList()
-                    tasksListVM.getTasksFMList()
-                    tasksListVM.getTasksRNList()
-                    tasksListVM.getTasksCRList()
+                    tasksListVM.updateAll()
                     blankAppsListVM.getAppsList()
                 } label: {
                     Text("Сформировать списки")

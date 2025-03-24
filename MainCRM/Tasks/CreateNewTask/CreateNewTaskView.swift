@@ -67,7 +67,7 @@ struct CreateNewTaskView: View {
             case .creo:
                 TaskCreo(app: app)
             case .asomobile:
-                TaskAsoMobile()
+                TaskAsoMobile(app: app)
             case .transfer:
                 TaskTransfer()
             }

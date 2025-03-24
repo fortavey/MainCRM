@@ -23,9 +23,7 @@ struct TasksListView: View {
                     }
                     Spacer()
                     Button {
-                        tasksListVM.getTasksFMList()
-                        tasksListVM.getTasksRNList()
-                        tasksListVM.getTasksCRList()
+                        tasksListVM.updateAll()
                     } label: {
                         MenuIconView(systemName: "arrow.clockwise.circle.fill")
                     }
@@ -36,6 +34,8 @@ struct TasksListView: View {
                 if tasksListVM.tasksRNList.count > 0 { ListRNTasks(isRemoveMode: $isRemoveMode) }
                 
                 if tasksListVM.tasksCRList.count > 0 { ListCRTasks(isRemoveMode: $isRemoveMode) }
+                
+                if tasksListVM.tasksASOList.count > 0 { ListASOTasks(isRemoveMode: $isRemoveMode) }
                 
             }
             .padding()

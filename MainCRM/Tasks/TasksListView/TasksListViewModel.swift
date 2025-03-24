@@ -13,6 +13,7 @@ enum TaskDB: String, CaseIterable {
     case fm = "taskfirsmoderation"
     case rn = "taskrename"
     case cr = "taskcreo"
+    case aso = "taskasomobile"
 }
 
 final class TasksListViewModel: ObservableObject {
@@ -20,15 +21,18 @@ final class TasksListViewModel: ObservableObject {
     var tasksFMList: [TaskFirstModerationModel] = []
     var tasksRNList: [TaskRenameModel] = []
     var tasksCRList: [TaskCreoModel] = []
+    var tasksASOList: [TaskAsoMobileModel] = []
     
     func getTaskType(id: String) -> String? {
         let fm = tasksFMList.contains{ $0.id == id }
         let rn = tasksRNList.contains{ $0.id == id }
         let cr = tasksCRList.contains{ $0.id == id }
+        let aso = tasksASOList.contains{ $0.id == id }
         
         if fm { return TaskDB.fm.rawValue }
         if rn { return TaskDB.rn.rawValue }
         if cr { return TaskDB.cr.rawValue }
+        if aso { return TaskDB.aso.rawValue }
         return nil
         
     }
@@ -37,8 +41,9 @@ final class TasksListViewModel: ObservableObject {
         let fm = tasksFMList.contains{ $0.id == id }
         let rn = tasksRNList.contains{ $0.id == id }
         let cr = tasksCRList.contains{ $0.id == id }
+        let aso = tasksASOList.contains{ $0.id == id }
         
-        return fm || rn || cr
+        return fm || rn || cr || aso
     }
     
     func isTaskDone(id: String) -> Bool? {
@@ -48,7 +53,9 @@ final class TasksListViewModel: ObservableObject {
             return task.isDone
         } else if let task = tasksCRList.first(where: {$0.id == id}) {
             return task.isDone
-         }
+        } else if let task = tasksASOList.first(where: {$0.id == id}) {
+            return task.isDone
+        }
         return nil
     }
     
@@ -82,11 +89,6 @@ final class TasksListViewModel: ObservableObject {
             self.objectWillChange.send()
         }
     }
-    
-//    func isLoad() -> Bool{
-//        return tasksFMList.count > 0
-//    }
-    
     
     func getTasksRNList(){
         FirebaseServices().getDocuments(collection: "taskrename") { docs in
@@ -123,7 +125,6 @@ final class TasksListViewModel: ObservableObject {
         }
     }
     
-    
     func getTasksCRList(){
         FirebaseServices().getDocuments(collection: TaskDB.cr.rawValue) { docs in
             var array: [TaskCreoModel] = []
@@ -157,5 +158,35 @@ final class TasksListViewModel: ObservableObject {
             self.tasksCRList = array
             self.objectWillChange.send()
         }
+    }
+    
+    func getTasksASOList(){
+        FirebaseServices().getDocuments(collection: TaskDB.aso.rawValue) { docs in
+            var array: [TaskAsoMobileModel] = []
+                        
+            docs.forEach{doc in
+                let id = doc.documentID
+                let appLink = doc["appLink"] as? String
+                let keys = doc["keys"] as? [String]
+                let isDone = doc["isDone"] as? Bool
+                array.append(
+                    TaskAsoMobileModel(
+                        id: id,
+                        appLink: appLink ?? "",
+                        keys: keys ?? [],
+                        isDone: isDone ?? false
+                    )
+                )
+            }
+            self.tasksASOList = array
+            self.objectWillChange.send()
+        }
+    }
+    
+    func updateAll() {
+        getTasksFMList()
+        getTasksRNList()
+        getTasksCRList()
+        getTasksASOList()
     }
 }
