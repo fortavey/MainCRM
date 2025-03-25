@@ -69,6 +69,11 @@ struct ChooseCountrySheetView: View {
             Text("Выберите страны для доступа")
                 .font(.title)
             
+            HStack {
+                ChangeCountriesButton(isPresented: $isPresented, id: app.id, name: "Plinko", keys: AsoKeys.plinko)
+                ChangeCountriesButton(isPresented: $isPresented, id: app.id, name: "Sweet Bonanza", keys: AsoKeys.sweetBonanza)
+            }
+            
             ScrollView {
                 Grid(alignment: .leading) {
                     ForEach(Countries.allCases, id: \.rawValue) { country in
@@ -84,49 +89,34 @@ struct ChooseCountrySheetView: View {
                 Button("Отмена") {
                     isPresented = false
                 }
-                Button("Сохранить") {
-                    FirebaseServices().updateDocument(id: app.id, collection: "apps", fields: ["countries": countries]) { result in
-                        if result {
-                            appListVM.getAppsList()
-                            isPresented = false
-                        }else {
-                            print("Ошибка обновления")
-                        }
-                    }
-                }
+                ChangeCountriesButton(isPresented: $isPresented, id: app.id, name: "Сохранить", keys: countries)
             }
             .padding()
-            Button("Plinko"){
-                FirebaseServices().updateDocument(id: app.id,
-                                                  collection: "apps",
-                                                  fields: ["countries": [
-                                                    "Австралия",
-                                                    "Австрия",
-                                                    "Великобритания",
-                                                    "Венгрия",
-                                                    "Германия",
-                                                    "Греция",
-                                                    "Испания",
-                                                    "Италия",
-                                                    "Канада",
-                                                    "Нидерланды",
-                                                    "Новая Зеландия",
-                                                    "Польша",
-                                                    "Румыния",
-                                                    "Франция",
-                                                    "Португалия"
-                                                  ]]
-                ) { result in
-                    if result {
-                        appListVM.getAppsList()
-                        isPresented = false
-                    }else {
-                        print("Ошибка обновления")
-                    }
-                }
-            }
-
         }
         .padding()
+    }
+}
+
+struct ChangeCountriesButton: View {
+    @EnvironmentObject private var appListVM: AppListViewModel
+    @Binding var isPresented: Bool
+    var id: String
+    var name: String
+    var keys: [String]
+    
+    var body: some View {
+        Button(name){
+            FirebaseServices().updateDocument(id: id,
+                                              collection: "apps",
+                                              fields: ["countries": keys]
+            ) { result in
+                if result {
+                    appListVM.getAppsList()
+                    isPresented = false
+                }else {
+                    print("Ошибка обновления")
+                }
+            }
+        }
     }
 }

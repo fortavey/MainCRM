@@ -18,18 +18,33 @@ struct ContentView: View {
     let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     
     var body: some View {
-        TabView {
-            HomeView()
-                .tabItem {
-                    Image(systemName: "house")
+        ZStack{
+            TabView {
+                HomeView()
+                    .tabItem {
+                        Image(systemName: "house")
+                    }
+                BlankAppsListView()
+                    .tabItem {
+                        Image(systemName: "plus.square")
+                    }
+            }
+            .onReceive(timer) { firedDate in
+                updateData()
+            }
+            
+            if tasksListVM.isSomeTaskDone() {
+                VStack {
+                    Spacer()
+                    ZStack{
+                        Text("Новая выполненная задача")
+                    }
+                    .frame(width: 200, height: 50)
+                    .background(Color.green)
+                    .padding(.bottom, 40)
+                    
                 }
-            BlankAppsListView()
-                .tabItem {
-                    Image(systemName: "plus.square")
-                }
-        }
-        .onReceive(timer) { firedDate in
-            updateData()
+            }
         }
     }
     

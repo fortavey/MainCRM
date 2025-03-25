@@ -76,7 +76,7 @@ struct CreateNewTaskView: View {
             case .asomobile:
                 TaskAsoMobile(app: app)
             case .transfer:
-                TaskTransfer()
+                TaskTransfer(app: app)
             case .webview:
                 TaskWebview(app: app)
             }

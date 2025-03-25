@@ -25,6 +25,9 @@ enum Localizations: String, CaseIterable {
     case tr = "tr"
     case fr = "fr"
     case hi = "hi"
+    case hu = "hu"
+    case el = "el"
+    case ro = "ro"
     
     var title: String {
         switch self {
@@ -45,6 +48,9 @@ enum Localizations: String, CaseIterable {
         case .tr: "Турецкий"
         case .fr: "Французский (Франция)"
         case .hi: "Хинди"
+        case .hu: "Венгерский"
+        case .el: "Греческий"
+        case .ro: "Румынский"
         }
     }
 }

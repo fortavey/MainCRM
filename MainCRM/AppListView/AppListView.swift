@@ -19,6 +19,7 @@ struct AppListView: View {
     @EnvironmentObject private var appListVM: AppListViewModel
     @EnvironmentObject private var tasksListVM: TasksListViewModel
     @State private var isRemoveMode = false
+    @State private var isPlayStoreMode = true
     @State private var isLinkMode = false
     @State private var isCompMode = false
     @State private var isCreoMode = false
@@ -36,6 +37,7 @@ struct AppListView: View {
                 AppListToolbar(
                     isRemoveMode: $isRemoveMode,
                     isLinkMode: $isLinkMode,
+                    isPlayStoreMode: $isPlayStoreMode,
                     isCompMode: $isCompMode,
                     isCreoMode: $isCreoMode,
                     isPresented: $isPresented,
@@ -64,7 +66,7 @@ struct AppListView: View {
                                 }
                             }
                             
-                            // Кнапка бана
+                            // Кнопка бана
                             if isBanMode {
                                 AddBanButton(app: app)
                             }
@@ -76,12 +78,6 @@ struct AppListView: View {
                             
                             // Первое название
                             LineItemView(text: app.firstAppName, width: 150)
-                            
-                            // Ссылка на разработку
-//                            if isLinkMode {
-//                                DevelopmentsLinkView(app: app, itemWidth: 100)
-//                            }
-                            
                             
                             // Трастовый аккаунт
                             ChangeTrustAccountButton(app: app, width: 100)
@@ -116,19 +112,22 @@ struct AppListView: View {
                             ChooseCountryButtonView(app: app)
                             
                             // ASO Mobile
-                            if app.isAsoMobile == nil || !app.isAsoMobile! {
-                                Button("+АСО"){
-                                    FirebaseServices().updateDocument(id: app.id,
-                                                                      collection: "apps",
-                                                                      fields: ["isAsoMobile" : true]) { result in
-                                        if result {
-                                            appListVM.getAppsList()
-                                        }else {
-                                            print("Ошибка обновления трастового аккаунта")
+                            if app.updateType == UpdateType.naming.rawValue && app.moderationStatus == ModerationStatus.approve.rawValue {
+                                if app.isAsoMobile == nil || !app.isAsoMobile! {
+                                    Button("+АСО"){
+                                        FirebaseServices().updateDocument(id: app.id,
+                                                                          collection: "apps",
+                                                                          fields: ["isAsoMobile" : true]) { result in
+                                            if result {
+                                                appListVM.getAppsList()
+                                            }else {
+                                                print("Ошибка обновления трастового аккаунта")
+                                            }
                                         }
                                     }
                                 }
                             }
+                            
                             
                             
                             // Домен webview
@@ -137,7 +136,7 @@ struct AppListView: View {
                             }
                             
                             // Ссылка на приложение в GooglePlay
-                            if isLinkMode {
+                            if isPlayStoreMode {
                                 let appNameLow = String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased()
                                 let gpLink = "https://play.google.com/store/apps/details?id=com."
                                 if let link = URL(string: gpLink + appNameLow) {

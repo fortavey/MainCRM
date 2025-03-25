@@ -15,6 +15,7 @@ struct AppListToolbar: View {
     @EnvironmentObject private var blankAppsListVM: BlankAppsListViewModel
     @Binding var isRemoveMode: Bool
     @Binding var isLinkMode: Bool
+    @Binding var isPlayStoreMode: Bool
     @Binding var isCompMode: Bool
     @Binding var isCreoMode: Bool
     @Binding var isPresented: Bool
@@ -46,6 +47,18 @@ struct AppListToolbar: View {
                     .foregroundStyle(isCompMode ? Color.red : Color.white)
                     .contextMenu {
                         Text("Показать компьютеры")
+                    }
+            }
+            // Кнопка PlayStore
+            Button {
+                isPlayStoreMode.toggle()
+            } label: {
+                Image("GooglePlayIcon")
+                    .resizable()
+                    .frame(width: 25, height: 25)
+                    .padding(2)
+                    .contextMenu {
+                        Text("Показать ссылки")
                     }
             }
             // Кнопка ссылки

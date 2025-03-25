@@ -37,6 +37,8 @@ struct TasksListView: View {
                 
                 if tasksListVM.tasksASOList.count > 0 { ListASOTasks(isRemoveMode: $isRemoveMode) }
                 
+                if tasksListVM.tasksTRList.count > 0 { ListTRTasks(isRemoveMode: $isRemoveMode) }
+                
             }
             .padding()
         }

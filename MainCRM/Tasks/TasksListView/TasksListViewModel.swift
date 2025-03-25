@@ -15,6 +15,7 @@ enum TaskDB: String, CaseIterable {
     case cr = "taskcreo"
     case aso = "taskasomobile"
     case web = "taskwebview"
+    case tr = "tasktransfer"
 }
 
 final class TasksListViewModel: ObservableObject {
@@ -24,6 +25,18 @@ final class TasksListViewModel: ObservableObject {
     var tasksCRList: [TaskCreoModel] = []
     var tasksASOList: [TaskAsoMobileModel] = []
     var tasksWEBList: [TaskWebViewModel] = []
+    var tasksTRList: [TaskTransferModel] = []
+    
+    func isSomeTaskDone() -> Bool {
+        let fm = tasksFMList.contains{ $0.isDone }
+        let rn = tasksRNList.contains{ $0.isDone }
+        let cr = tasksCRList.contains{ $0.isDone }
+        let aso = tasksASOList.contains{ $0.isDone }
+        let web = tasksWEBList.contains{ $0.isDone }
+        let tr = tasksTRList.contains{ $0.isDone }
+        
+        return fm || rn || cr || aso || web || tr
+    }
     
     func getTaskType(id: String) -> String? {
         let fm = tasksFMList.contains{ $0.id == id }
@@ -31,12 +44,15 @@ final class TasksListViewModel: ObservableObject {
         let cr = tasksCRList.contains{ $0.id == id }
         let aso = tasksASOList.contains{ $0.id == id }
         let web = tasksWEBList.contains{ $0.id == id }
+        let tr = tasksTRList.contains{ $0.id == id }
         
         if fm { return TaskDB.fm.rawValue }
         if rn { return TaskDB.rn.rawValue }
         if cr { return TaskDB.cr.rawValue }
         if aso { return TaskDB.aso.rawValue }
         if web { return TaskDB.web.rawValue }
+        if tr { return TaskDB.tr.rawValue }
+        
         return nil
         
     }
@@ -47,8 +63,9 @@ final class TasksListViewModel: ObservableObject {
         let cr = tasksCRList.contains{ $0.id == id }
         let aso = tasksASOList.contains{ $0.id == id }
         let web = tasksWEBList.contains{ $0.id == id }
+        let tr = tasksTRList.contains{ $0.id == id }
         
-        return fm || rn || cr || aso || web
+        return fm || rn || cr || aso || web || tr
     }
     
     func isTaskDone(id: String) -> Bool? {
@@ -61,6 +78,8 @@ final class TasksListViewModel: ObservableObject {
         } else if let task = tasksASOList.first(where: {$0.id == id}) {
             return task.isDone
         } else if let task = tasksWEBList.first(where: {$0.id == id}) {
+            return task.isDone
+        } else if let task = tasksTRList.first(where: {$0.id == id}) {
             return task.isDone
         }
         return nil
@@ -222,11 +241,52 @@ final class TasksListViewModel: ObservableObject {
         }
     }
     
+    
+    
+    func getTasksTRList(){
+        FirebaseServices().getDocuments(collection: TaskDB.tr.rawValue) { docs in
+            var array: [TaskTransferModel] = []
+                        
+            docs.forEach{doc in
+                let id = doc.documentID
+                let appId = doc["appId"] as? String
+                let createAccountName = doc["createAccountName"] as? String
+                let createAccountCompany = doc["createAccountCompany"] as? String
+                let createAccountIdentifier = doc["createAccountIdentifier"] as? String
+                let createAccountToken = doc["createAccountToken"] as? String
+                let transferAccountName = doc["transferAccountName"] as? String
+                let transferAccountCompany = doc["transferAccountCompany"] as? String
+                let transferAccountIdentifier = doc["transferAccountIdentifier"] as? String
+                let transferAccountToken = doc["transferAccountToken"] as? String
+                let isDone = doc["isDone"] as? Bool
+                
+                array.append(
+                    TaskTransferModel(
+                        id: id,
+                        appId: appId ?? "",
+                        createAccountName: createAccountName ?? "",
+                        createAccountCompany: createAccountCompany ?? "",
+                        createAccountIdentifier: createAccountIdentifier ?? "",
+                        createAccountToken: createAccountToken ?? "",
+                        transferAccountName: transferAccountName ?? "",
+                        transferAccountCompany: transferAccountCompany ?? "",
+                        transferAccountIdentifier: transferAccountIdentifier ?? "",
+                        transferAccountToken: transferAccountToken ?? "",
+                        isDone: isDone ?? false
+                    )
+                )
+            }
+            self.tasksTRList = array
+            self.objectWillChange.send()
+        }
+    }
+    
     func updateAll() {
         getTasksFMList()
         getTasksRNList()
         getTasksCRList()
         getTasksASOList()
         getTasksWEBList()
+        getTasksTRList()
     }
 }
