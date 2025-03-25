@@ -30,7 +30,9 @@ struct TasksAppLineElement: View {
                         }
                     }
                 }else {
-                    Image(systemName: "paperplane.fill")
+                    ProgressView()
+                        .frame(width: 25, height: 25)
+                        .scaleEffect(x: 0.5, y: 0.5, anchor: .center)
                 }
             }
         }else {

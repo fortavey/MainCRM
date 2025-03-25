@@ -25,4 +25,5 @@ struct AppModel: Identifiable {
     var isBan: Bool?
     var webviewDomain: String?
     var countries: [String]?
+    var isAsoMobile: Bool?
 }

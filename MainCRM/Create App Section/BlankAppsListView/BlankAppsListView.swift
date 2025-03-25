@@ -10,6 +10,7 @@ import FirebaseFirestore
 
 struct BlankAppsListView: View {
     @EnvironmentObject private var blankAppsListVM: BlankAppsListViewModel
+    @EnvironmentObject private var tasksListVM: TasksListViewModel
     @State private var isPresented = false
     
     var body: some View {
@@ -27,11 +28,48 @@ struct BlankAppsListView: View {
                     Spacer()
                     Button {
                         blankAppsListVM.getAppsList()
+                        tasksListVM.getTasksWEBList()
                     } label: {
                         MenuIconView(systemName: "arrow.clockwise.circle.fill")
                     }
                     
                 }
+                
+                
+                
+                if tasksListVM.tasksWEBList.contains(where: { !$0.isDone }) {
+                    HStack{
+                        Text("Финальное обновление")
+                            .font(.title3)
+                        Spacer()
+                    }
+                    List(tasksListVM.tasksWEBList){ app in
+                        HStack{
+                            LineItemView(text: app.appId, width: 150)
+                            LineItemView(text: app.newAppName, width: 150)
+                            LineItemView(text: app.createAccount, width: 150)
+                            NavigationLink {
+                                CreateFinalUpdate(app: app)
+                            } label: {
+                                Label {
+                                    Text("Начать")
+                                } icon: {
+                                    Image(systemName: "arrow.right.square")
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+                
+                
+                HStack{
+                    Text("Cоздание приложений")
+                        .font(.title3)
+                    Spacer()
+                }
+                
                 List(blankAppsListVM.appsList){ app in
                     HStack{
                         LineItemView(text: app.name, width: 150)

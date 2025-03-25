@@ -53,10 +53,10 @@ struct Helpers {
             return "\(now - timestamp)с"
         } else if now - timestamp < 3600 {
             return "\((now - timestamp)/60)м"
-        } else if now - timestamp < 86400 {
+        } else if now - timestamp < 86400*2 {
             return "\((now - timestamp)/3600)ч"
         }
 
-        return ""
+        return "\((now - timestamp)/3600/24)д"
     }
 }

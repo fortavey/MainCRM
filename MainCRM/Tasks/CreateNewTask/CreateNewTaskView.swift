@@ -12,6 +12,7 @@ enum TaskType {
     case rename
     case creo
     case asomobile
+    case webview
     case transfer
 }
 
@@ -51,6 +52,12 @@ struct CreateNewTaskView: View {
                 .background(getButtonColor(taskType: .asomobile))
                 
                 Button {
+                    taskType = .webview
+                } label: {
+                    Text("Webview")
+                }
+                .background(getButtonColor(taskType: .webview))
+                Button {
                     taskType = .transfer
                 } label: {
                     Text("Трансфер приложения")
@@ -70,6 +77,8 @@ struct CreateNewTaskView: View {
                 TaskAsoMobile(app: app)
             case .transfer:
                 TaskTransfer()
+            case .webview:
+                TaskWebview(app: app)
             }
             
             Spacer()

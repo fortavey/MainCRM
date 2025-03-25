@@ -14,6 +14,7 @@ enum TaskDB: String, CaseIterable {
     case rn = "taskrename"
     case cr = "taskcreo"
     case aso = "taskasomobile"
+    case web = "taskwebview"
 }
 
 final class TasksListViewModel: ObservableObject {
@@ -22,17 +23,20 @@ final class TasksListViewModel: ObservableObject {
     var tasksRNList: [TaskRenameModel] = []
     var tasksCRList: [TaskCreoModel] = []
     var tasksASOList: [TaskAsoMobileModel] = []
+    var tasksWEBList: [TaskWebViewModel] = []
     
     func getTaskType(id: String) -> String? {
         let fm = tasksFMList.contains{ $0.id == id }
         let rn = tasksRNList.contains{ $0.id == id }
         let cr = tasksCRList.contains{ $0.id == id }
         let aso = tasksASOList.contains{ $0.id == id }
+        let web = tasksWEBList.contains{ $0.id == id }
         
         if fm { return TaskDB.fm.rawValue }
         if rn { return TaskDB.rn.rawValue }
         if cr { return TaskDB.cr.rawValue }
         if aso { return TaskDB.aso.rawValue }
+        if web { return TaskDB.web.rawValue }
         return nil
         
     }
@@ -42,8 +46,9 @@ final class TasksListViewModel: ObservableObject {
         let rn = tasksRNList.contains{ $0.id == id }
         let cr = tasksCRList.contains{ $0.id == id }
         let aso = tasksASOList.contains{ $0.id == id }
+        let web = tasksWEBList.contains{ $0.id == id }
         
-        return fm || rn || cr || aso
+        return fm || rn || cr || aso || web
     }
     
     func isTaskDone(id: String) -> Bool? {
@@ -54,6 +59,8 @@ final class TasksListViewModel: ObservableObject {
         } else if let task = tasksCRList.first(where: {$0.id == id}) {
             return task.isDone
         } else if let task = tasksASOList.first(where: {$0.id == id}) {
+            return task.isDone
+        } else if let task = tasksWEBList.first(where: {$0.id == id}) {
             return task.isDone
         }
         return nil
@@ -183,10 +190,43 @@ final class TasksListViewModel: ObservableObject {
         }
     }
     
+    func getTasksWEBList(){
+        FirebaseServices().getDocuments(collection: TaskDB.web.rawValue) { docs in
+            var array: [TaskWebViewModel] = []
+                        
+            docs.forEach{doc in
+                let id = doc.documentID
+                let appId = doc["appId"] as? String
+                let newAppName = doc["newAppName"] as? String
+                let firstAppName = doc["firstAppName"] as? String
+                let createAccount = doc["createAccount"] as? String
+                let creoLink = doc["creoLink"] as? String
+                let webviewDomain = doc["webviewDomain"] as? String
+                let isDone = doc["isDone"] as? Bool
+                
+                array.append(
+                    TaskWebViewModel(
+                        id: id,
+                        appId: appId ?? "",
+                        newAppName: newAppName ?? "",
+                        firstAppName: firstAppName ?? "",
+                        createAccount: createAccount ?? "",
+                        creoLink: creoLink ?? "",
+                        webviewDomain: webviewDomain ?? "",
+                        isDone: isDone ?? false
+                    )
+                )
+            }
+            self.tasksWEBList = array
+            self.objectWillChange.send()
+        }
+    }
+    
     func updateAll() {
         getTasksFMList()
         getTasksRNList()
         getTasksCRList()
         getTasksASOList()
+        getTasksWEBList()
     }
 }

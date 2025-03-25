@@ -96,6 +96,35 @@ struct ChooseCountrySheetView: View {
                 }
             }
             .padding()
+            Button("Plinko"){
+                FirebaseServices().updateDocument(id: app.id,
+                                                  collection: "apps",
+                                                  fields: ["countries": [
+                                                    "Австралия",
+                                                    "Австрия",
+                                                    "Великобритания",
+                                                    "Венгрия",
+                                                    "Германия",
+                                                    "Греция",
+                                                    "Испания",
+                                                    "Италия",
+                                                    "Канада",
+                                                    "Нидерланды",
+                                                    "Новая Зеландия",
+                                                    "Польша",
+                                                    "Румыния",
+                                                    "Франция",
+                                                    "Португалия"
+                                                  ]]
+                ) { result in
+                    if result {
+                        appListVM.getAppsList()
+                        isPresented = false
+                    }else {
+                        print("Ошибка обновления")
+                    }
+                }
+            }
 
         }
         .padding()

@@ -115,6 +115,22 @@ struct AppListView: View {
                             // Страны
                             ChooseCountryButtonView(app: app)
                             
+                            // ASO Mobile
+                            if app.isAsoMobile == nil || !app.isAsoMobile! {
+                                Button("+АСО"){
+                                    FirebaseServices().updateDocument(id: app.id,
+                                                                      collection: "apps",
+                                                                      fields: ["isAsoMobile" : true]) { result in
+                                        if result {
+                                            appListVM.getAppsList()
+                                        }else {
+                                            print("Ошибка обновления трастового аккаунта")
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            
                             // Домен webview
                             if isWebviewMode {
                                 LineItemView(text: app.webviewDomain ?? "", width: 250)
