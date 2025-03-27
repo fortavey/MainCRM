@@ -64,7 +64,13 @@ struct Section03Server: View {
             
             HStack{
                 Text("Вставляем в него контент ")
-                CopyTextView(text: "<?php echo json_encode(['res' => true]);")
+                CopyTextView(text: """
+<?php
+echo json_encode([
+    "res" => false,
+    "weblink" => "https://1wjpja.top/"
+]);
+""")
             }
             .padding(.bottom, 10)
             
