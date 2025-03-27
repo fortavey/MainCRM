@@ -22,7 +22,6 @@ struct AppListToolbar: View {
     @Binding var isBanMode: Bool
     @Binding var isSelfMode: Bool
     @Binding var isWebviewMode: Bool
-    @Binding var isFilterMode: Bool
     
     var body: some View {
         
@@ -121,17 +120,10 @@ struct AppListToolbar: View {
                         Text("Показать кнопки удаления")
                     }
             }
+            
             Spacer()
-            // Кнопка фильтра
-            Button {
-                isFilterMode.toggle()
-            } label: {
-                MenuIconView(systemName: "arrow.up.arrow.down.circle.fill")
-                    .foregroundStyle(isFilterMode ? Color.red : Color.white)
-                    .contextMenu {
-                        Text("Показать фильтры")
-                    }
-            }
+            
+            // Кнопка обновления
             Button {
                 trustAccountsVM.getAccountsList()
                 appListVM.getAppsList()

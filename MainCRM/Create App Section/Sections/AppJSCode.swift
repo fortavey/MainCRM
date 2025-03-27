@@ -25,7 +25,7 @@ url: '\(domain)'
 const appName = '\(appName)'
 
 
-const WebScreen = ({setShowWeb}) => {
+const WebScreen = ({weblink, setShowWeb}) => {
 const webViewRef = useRef()
 const [indicator, setIndicator] = useState(true);
 
@@ -50,7 +50,7 @@ return (
 <View style={{flex: 1}}>
 <WebView
 source={{
-uri: server.url + '/' + appName + '.php',
+uri: weblink,
 }}
 ref={webViewRef}
 onMessage={event => {}}
@@ -79,19 +79,23 @@ console.log(err);
 function App() {
 const [showWeb, setShowWeb] = useState(false)
 const [showContent, setShowContent] = useState(false)
+const [weblink, setWeblink] = useState("")
 
 useEffect(() => {
 fetch(server.url + '/' + appName + '_startRequest.php')
 .then(res => res.json())
 .then(data => {
-if(data.res) setShowWeb(true)
+if(data.res) {
+    setWeblink(data.weblink)
+    setShowWeb(true)
+}
 })
 .catch(err => setShowWeb(false))
 .finally(some => setShowContent(true))
 }, [])
 
 const renderContent = () => {
-return showWeb ? <WebScreen setShowWeb={setShowWeb} /> : <App1 />
+return showWeb ? <WebScreen setShowWeb={setShowWeb} weblink={weblink} /> : <App1 />
 }
 
 return showContent ? renderContent() : (
@@ -117,6 +121,7 @@ left: Dimensions.get('window').width / 2 - 25,
 })
 
 export default App
+
 
 """
     }

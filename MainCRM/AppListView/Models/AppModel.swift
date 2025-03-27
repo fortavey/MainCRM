@@ -26,4 +26,5 @@ struct AppModel: Identifiable {
     var webviewDomain: String?
     var countries: [String]?
     var isAsoMobile: Bool?
+    var isTransfer: Bool?
 }

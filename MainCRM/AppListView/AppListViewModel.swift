@@ -36,6 +36,7 @@ final class AppListViewModel: ObservableObject {
                 let webviewDomain = doc["webviewDomain"] as? String
                 let countries = doc["countries"] as? [String]
                 let isAsoMobile = doc["isAsoMobile"] as? Bool
+                let isTransfer = doc["isTransfer"] as? Bool
                 array.append(
                     AppModel(
                         id: id,
@@ -55,7 +56,8 @@ final class AppListViewModel: ObservableObject {
                         isBan: isBan,
                         webviewDomain: webviewDomain,
                         countries: countries,
-                        isAsoMobile: isAsoMobile
+                        isAsoMobile: isAsoMobile,
+                        isTransfer: isTransfer
                     )
                 )
             }

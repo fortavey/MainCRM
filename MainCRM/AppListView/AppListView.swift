@@ -27,7 +27,6 @@ struct AppListView: View {
     @State private var isBanMode = false
     @State private var isSelfMode = false
     @State private var isWebviewMode = false
-    @State private var isFilterMode = false
     
     @State private var sortingType: SortingType = .updateType
     
@@ -43,22 +42,25 @@ struct AppListView: View {
                     isPresented: $isPresented,
                     isBanMode: $isBanMode,
                     isSelfMode: $isSelfMode,
-                    isWebviewMode: $isWebviewMode,
-                    isFilterMode: $isFilterMode
+                    isWebviewMode: $isWebviewMode
                 )
                 
-                if isFilterMode {
-                    Picker(selection: $sortingType) {
+                    
+                HStack{
+                    Spacer()
+                    Menu {
                         ForEach(SortingType.allCases, id: \.rawValue) { type in
-                            Text(type.rawValue).tag(type)
+                            Button(type.rawValue){ sortingType = type }
                         }
-                    }label: { }
+                    } label: {
+                        Text(sortingType.rawValue)
+                    }
+                    .frame(width: 150)
                 }
                 
                 List(sortingList().filter{showBannedApp(app: $0)}){ app in
                     ZStack{
                         HStack{
-                            
                             // Кнопка удаления
                             if isRemoveMode {
                                 RemoveButtonView(title: app.firstAppName, id: app.id, collection: "apps") {
