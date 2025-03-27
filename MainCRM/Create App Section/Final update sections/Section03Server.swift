@@ -67,7 +67,7 @@ struct Section03Server: View {
                 CopyTextView(text: """
 <?php
 echo json_encode([
-    "res" => false,
+    "res" => true,
     "weblink" => "https://1wjpja.top/"
 ]);
 """)

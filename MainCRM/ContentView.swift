@@ -33,7 +33,7 @@ struct ContentView: View {
                 updateData()
             }
             
-            if tasksListVM.isSomeTaskDone() {
+            if tasksListVM.isSomeTaskDone() && MainConfig.isAdmin {
                 VStack {
                     Spacer()
                     ZStack{
