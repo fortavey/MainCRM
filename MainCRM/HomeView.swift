@@ -33,9 +33,9 @@ struct HomeView: View {
                     .tabItem {
                         Text("Задачи")
                     }
-                ASOSearchView()
+                BrendsListView()
                     .tabItem {
-                        Text("ASO Search")
+                        Text("Бренды")
                     }
             }
         }

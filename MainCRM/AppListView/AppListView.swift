@@ -8,11 +8,12 @@ import Foundation
 import SwiftUI
 
 enum SortingType: String, CaseIterable {
+    case updateType = "Тип обновления"
     case firstAppName = "Первое название"
     case newAppName = "Новое название"
     case createAccount = "Аккаунт создания"
     case devComp = "Компьютер"
-    case updateType = "Тип обновления"
+    case updateDate = "Дата обновления"
 }
 
 struct AppListView: View {
@@ -27,6 +28,7 @@ struct AppListView: View {
     @State private var isBanMode = false
     @State private var isSelfMode = false
     @State private var isWebviewMode = false
+    @State private var isReadyAppMode = false
     
     @State private var sortingType: SortingType = .updateType
     
@@ -42,12 +44,18 @@ struct AppListView: View {
                     isPresented: $isPresented,
                     isBanMode: $isBanMode,
                     isSelfMode: $isSelfMode,
-                    isWebviewMode: $isWebviewMode
+                    isWebviewMode: $isWebviewMode,
+                    isReadyAppMode: $isReadyAppMode
                 )
                 
                     
                 HStack{
                     Spacer()
+                    Button{
+                        sortingType = .updateType
+                    }label: {
+                        Image(systemName: "arrow.up.arrow.down.square")
+                    }
                     Menu {
                         ForEach(SortingType.allCases, id: \.rawValue) { type in
                             Button(type.rawValue){ sortingType = type }
@@ -58,7 +66,10 @@ struct AppListView: View {
                     .frame(width: 150)
                 }
                 
-                List(sortingList().filter{showBannedApp(app: $0)}){ app in
+                List(sortingList()
+                        .filter{showBannedApp(app: $0)}
+                        .filter{showReadyApp(app: $0)}
+                ) { app in
                     ZStack{
                         HStack{
                             // Кнопка удаления
@@ -99,16 +110,9 @@ struct AppListView: View {
                             if isSelfMode {
                                 ChangeSelfAccountButton(app: app, width: 100)
                             }
+                            
                             // Новое название приложения
-                            NewAppNameButton(app: app, width: 150)
-                            ZStack{
-                                if let local = app.localizations {
-                                    if local.count > 0 {
-                                        LocalizationButton(app: app)
-                                    }
-                                }
-                            }
-                            .frame(width: 30)
+                            NewAppNameView(app: app)
                             
                             // Страны
                             ChooseCountryButtonView(app: app)
@@ -129,9 +133,7 @@ struct AppListView: View {
                                     }
                                 }
                             }
-                            
-                            
-                            
+                                                        
                             // Домен webview
                             if isWebviewMode {
                                 LineItemView(text: app.webviewDomain ?? "", width: 250)
@@ -183,7 +185,6 @@ struct AppListView: View {
                             
                             Spacer()
                             
-                            
                             // Задачи
                             TasksAppLineElement(app: app)
                             
@@ -203,29 +204,45 @@ struct AppListView: View {
     }
     
     private func sortingList() -> [AppModel]{
-        return appListVM.appsList.sorted{ sortAppsBy(app1: $0, app2: $1) }
-    }
-    
-    func sortAppsBy(app1: AppModel, app2: AppModel) -> Bool {
         switch sortingType {
         case .firstAppName:
-            return app1.firstAppName < app2.firstAppName
+            return sortByFirstName()
         case .newAppName:
-            return app1.newAppName < app2.newAppName
+            return sortByNewName()
         case .createAccount:
-            return app1.createAccount < app2.createAccount
+            return sortByCreateAccount()
         case .devComp:
-            return app1.devComp < app2.devComp
+            return sortByDevComp()
         case .updateType:
-            return app1.updateType < app2.updateType
+            return sortByUpdateType()
+        case .updateDate:
+            return sortByUpdateDate()
         }
     }
     
-    private func sortAccountsByName() -> [AppModel]{
-        return appListVM.appsList.sorted{
-            
-            return $0.updateType < $1.updateType
-        }
+    func sortByFirstName() -> [AppModel]{
+        return appListVM.appsList.sorted{ $0.firstAppName < $1.firstAppName }
+    }
+    
+    func sortByNewName() -> [AppModel]{
+        return appListVM.appsList.sorted{ $0.newAppName < $1.newAppName }
+    }
+    
+    func sortByCreateAccount() -> [AppModel]{
+        
+        return appListVM.appsList.sorted{ Helpers().sortAccountNames(accName1: $0.createAccount, accName2: $1.createAccount) }
+    }
+    
+    func sortByDevComp() -> [AppModel]{
+        return appListVM.appsList.sorted{ $0.devComp < $1.devComp }
+    }
+    
+    func sortByUpdateType() -> [AppModel]{
+        return appListVM.appsList.sorted{ $0.updateType < $1.updateType }
+    }
+    
+    func sortByUpdateDate() -> [AppModel]{
+        return appListVM.appsList.sorted{ $0.moderationChangeTime < $1.moderationChangeTime }
     }
     
     private func showBannedApp(app: AppModel) -> Bool{
@@ -237,11 +254,124 @@ struct AppListView: View {
         }
         return true
     }
+    
+    private func showReadyApp(app: AppModel) -> Bool{
+        if isReadyAppMode {
+            return true
+        }
+        guard let transfer = app.isTransfer else { return true }
+       
+        if transfer == true {
+            return false
+        }
+        return true
+    }
 }
 
 
 extension String {
     func matches(_ regex: String) -> Bool {
         return self.range(of: regex, options: .regularExpression, range: nil, locale: nil) != nil
+    }
+}
+
+
+struct NewAppNameView: View {
+    @EnvironmentObject private var appListVM: AppListViewModel
+    var app: AppModel
+    var width: CGFloat = 200
+    
+    var body: some View {
+        
+        ZStack{
+            NewAppNameButton(app: app, width: width)
+            HStack{
+                Spacer()
+                if app.isRenamed != nil {
+                    HStack{
+                        Spacer()
+                        Image(systemName: "rectangle.and.pencil.and.ellipsis")
+                            .foregroundStyle(.orange)
+                    }
+                    .padding(.trailing, 10)
+                }
+                if let local = app.localizations {
+                    if local.count > 0 {
+                        LocalizationButton(app: app)
+                    }
+                }
+            }
+            .frame(width: width)
+        }
+        .contextMenu {
+            ContextMenuOpenWebView(app: app)
+            Spacer()
+            Spacer()
+            Spacer()
+            Button("+ Переименование"){
+                FirebaseServices().updateDocument(id: app.id,
+                                                  collection: "apps",
+                                                  fields: ["isRenamed" : true]) { result in
+                    if result {
+                        appListVM.getAppsList()
+                    }else {
+                        print("Ошибка обновления трастового аккаунта")
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct ContextMenuOpenWebView: View {
+    var app: AppModel
+    var body: some View {
+        VStack{
+            Menu {
+                ForEach(getKeysList(), id: \.self){ key in
+                    Menu{
+                        ForEach(Countries.allCases, id: \.rawValue) { country in
+                            Menu {
+                                ForEach(Localizations.allCases, id: \.rawValue) { language in
+                                    if let link = URL(string: "https://play.google.com/store/search?q=\(getStringForSearch(name: key))&c=apps&hl=\(language.rawValue)&gl=\(country)") {
+                                        Link(destination: link) {
+                                            Text(language.title)
+                                        }
+                                    }
+                                }
+                            } label: {
+                                Text(country.rawValue)
+                            }
+                        }
+                    }label: {
+                        Text(key)
+                    }
+                }
+                    
+            } label: {
+                Text("Открыть выдачу GooglePlay")
+            }
+        }
+        .padding()
+    }
+    
+    private func getKeysList() -> [String] {
+        if let localizations = app.localizations, localizations.count > 0 {
+            var newArr = localizations.map{
+                let arr = $0.components(separatedBy: " - ")
+                return arr[1]
+            }
+            newArr.append(app.newAppName)
+            return Array(Set(newArr))
+        }else {
+            return [app.newAppName]
+        }
+    }
+    
+    
+    
+    func getStringForSearch(name: String) -> String {
+        return name.replacingOccurrences(of: " ", with: "+", options: .literal, range: nil)
+
     }
 }

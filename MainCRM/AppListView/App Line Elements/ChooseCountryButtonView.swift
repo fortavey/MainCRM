@@ -52,7 +52,7 @@ struct ChooseCountryButtonView: View {
 struct ChooseCountrySheetView: View {
     @EnvironmentObject private var appListVM: AppListViewModel
     @Binding var isPresented: Bool
-    @State private var countries: [String] = []
+    @State private var countries: [String] = ["Россия", "Украина"]
     var app: AppModel
     var index = 1
     

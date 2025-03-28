@@ -95,7 +95,14 @@ struct TransferMoveView: View {
         if app.isTransfer == nil {
             if app.transferAccount != nil {
                 Button("+"){
-                    FirebaseServices().updateDocument(id: app.id, collection: "apps", fields: ["isTransfer" : false]) { result in
+                    FirebaseServices()
+                        .updateDocument(id: app.id,
+                                        collection: "apps",
+                                        fields: [
+                                            "isTransfer" : false,
+                                            "moderationChangeTime" : Int(Date().timeIntervalSince1970)
+                                        ]
+                        ) { result in
                         if result {
                             appListVM.getAppsList()
                         }else {

@@ -9,6 +9,7 @@ import SwiftUI
 import FirebaseFirestore
 
 struct TaskAsoMobile: View {
+    @EnvironmentObject private var appListVM: AppListViewModel
     @EnvironmentObject private var tasksListVM: TasksListViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var isIndicator: Bool = false
@@ -75,7 +76,7 @@ struct TaskAsoMobile: View {
                 "isDone": false
             ], merge: true) { err in
                 if err == nil {
-                    print("Saved")
+                    changeAsoMobileStatus()
                     tasksListVM.getTasksCRList()
                     self.presentationMode.wrappedValue.dismiss()
                     isIndicator = false
@@ -83,6 +84,18 @@ struct TaskAsoMobile: View {
                     print("ERR")
                 }
             }
+    }
+    
+    private func changeAsoMobileStatus(){
+        FirebaseServices().updateDocument(id: app.id,
+                                          collection: "apps",
+                                          fields: ["isAsoMobile" : false]) { result in
+            if result {
+                appListVM.getAppsList()
+            }else {
+                print("Ошибка обновления трастового аккаунта")
+            }
+        }
     }
 }
 

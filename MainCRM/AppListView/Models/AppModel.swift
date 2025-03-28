@@ -15,7 +15,7 @@ struct AppModel: Identifiable {
     var createAccount: String
     var transferAccount: String?
     var moderationStatus: String
-    var moderationChangeTime: Int?
+    var moderationChangeTime: Int
     var updateType: String
     var newAppName: String
     var localizations: [String]?
@@ -27,4 +27,5 @@ struct AppModel: Identifiable {
     var countries: [String]?
     var isAsoMobile: Bool?
     var isTransfer: Bool?
+    var isRenamed: Bool?
 }

@@ -17,7 +17,7 @@ struct LocalizationButton: View {
         } label: {
             Image(systemName: "slider.horizontal.2.rectangle.and.arrow.triangle.2.circlepath")
                 .resizable()
-                .frame(width: 20)
+                .frame(width: 20, height: 20)
         }
         .buttonStyle(.plain)
         .popover(isPresented: $showingPopover) {

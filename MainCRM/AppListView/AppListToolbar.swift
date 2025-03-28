@@ -22,6 +22,7 @@ struct AppListToolbar: View {
     @Binding var isBanMode: Bool
     @Binding var isSelfMode: Bool
     @Binding var isWebviewMode: Bool
+    @Binding var isReadyAppMode: Bool
     
     var body: some View {
         
@@ -110,6 +111,17 @@ struct AppListToolbar: View {
                         Text("Показать ссылку Webview")
                     }
             }
+            
+            // Кнопка готовых приложений
+            Button {
+                isReadyAppMode.toggle()
+            } label: {
+                MenuIconView(systemName: "checkmark.diamond")
+                    .foregroundStyle(isReadyAppMode ? Color.red : Color.white)
+                    .contextMenu {
+                        Text("Показать готовые приложения")
+                    }
+            }
             // Кнопка удаление
             Button {
                 isRemoveMode.toggle()
@@ -121,7 +133,18 @@ struct AppListToolbar: View {
                     }
             }
             
+            
+            
             Spacer()
+            
+            // Кнопка Web-интерфейс
+            WebInterfaceButtonView()
+            
+            // Кнопка гугл диск
+            GoogleDriveButtonView()
+            
+            // Кнопка сервера
+            ServerButtonView()
             
             // Кнопка обновления
             Button {
@@ -136,6 +159,76 @@ struct AppListToolbar: View {
                     .contextMenu {
                         Text("Обновить список")
                     }
+            }
+        }
+    }
+}
+
+
+struct ServerButtonView: View {
+    var body: some View {
+        ZStack{
+            if let link = URL(string: "https://ispnl.hyperhost.ua:1500/") {
+                Link(destination: link) {
+                    MenuIconView(systemName: "server.rack")
+                }
+            }
+        }
+        .contextMenu {
+            VStack{
+                Button("Cкопировать логин"){
+                    let pasteboard = NSPasteboard.general
+                    pasteboard.declareTypes([NSPasteboard.PasteboardType.string], owner: nil)
+                    pasteboard.setString(MainConfig.serverLogin, forType: .string)
+                }
+                Button("Cкопировать пароль"){
+                    let pasteboard = NSPasteboard.general
+                    pasteboard.declareTypes([NSPasteboard.PasteboardType.string], owner: nil)
+                    pasteboard.setString(MainConfig.serverPassword, forType: .string)
+                }
+            }
+            .padding()
+        }
+    }
+}
+
+
+struct GoogleDriveButtonView: View {
+    var body: some View {
+        ZStack{
+            if let link = URL(string: "https://drive.google.com/drive/folders/1Naqm1E1XLYIvb49l7VuMQ1hm2ow_uMp6") {
+                Link(destination: link) {
+                    Image("GoogleDriveIcon")
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                        .padding(2)
+                }
+            }
+        }
+        .contextMenu {
+            if let link = URL(string: "https://drive.google.com/drive/folders/106Pxrnj_4uqkDB0L47_R0qHP7zR-dnan") {
+                Link(destination: link) {
+                    Text("Дизайн")
+                }
+            }
+            if let link = URL(string: "https://drive.google.com/drive/folders/1O38VJSDx0fM1y3yv5G_TznKnhTI8pQlO") {
+                Link(destination: link) {
+                    Text("Приложения")
+                }
+            }
+        }
+    }
+}
+
+
+
+struct WebInterfaceButtonView: View {
+    var body: some View {
+        ZStack{
+            if let link = URL(string: "http://94.154.11.177:1533/") {
+                Link(destination: link) {
+                    MenuIconView(systemName: "arrow.trianglehead.2.clockwise.rotate.90.page.on.clipboard")
+                }
             }
         }
     }

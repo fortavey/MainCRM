@@ -25,6 +25,7 @@ struct MainCRMApp: App {
     @StateObject private var selfAccountsVM = SelfAccountsViewModel()
     @StateObject private var blankAppsListVM = BlankAppsListViewModel()
     @StateObject private var tasksListVM = TasksListViewModel()
+    @StateObject private var brendListVM = BrendListViewModel()
 
     var body: some Scene {
         WindowGroup {
@@ -35,5 +36,6 @@ struct MainCRMApp: App {
         .environmentObject(selfAccountsVM)
         .environmentObject(blankAppsListVM)
         .environmentObject(tasksListVM)
+        .environmentObject(brendListVM)
       }
 }
