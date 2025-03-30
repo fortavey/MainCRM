@@ -38,6 +38,8 @@ final class AppListViewModel: ObservableObject {
                 let isAsoMobile = doc["isAsoMobile"] as? Bool
                 let isTransfer = doc["isTransfer"] as? Bool
                 let isRenamed = doc["isRenamed"] as? Bool
+                let renameVersion = doc["renameVersion"] as? Int
+                let lastUpdateTime = doc["lastUpdateTime"] as? String
                 array.append(
                     AppModel(
                         id: id,
@@ -59,7 +61,9 @@ final class AppListViewModel: ObservableObject {
                         countries: countries,
                         isAsoMobile: isAsoMobile,
                         isTransfer: isTransfer,
-                        isRenamed: isRenamed
+                        isRenamed: isRenamed,
+                        renameVersion: renameVersion,
+                        lastUpdateTime: Helpers().getTimeCount(timestamp: moderationChangeTime)
                     )
                 )
             }
@@ -72,4 +76,16 @@ final class AppListViewModel: ObservableObject {
         return appsList.count > 0
     }
     
+    func updateSingleDocument(id: String, fields: [AnyHashable : Any]){
+        FirebaseServices().updateDocument(id: id,
+                                          collection: "apps",
+                                          fields: fields) { [weak self] result in
+            guard let self else {return}
+            if result {
+                self.getAppsList()
+            }else {
+                print("Ошибка обновления приложения")
+            }
+        }
+    }
 }

@@ -46,7 +46,7 @@ struct Helpers {
     }
     
     func getTimeCount(timestamp: Int?) -> String {
-        guard let timestamp else { return "" }
+        guard let timestamp else { return "99д" }
         let now = Int(Date().timeIntervalSince1970)
         
         if now - timestamp < 60 {

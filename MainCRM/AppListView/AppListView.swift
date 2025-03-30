@@ -31,7 +31,7 @@ struct AppListView: View {
     @State private var isReadyAppMode = false
     
     @State private var sortingType: SortingType = .updateType
-    
+        
     var body: some View {
         NavigationStack {
             VStack {
@@ -101,7 +101,7 @@ struct AppListView: View {
                             
                             // Время после изменения статуса модерации
                             ZStack{
-                                Text(Helpers().getTimeCount(timestamp: app.moderationChangeTime))
+                                Text(app.lastUpdateTime ?? "10д")
                             }
                             .frame(width: 40, height: 25)
                             .background(Color.sectionBG)
@@ -114,6 +114,11 @@ struct AppListView: View {
                             // Новое название приложения
                             NewAppNameView(app: app)
                             
+                            // Открыть в поиске
+                            
+                            OpenPlayButtonView(app: app)
+                           
+                
                             // Страны
                             ChooseCountryButtonView(app: app)
                             
@@ -290,8 +295,15 @@ struct NewAppNameView: View {
                 if app.isRenamed != nil {
                     HStack{
                         Spacer()
-                        Image(systemName: "rectangle.and.pencil.and.ellipsis")
-                            .foregroundStyle(.orange)
+                        if let version = app.renameVersion {
+                            Image(systemName: "0\(version).square")
+                                .resizable()
+                                .frame(width: 15, height: 15)
+                                .foregroundStyle(.orange)
+                        }else {
+                            Image(systemName: "01.square")
+                                .foregroundStyle(.orange)
+                        }
                     }
                     .padding(.trailing, 10)
                 }
@@ -303,53 +315,44 @@ struct NewAppNameView: View {
             }
             .frame(width: width)
         }
-        .contextMenu {
-            ContextMenuOpenWebView(app: app)
-            Spacer()
-            Spacer()
-            Spacer()
-            Button("+ Переименование"){
-                FirebaseServices().updateDocument(id: app.id,
-                                                  collection: "apps",
-                                                  fields: ["isRenamed" : true]) { result in
-                    if result {
-                        appListVM.getAppsList()
-                    }else {
-                        print("Ошибка обновления трастового аккаунта")
-                    }
-                }
-            }
+    }
+    
+    private func getNewRenameVersion() -> Int {
+        if let version = app.renameVersion {
+            return version + 1
+        }else {
+            return 1
         }
     }
 }
 
 struct ContextMenuOpenWebView: View {
+    @Binding var isPresented: Bool
     var app: AppModel
+    
     var body: some View {
         VStack{
-            Menu {
-                ForEach(getKeysList(), id: \.self){ key in
-                    Menu{
-                        ForEach(Countries.allCases, id: \.rawValue) { country in
-                            Menu {
-                                ForEach(Localizations.allCases, id: \.rawValue) { language in
-                                    if let link = URL(string: "https://play.google.com/store/search?q=\(getStringForSearch(name: key))&c=apps&hl=\(language.rawValue)&gl=\(country)") {
-                                        Link(destination: link) {
-                                            Text(language.title)
-                                        }
+            ForEach(getKeysList(), id: \.self){ key in
+                Menu{
+                    ForEach(Countries.allCases, id: \.rawValue) { country in
+                        Menu {
+                            ForEach(Localizations.allCases, id: \.rawValue) { language in
+                                if let link = URL(string: "https://play.google.com/store/search?q=\(getStringForSearch(name: key))&c=apps&hl=\(language.rawValue)&gl=\(country)") {
+                                    Link(destination: link) {
+                                        Text(language.title)
                                     }
                                 }
-                            } label: {
-                                Text(country.rawValue)
                             }
+                        } label: {
+                            Text(country.rawValue)
                         }
-                    }label: {
-                        Text(key)
                     }
+                }label: {
+                    Text(key)
                 }
-                    
-            } label: {
-                Text("Открыть выдачу GooglePlay")
+            }
+            Button("Закрыть") {
+                isPresented = false
             }
         }
         .padding()
@@ -373,5 +376,22 @@ struct ContextMenuOpenWebView: View {
     func getStringForSearch(name: String) -> String {
         return name.replacingOccurrences(of: " ", with: "+", options: .literal, range: nil)
 
+    }
+}
+
+struct OpenPlayButtonView: View {
+    var app: AppModel
+    @State private var isPresented: Bool = false
+    
+    var body: some View {
+        Button {
+            isPresented = true
+        } label: {
+            Image(systemName: "globe")
+                .foregroundStyle(.blue)
+        }
+        .sheet(isPresented: $isPresented) {
+            ContextMenuOpenWebView(isPresented: $isPresented, app: app)
+        }
     }
 }

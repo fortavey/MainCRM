@@ -28,4 +28,6 @@ struct AppModel: Identifiable {
     var isAsoMobile: Bool?
     var isTransfer: Bool?
     var isRenamed: Bool?
+    var renameVersion: Int?
+    var lastUpdateTime: String?
 }
