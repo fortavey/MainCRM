@@ -284,7 +284,7 @@ extension String {
 struct NewAppNameView: View {
     @EnvironmentObject private var appListVM: AppListViewModel
     var app: AppModel
-    var width: CGFloat = 200
+    var width: CGFloat = 150
     
     var body: some View {
         
