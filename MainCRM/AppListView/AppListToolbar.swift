@@ -23,6 +23,8 @@ struct AppListToolbar: View {
     @Binding var isSelfMode: Bool
     @Binding var isWebviewMode: Bool
     @Binding var isReadyAppMode: Bool
+    @Binding var isFirstNameMode: Bool
+    @Binding var isIdMode: Bool
     
     var body: some View {
         
@@ -39,6 +41,16 @@ struct AppListToolbar: View {
             .sheet(isPresented: $isPresented) {
                 AddNewApp(isPresented: $isPresented, appListVM: appListVM)
             }
+            // Кнопка ID
+            Button {
+                isIdMode.toggle()
+            } label: {
+                MenuIconView(systemName: "grid.circle.fill")
+                    .foregroundStyle(isIdMode ? Color.red : Color.white)
+                    .contextMenu {
+                        Text("Показать ID приложения")
+                    }
+            }
             // Кнопка компьютеры
             Button {
                 isCompMode.toggle()
@@ -47,6 +59,16 @@ struct AppListToolbar: View {
                     .foregroundStyle(isCompMode ? Color.red : Color.white)
                     .contextMenu {
                         Text("Показать компьютеры")
+                    }
+            }
+            // Кнопка первое название
+            Button {
+                isFirstNameMode.toggle()
+            } label: {
+                MenuIconView(systemName: "character.book.closed")
+                    .foregroundStyle(isFirstNameMode ? Color.red : Color.white)
+                    .contextMenu {
+                        Text("Показать первое название")
                     }
             }
             // Кнопка PlayStore

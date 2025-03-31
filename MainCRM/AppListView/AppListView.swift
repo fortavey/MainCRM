@@ -29,6 +29,8 @@ struct AppListView: View {
     @State private var isSelfMode = false
     @State private var isWebviewMode = false
     @State private var isReadyAppMode = false
+    @State private var isFirstNameMode = false
+    @State private var isIdMode = false
     
     @State private var sortingType: SortingType = .updateType
         
@@ -45,7 +47,9 @@ struct AppListView: View {
                     isBanMode: $isBanMode,
                     isSelfMode: $isSelfMode,
                     isWebviewMode: $isWebviewMode,
-                    isReadyAppMode: $isReadyAppMode
+                    isReadyAppMode: $isReadyAppMode,
+                    isFirstNameMode: $isFirstNameMode,
+                    isIdMode: $isIdMode
                 )
                 
                     
@@ -84,13 +88,20 @@ struct AppListView: View {
                                 AddBanButton(app: app)
                             }
                             
+                            // Id приложения
+                            if isIdMode {
+                                LineItemView(text: "com.\(Helpers().getAppStoreId(appName: app.firstAppName))", width: 200)
+                            }
+                            
                             // Компьютер
                             if isCompMode {
                                 LineItemView(text: app.devComp, width: 40)
                             }
                             
                             // Первое название
-                            LineItemView(text: app.firstAppName, width: 150)
+                            if isFirstNameMode {
+                                LineItemView(text: app.firstAppName, width: 150)
+                            }
                             
                             // Трастовый аккаунт
                             ChangeTrustAccountButton(app: app, width: 100)
