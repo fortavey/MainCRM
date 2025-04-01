@@ -31,6 +31,7 @@ struct AppListView: View {
     @State private var isReadyAppMode = false
     @State private var isFirstNameMode = false
     @State private var isIdMode = false
+    @State private var isCountryMode = false
     
     @State private var sortingType: SortingType = .updateType
         
@@ -49,7 +50,8 @@ struct AppListView: View {
                     isWebviewMode: $isWebviewMode,
                     isReadyAppMode: $isReadyAppMode,
                     isFirstNameMode: $isFirstNameMode,
-                    isIdMode: $isIdMode
+                    isIdMode: $isIdMode,
+                    isCountryMode: $isCountryMode
                 )
                 
                     
@@ -90,7 +92,8 @@ struct AppListView: View {
                             
                             // Id приложения
                             if isIdMode {
-                                LineItemView(text: "com.\(Helpers().getAppStoreId(appName: app.firstAppName))", width: 200)
+                                // LineItemView(text: "com.\(Helpers().getAppStoreId(appName: app.firstAppName))", width: 200)
+                                LineItemView(text: app.id, width: 200)
                             }
                             
                             // Компьютер
@@ -131,7 +134,10 @@ struct AppListView: View {
                            
                 
                             // Страны
-                            ChooseCountryButtonView(app: app)
+                            if isCountryMode {
+                                ChooseCountryButtonView(app: app)
+                            }
+                            
                             
                             // ASO Mobile
                             if app.updateType == UpdateType.naming.rawValue && app.moderationStatus == ModerationStatus.approve.rawValue {
@@ -326,6 +332,22 @@ struct NewAppNameView: View {
             }
             .frame(width: width)
         }
+        .contextMenu {
+            Button("+ Переименование"){
+                FirebaseServices().updateDocument(id: app.id,
+                                                  collection: "apps",
+                                                  fields: [
+                                                    "isRenamed": true,
+                                                    "renameVersion" : getNewRenameVersion()
+                                                  ]) { result in
+                    if result {
+                        appListVM.getAppsList()
+                    }else {
+                        print("Ошибка обновления")
+                    }
+                }
+            }
+           }
     }
     
     private func getNewRenameVersion() -> Int {

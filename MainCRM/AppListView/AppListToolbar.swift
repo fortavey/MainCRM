@@ -25,6 +25,7 @@ struct AppListToolbar: View {
     @Binding var isReadyAppMode: Bool
     @Binding var isFirstNameMode: Bool
     @Binding var isIdMode: Bool
+    @Binding var isCountryMode: Bool
     
     var body: some View {
         
@@ -123,6 +124,17 @@ struct AppListToolbar: View {
                         Text("Показать трансфер аккаунты")
                     }
             }
+            // Кнопка страны
+            Button {
+                isCountryMode.toggle()
+            } label: {
+                MenuIconView(systemName: "globe")
+                    .foregroundStyle(isCountryMode ? Color.red : Color.white)
+                    .contextMenu {
+                        Text("Показать страны")
+                    }
+            }
+            
             // Кнопка Webview
             Button {
                 isWebviewMode.toggle()
