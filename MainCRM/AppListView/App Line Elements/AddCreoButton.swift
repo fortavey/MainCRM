@@ -29,7 +29,7 @@ struct AddCreoButton: View {
                 if let link = URL(string: creoLink) {
                     if creoLink.matches("https"){
                         Link(destination: link) {
-                            Image(systemName: "arrowshape.right.circle")
+                            Image(systemName: "photo.on.rectangle.angled")
                                 .resizable()
                                 .frame(width: 17, height: 17)
                         }

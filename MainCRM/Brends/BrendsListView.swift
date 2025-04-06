@@ -36,13 +36,9 @@ struct BrendsListView: View {
                
                 HStack {
                     LineItemView(text: brend.name, width: 150)
-                    LineItemView(text: brend.alias ?? "", width: 150)
                     if let arr = brend.countries, arr.count > 0 {
-                        LineItemView(text: "\(arr[0].rawValue)...", width: 150)
-                    }else {
-                        LineItemView(text: "Все страны", width: 150)
+                        LineItemView(text: "\(arr[0])", width: 50)
                     }
-                   
                 }
             }
             
