@@ -37,28 +37,30 @@ struct BlankAppsListView: View {
                 
                 
                 
-                if tasksListVM.tasksWEBList.contains(where: { !$0.isDone }) {
-                    HStack{
-                        Text("Финальное обновление")
-                            .font(.title3)
-                        Spacer()
-                    }
-                    List(tasksListVM.tasksWEBList){ app in
+                if MainConfig.isAdmin {
+                    if tasksListVM.tasksWEBList.contains(where: { !$0.isDone }) {
                         HStack{
-                            LineItemView(text: app.appId, width: 150)
-                            LineItemView(text: app.newAppName, width: 150)
-                            LineItemView(text: app.createAccount, width: 150)
-                            NavigationLink {
-                                CreateFinalUpdate(app: app)
-                            } label: {
-                                Label {
-                                    Text("Начать")
-                                } icon: {
-                                    Image(systemName: "arrow.right.square")
+                            Text("Финальное обновление")
+                                .font(.title3)
+                            Spacer()
+                        }
+                        List(tasksListVM.tasksWEBList){ app in
+                            HStack{
+                                LineItemView(text: app.appId, width: 150)
+                                LineItemView(text: app.newAppName, width: 150)
+                                LineItemView(text: app.createAccount, width: 150)
+                                NavigationLink {
+                                    CreateFinalUpdate(app: app)
+                                } label: {
+                                    Label {
+                                        Text("Начать")
+                                    } icon: {
+                                        Image(systemName: "arrow.right.square")
+                                    }
+
                                 }
 
                             }
-
                         }
                     }
                 }
