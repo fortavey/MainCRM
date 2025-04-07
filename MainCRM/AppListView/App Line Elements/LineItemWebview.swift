@@ -96,7 +96,7 @@ struct WebViewServerSheetView: View {
             codeString = "<?php echo json_encode([ 'res' => false, 'weblink' => '']);"
         }
         
-        var valuesArray = [
+        let valuesArray = [
             MainConfig.token,
             codeString,
             "\(Helpers().getAppStoreId(appName: firstAppName))_startRequest.php"

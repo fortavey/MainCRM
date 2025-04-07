@@ -52,7 +52,7 @@ struct ChooseCountryButtonView: View {
 struct ChooseCountrySheetView: View {
     @EnvironmentObject private var appListVM: AppListViewModel
     @Binding var isPresented: Bool
-    @State private var countries: [String] = ["Россия", "Украина"]
+    @State private var countries: [String] = []
     var app: AppModel
     var index = 1
     
@@ -72,6 +72,7 @@ struct ChooseCountrySheetView: View {
             HStack {
                 ChangeCountriesButton(isPresented: $isPresented, id: app.id, name: "Plinko", keys: AsoKeys.plinko)
                 ChangeCountriesButton(isPresented: $isPresented, id: app.id, name: "Sweet Bonanza", keys: AsoKeys.sweetBonanza)
+                ChangeCountriesButton(isPresented: $isPresented, id: app.id, name: "Сброс", keys: [])
             }
             
             ScrollView {

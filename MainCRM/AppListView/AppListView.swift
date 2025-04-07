@@ -34,6 +34,8 @@ struct AppListView: View {
     @State private var isCountryMode = false
     
     @State private var sortingType: SortingType = .updateType
+    
+    @State private var appCount: Int = 0
         
     var body: some View {
         NavigationStack {
@@ -56,6 +58,7 @@ struct AppListView: View {
                 
                     
                 HStack{
+                    Text("Приложений - \(appCount)")
                     Spacer()
                     Button{
                         sortingType = .updateType
