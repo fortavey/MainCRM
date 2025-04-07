@@ -129,7 +129,6 @@ struct AppListView: View {
                             NewAppNameView(app: app)
                             
                             // Открыть в поиске
-                            
                             OpenPlayButtonView(app: app)
                            
                 
@@ -158,7 +157,7 @@ struct AppListView: View {
                                                         
                             // Домен webview
                             if isWebviewMode {
-                                LineItemView(text: app.webviewDomain ?? "", width: 250)
+                                LineItemWebview(app: app)
                             }
                             
                             // Ссылка на приложение в GooglePlay
