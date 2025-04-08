@@ -26,6 +26,7 @@ struct AppListToolbar: View {
     @Binding var isFirstNameMode: Bool
     @Binding var isIdMode: Bool
     @Binding var isCountryMode: Bool
+    @Binding var isInfoMode: Bool
     
     var body: some View {
         
@@ -154,6 +155,16 @@ struct AppListToolbar: View {
                     .foregroundStyle(isReadyAppMode ? Color.red : Color.white)
                     .contextMenu {
                         Text("Показать готовые приложения")
+                    }
+            }
+            // Кнопка информации
+            Button {
+                isInfoMode.toggle()
+            } label: {
+                MenuIconView(systemName: "info.circle")
+                    .foregroundStyle(isInfoMode ? Color.red : Color.white)
+                    .contextMenu {
+                        Text("Показать информацию")
                     }
             }
             // Кнопка удаление

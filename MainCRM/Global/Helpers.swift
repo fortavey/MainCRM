@@ -59,4 +59,13 @@ struct Helpers {
 
         return "\((now - timestamp)/3600/24)д"
     }
+    
+    func getPlayStoreLink(app: AppModel) -> URL? {
+        let appNameLow = getAppStoreId(appName: app.firstAppName)
+        let gpLink = "https://play.google.com/store/apps/details?id=com."
+        if let link = URL(string: gpLink + appNameLow) {
+            return link
+        }
+        return nil
+    }
 }

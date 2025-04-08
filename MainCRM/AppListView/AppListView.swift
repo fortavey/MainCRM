@@ -32,10 +32,10 @@ struct AppListView: View {
     @State private var isFirstNameMode = false
     @State private var isIdMode = false
     @State private var isCountryMode = false
+    @State private var isInfoMode = false
     
     @State private var sortingType: SortingType = .updateType
     
-    @State private var appCount: Int = 0
         
     var body: some View {
         NavigationStack {
@@ -53,12 +53,19 @@ struct AppListView: View {
                     isReadyAppMode: $isReadyAppMode,
                     isFirstNameMode: $isFirstNameMode,
                     isIdMode: $isIdMode,
-                    isCountryMode: $isCountryMode
+                    isCountryMode: $isCountryMode,
+                    isInfoMode: $isInfoMode
                 )
                 
                     
                 HStack{
-                    Text("Приложений - \(appCount)")
+                    if isInfoMode {
+                        HStack{
+                            Text("Всего приложений - \(appListVM.appsList.count) | ")
+                            Text("Всего рабочих - \(appListVM.appsList.filter{$0.isBan != true}.count) | ")
+                            Text("Всего готовых - \(appListVM.appsList.filter{$0.isBan != true && $0.updateType == "Готово"}.count)")
+                        }
+                    }
                     Spacer()
                     Button{
                         sortingType = .updateType
@@ -165,9 +172,7 @@ struct AppListView: View {
                             
                             // Ссылка на приложение в GooglePlay
                             if isPlayStoreMode {
-                                let appNameLow = String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased()
-                                let gpLink = "https://play.google.com/store/apps/details?id=com."
-                                if let link = URL(string: gpLink + appNameLow) {
+                                if let link = Helpers().getPlayStoreLink(app: app) {
                                     Link(destination: link) {
                                         Image("GooglePlayIcon")
                                             .resizable()
@@ -175,6 +180,8 @@ struct AppListView: View {
                                     }
                                 }
                             }
+                            
+                            LineItemBanChecker(app: app)
                             
                             // Cсылка на исходники разработки
                             if isLinkMode {
