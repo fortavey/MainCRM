@@ -368,14 +368,41 @@ struct NewAppNameView: View {
     }
 }
 
+struct PopularCountry {
+    var id: UUID = UUID()
+    var name: String
+    var hl: String
+    var gl: String
+}
+
 struct ContextMenuOpenWebView: View {
     @Binding var isPresented: Bool
     var app: AppModel
+    var popularCountries: [PopularCountry] = [
+        PopularCountry(name: "Бразилия", hl: "pt-br", gl: "br"),
+        PopularCountry(name: "Турция", hl: "tr", gl: "tr"),
+        PopularCountry(name: "Италия", hl: "it", gl: "it"),
+        PopularCountry(name: "Индия", hl: "en", gl: "in"),
+    ]
     
     var body: some View {
         VStack{
             ForEach(getKeysList(), id: \.self){ key in
                 Menu{
+                    
+                    Text("Популярные страны:")
+                        .padding(.vertical, 10)
+                    ForEach(popularCountries, id: \.id) { country in
+                        if let link = URL(string: "https://play.google.com/store/search?q=\(getStringForSearch(name: key))&c=apps&hl=\(country.hl)&gl=\(country.gl)") {
+                            Link(destination: link) {
+                                Text(country.name)
+                            }
+                        }
+                    }
+                    
+                    Text("Остальные страны:")
+                        .padding(.vertical, 10)
+                    
                     ForEach(Countries.allCases, id: \.rawValue) { country in
                         Menu {
                             ForEach(Localizations.allCases, id: \.rawValue) { language in
