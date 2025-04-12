@@ -61,7 +61,8 @@ struct TaskFirstModeration: View {
                 "updateType": app.updateType,
                 "driveLink": app.driveLink,
                 "message": textForTextEditor,
-                "isDone": false
+                "isDone": false,
+                "timestamp": Date().timeIntervalSince1970
             ], merge: true) { err in
                 if err == nil {
                     print("Saved")

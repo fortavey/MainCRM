@@ -98,6 +98,7 @@ final class TasksListViewModel: ObservableObject {
                 let driveLink = doc["updateType"] as? String
                 let isDone = doc["isDone"] as? Bool
                 let message = doc["message"] as? String
+                let timestamp = doc["timestamp"] as? Double
                 array.append(
                     TaskFirstModerationModel(
                         id: id,
@@ -107,7 +108,8 @@ final class TasksListViewModel: ObservableObject {
                         updateType: updateType ?? "",
                         driveLink: driveLink ?? "",
                         isDone: isDone ?? false, 
-                        message: message ?? ""
+                        message: message ?? "",
+                        timestamp: timestamp ?? Date().timeIntervalSince1970
                     )
                 )
             }

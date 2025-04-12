@@ -16,4 +16,5 @@ struct TaskFirstModerationModel: Identifiable {
     var driveLink: String
     var isDone: Bool
     var message: String
+    var timestamp: Double
 }

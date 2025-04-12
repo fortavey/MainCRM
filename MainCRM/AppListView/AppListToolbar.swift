@@ -191,6 +191,9 @@ struct AppListToolbar: View {
             // Кнопка сервера
             ServerButtonView()
             
+            // Кнопка обновления 404
+            AppUpdate404StatusView()
+            
             // Кнопка обновления
             Button {
                 trustAccountsVM.getAccountsList()

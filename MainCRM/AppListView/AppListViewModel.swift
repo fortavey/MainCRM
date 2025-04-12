@@ -68,6 +68,7 @@ final class AppListViewModel: ObservableObject {
                 )
             }
             self.appsList = array
+            StatusCodesHelperClass.listApps = array
             self.objectWillChange.send()
         }
     }

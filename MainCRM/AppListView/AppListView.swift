@@ -180,9 +180,7 @@ struct AppListView: View {
                                     }
                                 }
                             }
-                            
-                            LineItemBanChecker(app: app)
-                            
+                                                        
                             // Cсылка на исходники разработки
                             if isLinkMode {
                                 if let link = URL(string: app.devLink) {
@@ -213,6 +211,8 @@ struct AppListView: View {
                             if isCreoMode {
                                 AddCreoButton(app: app)
                             }
+                            
+                            LineItem404Checker(app: app)
                             
                             Spacer()
                             
