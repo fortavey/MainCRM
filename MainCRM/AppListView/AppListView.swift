@@ -172,7 +172,7 @@ struct AppListView: View {
                             
                             // Ссылка на приложение в GooglePlay
                             if isPlayStoreMode {
-                                if let link = Helpers().getPlayStoreLink(app: app) {
+                                if let link = Helpers().getPlayStoreLinkURL(app: app) {
                                     Link(destination: link) {
                                         Image("GooglePlayIcon")
                                             .resizable()
@@ -380,9 +380,12 @@ struct ContextMenuOpenWebView: View {
     var app: AppModel
     var popularCountries: [PopularCountry] = [
         PopularCountry(name: "Бразилия", hl: "pt-br", gl: "br"),
-        PopularCountry(name: "Турция", hl: "tr", gl: "tr"),
+        PopularCountry(name: "Германия", hl: "de", gl: "de"),
         PopularCountry(name: "Италия", hl: "it", gl: "it"),
         PopularCountry(name: "Индия", hl: "en", gl: "in"),
+        PopularCountry(name: "Польша", hl: "pl", gl: "pl"),
+        PopularCountry(name: "США", hl: "en-us", gl: "us"),
+        PopularCountry(name: "Турция", hl: "tr", gl: "tr"),
     ]
     
     var body: some View {

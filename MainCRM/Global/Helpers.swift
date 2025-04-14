@@ -41,10 +41,6 @@ struct Helpers {
         return "\(number).square"
     }
     
-    func getAppStoreId(appName: String) -> String {
-        return String(appName.filter { !" \n\t\r".contains($0) }).lowercased()
-    }
-    
     func getTimeCount(timestamp: Int?) -> String {
         guard let timestamp else { return "99д" }
         let now = Int(Date().timeIntervalSince1970)
@@ -60,12 +56,20 @@ struct Helpers {
         return "\((now - timestamp)/3600/24)д"
     }
     
-    func getPlayStoreLink(app: AppModel) -> URL? {
+    func getPlayStoreLinkURL(app: AppModel) -> URL? {
         let appNameLow = getAppStoreId(appName: app.firstAppName)
         let gpLink = "https://play.google.com/store/apps/details?id=com."
         if let link = URL(string: gpLink + appNameLow) {
             return link
         }
         return nil
+    }
+    
+    func getPlayStoreLinkString(app: AppModel) -> String {
+        return "https://play.google.com/store/apps/details?id=com." + getAppStoreId(appName: app.firstAppName)
+    }
+    
+    func getAppStoreId(appName: String) -> String {
+        return String(appName.filter { !" \n\t\r".contains($0) }).lowercased()
     }
 }

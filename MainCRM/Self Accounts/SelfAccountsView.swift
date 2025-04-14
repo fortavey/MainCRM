@@ -57,5 +57,9 @@ struct SelfAccountsView: View {
             .padding()
         }
     }
+    
+    func getAccountLink() {
+        
+    }
 }
 

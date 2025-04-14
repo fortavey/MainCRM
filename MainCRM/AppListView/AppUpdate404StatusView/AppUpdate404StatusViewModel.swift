@@ -29,7 +29,7 @@ struct RequestPlayStoreModel: Identifiable, Codable {
 
 final class AppUpdate404StatusViewModel: ObservableObject {
     let objectWillChange = ObservableObjectPublisher()
-    var statusCodesList: [ResponsePlayStoreItemModel] = []
+    var statusCodesList: [ResponsePlayStoreItemModel] = [ResponsePlayStoreItemModel(id: "test", response: "test")]
     var requestError: Bool = false
     
     func getStatusCodesList(){
