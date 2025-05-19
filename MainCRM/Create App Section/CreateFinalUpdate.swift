@@ -30,6 +30,15 @@ struct CreateFinalUpdate: View {
                         
                         Button {
                             FirebaseServices().updateDocument(id: app.id,
+                                                              collection: "apps",
+                                                              fields: ["isUACReady" : true]) { result in
+                                if result {
+                                    
+                                }else {
+                                    print("Ошибка обновления готовности UAC")
+                                }
+                            }
+                            FirebaseServices().updateDocument(id: app.id,
                                                               collection: TaskDB.web.rawValue,
                                                               fields: ["isDone" : true]) { result in
                                 if result {

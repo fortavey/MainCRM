@@ -40,6 +40,7 @@ final class AppListViewModel: ObservableObject {
                 let isRenamed = doc["isRenamed"] as? Bool
                 let renameVersion = doc["renameVersion"] as? Int
                 let lastUpdateTime = doc["lastUpdateTime"] as? String
+                let isUACReady = doc["isUACReady"] as? Bool
                 array.append(
                     AppModel(
                         id: id,
@@ -63,7 +64,8 @@ final class AppListViewModel: ObservableObject {
                         isTransfer: isTransfer,
                         isRenamed: isRenamed,
                         renameVersion: renameVersion,
-                        lastUpdateTime: Helpers().getTimeCount(timestamp: moderationChangeTime)
+                        lastUpdateTime: Helpers().getTimeCount(timestamp: moderationChangeTime),
+                        isUACReady: isUACReady
                     )
                 )
             }

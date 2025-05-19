@@ -26,6 +26,7 @@ struct AppListView: View {
     @State private var isCreoMode = false
     @State private var isPresented = false
     @State private var isBanMode = false
+    @State private var isBanIconMode = false
     @State private var isSelfMode = false
     @State private var isWebviewMode = false
     @State private var isReadyAppMode = false
@@ -48,6 +49,7 @@ struct AppListView: View {
                     isCreoMode: $isCreoMode,
                     isPresented: $isPresented,
                     isBanMode: $isBanMode,
+                    isBanIconMode: $isBanIconMode,
                     isSelfMode: $isSelfMode,
                     isWebviewMode: $isWebviewMode,
                     isReadyAppMode: $isReadyAppMode,
@@ -96,7 +98,7 @@ struct AppListView: View {
                             }
                             
                             // Кнопка бана
-                            if isBanMode {
+                            if isBanIconMode {
                                 AddBanButton(app: app)
                             }
                             
@@ -113,7 +115,9 @@ struct AppListView: View {
                             
                             // Первое название
                             if isFirstNameMode {
-                                LineItemView(text: app.firstAppName, width: 150)
+//                                LineItemView(text: app.firstAppName, width: 150)
+                                CopyTextView(text: app.firstAppName)
+                                    .frame(width: 150)
                             }
                             
                             // Трастовый аккаунт
@@ -316,47 +320,7 @@ struct NewAppNameView: View {
         
         ZStack{
             NewAppNameButton(app: app, width: width)
-            HStack{
-                Spacer()
-                if app.isRenamed != nil {
-                    HStack{
-                        Spacer()
-                        if let version = app.renameVersion {
-                            Image(systemName: "0\(version).square")
-                                .resizable()
-                                .frame(width: 15, height: 15)
-                                .foregroundStyle(.orange)
-                        }else {
-                            Image(systemName: "01.square")
-                                .foregroundStyle(.orange)
-                        }
-                    }
-                    .padding(.trailing, 10)
-                }
-                if let local = app.localizations {
-                    if local.count > 0 {
-                        LocalizationButton(app: app)
-                    }
-                }
-            }
-            .frame(width: width)
         }
-        .contextMenu {
-            Button("+ Переименование"){
-                FirebaseServices().updateDocument(id: app.id,
-                                                  collection: "apps",
-                                                  fields: [
-                                                    "isRenamed": true,
-                                                    "renameVersion" : getNewRenameVersion()
-                                                  ]) { result in
-                    if result {
-                        appListVM.getAppsList()
-                    }else {
-                        print("Ошибка обновления")
-                    }
-                }
-            }
-           }
     }
     
     private func getNewRenameVersion() -> Int {
@@ -390,19 +354,17 @@ struct ContextMenuOpenWebView: View {
     
     var body: some View {
         VStack{
+            Text("Популярные страны:")
+                .padding(.vertical, 10)
+            ForEach(popularCountries, id: \.id) { country in
+                if let link = URL(string: "https://play.google.com/store/search?q=\(getStringForSearch(name: getKeysList()[0]))&c=apps&hl=\(country.hl)&gl=\(country.gl)") {
+                    Link(destination: link) {
+                        Text(country.name)
+                    }
+                }
+            }
             ForEach(getKeysList(), id: \.self){ key in
                 Menu{
-                    
-                    Text("Популярные страны:")
-                        .padding(.vertical, 10)
-                    ForEach(popularCountries, id: \.id) { country in
-                        if let link = URL(string: "https://play.google.com/store/search?q=\(getStringForSearch(name: key))&c=apps&hl=\(country.hl)&gl=\(country.gl)") {
-                            Link(destination: link) {
-                                Text(country.name)
-                            }
-                        }
-                    }
-                    
                     Text("Остальные страны:")
                         .padding(.vertical, 10)
                     

@@ -30,6 +30,7 @@ struct AppModel: Identifiable {
     var isRenamed: Bool?
     var renameVersion: Int?
     var lastUpdateTime: String?
+    var isUACReady: Bool?
     var isAppBaned: Bool?
     
     mutating func changeIsAppBanned(_ value: Bool?) {

@@ -10,6 +10,7 @@ import FirebaseFirestore
 
 struct SelfAccountsView: View {
     @EnvironmentObject private var selfAccountsVM: SelfAccountsViewModel
+    @EnvironmentObject private var appListVM: AppListViewModel
     @State private var isRemoveMode = false
     @State private var isPresented = false
     
@@ -51,6 +52,22 @@ struct SelfAccountsView: View {
                         LineItemView(text: acc.email, width: 200)
                         LineItemView(text: acc.developerId, width: 200)
                         LineItemView(text: acc.transactionId, width: 200)
+                        
+                        
+                        
+                        if let app = appListVM.appsList.first(where: { $0.transferAccount == acc.alias }){
+                            // Ссылка на аккаунт в GooglePlay
+                            if let link = URL(string: getAccountLink(accountCompanyName: acc.company)) {
+                                Link(destination: link) {
+                                    Image("GooglePlayIcon")
+                                        .resizable()
+                                        .frame(width: 17, height: 17)
+                                }
+                            }
+                            if(app.isBan == true) {
+                                Text("БАН")
+                            }
+                        }
                     }
                 }
             }
@@ -58,8 +75,9 @@ struct SelfAccountsView: View {
         }
     }
     
-    func getAccountLink() {
-        
+    func getAccountLink(accountCompanyName: String) -> String {
+        let newString = accountCompanyName.replacingOccurrences(of: " ", with: "+")
+        return "https://play.google.com/store/apps/developer?id=\(newString)"
     }
 }
 

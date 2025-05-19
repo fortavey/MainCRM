@@ -40,18 +40,31 @@ struct ChangeSelfAccountSheet: View {
     @Binding var isPresented: Bool
     var app: AppModel
     
+    func getEmptyAccountsList() -> [String] {
+        var returnArr: [String] = []
+        selfAccountsVM.accountsList.forEach{ acc in
+            if acc.alias == "S.FARM-1" { returnArr.append("S.FARM-1") }
+            if !appListVM.appsList.contains(where: { $0.transferAccount == acc.alias }) {
+                returnArr.append(acc.alias)
+            }
+        }
+        
+        return returnArr
+    }
+    
     var body: some View {
         VStack{
             Text("Выберите аккаунт")
                 .font(.title)
+            TextField("Введите алиас аккаунта", text: $transferAccount)
             Picker(selection: $transferAccount) {
-                ForEach(selfAccountsVM.accountsList.indices) { index in
+                ForEach(getEmptyAccountsList(), id: \.self) { accAlias in
                     Button {
                         print("Аккаунт выбран")
                     } label: {
-                        Text(getAccountName(index))
+                        Text(accAlias)
                     }
-                    .tag(getAccountName(index))
+                    .tag(accAlias)
                 }
             } label: {
                 HStack{

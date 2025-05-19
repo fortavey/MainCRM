@@ -33,18 +33,22 @@ struct ChangeTrustAccountSheet: View {
     @Binding var isPresented: Bool
     var app: AppModel
     
+    func getAccountsList() -> [String] {
+        return trustAccountsVM.accountsList.filter{ $0.isBan != true }.map(\.alias)
+    }
+    
     var body: some View {
         VStack{
             Text("Выберите аккаунт")
                 .font(.title)
             Picker(selection: $createAccount) {
-                ForEach(trustAccountsVM.accountsList.indices) { index in
+                ForEach(getAccountsList(), id: \.self) { alias in
                     Button {
                         print("Аккаунт выбран")
                     } label: {
-                        Text(getAccountName(index))
+                        Text(alias)
                     }
-                    .tag(getAccountName(index))
+                    .tag(alias)
                 }
             } label: {
                 HStack{
@@ -72,9 +76,5 @@ struct ChangeTrustAccountSheet: View {
             .padding()
         }
         .padding()
-    }
-    
-    private func getAccountName(_ index: Int) -> String {
-        return trustAccountsVM.accountsList[index].alias
     }
 }

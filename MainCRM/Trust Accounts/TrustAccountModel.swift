@@ -15,4 +15,5 @@ struct TrustAccountModel: Identifiable {
     var developerId: String
     var transactionId: String
     var isKeyExist: Bool
+    var isBan: Bool?
 }

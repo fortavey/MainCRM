@@ -25,7 +25,7 @@ struct Section06InstallDeps: View {
                     .font(.title)
                 Text("Работа в терминале. Удостоверится что выбрана папка \(appName)")
                 Text("Вводим команду для установки зависимостей приложения:")
-                CopyTextView(text: "npm i @fortawesome/fontawesome-svg-core @fortawesome/react-native-fontawesome @react-native-async-storage/async-storage @react-navigation/bottom-tabs @react-navigation/drawer @react-navigation/native @react-navigation/stack react-native-gesture-handler react-native-qrcode-svg react-native-reanimated react-native-safe-area-context react-native-screens react-native-svg react-native-vector-icons mobx mobx-react-lite @fortawesome/free-solid-svg-icons @react-navigation/native-stack react-native-webview")
+                CopyTextView(text: "npm i @react-navigation/elements @react-navigation/native @react-navigation/native-stack react-native-safe-area-context react-native-screens")
                 Text("Дожидаемся окончания процесса")
                 DefaultButtonView(title: "Готово") {
                     sections.append(index+1)

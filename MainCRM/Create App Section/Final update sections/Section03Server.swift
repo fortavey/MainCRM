@@ -62,17 +62,6 @@ struct Section03Server: View {
                 
                 HStack{
                     Text("Создаем файл ")
-                    CopyTextView(text: "\(String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased()).php")
-                }
-                
-                HStack{
-                    Text("Вставляем в него контент ")
-                    CopyTextView(text: "<?php header('Location: https://1wjpja.top/'); ?>")
-                }
-                .padding(.bottom, 30)
-                
-                HStack{
-                    Text("Создаем файл ")
                     CopyTextView(text: "\(String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased())_startRequest.php")
                 }
                 

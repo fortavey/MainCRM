@@ -91,7 +91,20 @@ struct WebViewServerSheetView: View {
         var codeString = ""
         
         if isOn {
-            codeString = "<?php echo json_encode([ 'res' => true, 'weblink' => '\(text)']);"
+            codeString = """
+<?php 
+if($_SERVER["REQUEST_METHOD"] == "GET") {
+    $gclid = $_GET["gclid"];
+    
+    if(strlen($gclid) > 5){
+        echo json_encode([ 'res' => true, 'weblink' => "\(text)"]);
+    }else {
+        echo json_encode([ 'res' => true, 'weblink' => "\(text)"]);
+    }
+}else {
+    echo json_encode([ 'res' => true, 'weblink' => "\(text)"]);
+}
+"""
         }else {
             codeString = "<?php echo json_encode([ 'res' => false, 'weblink' => '']);"
         }

@@ -36,28 +36,10 @@ struct Section05Final: View {
                 }
             }
             
-            Text("Изменяем название приложения в файлах package.json и strings.xml")
-                .font(.title3)
-            
-            CopyTextView(text: app.newAppName)
-            
-            Text("Сбрасываем зависимости")
-                .font(.title3)
-            
-            CopyTextView(text: "cd android")
-            CopyTextView(text: "./gradlew clean")
-            CopyTextView(text: "cd ..")
-            
-            Text("Перезапускаем приложение, проверяем работоспособность, иконку, название")
-                .font(.title3)
-                .padding(.bottom, 10)
-            
             HStack{
-                Text("Отключаем Webview в файле ")
-                CopyTextView(text: "\(String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased())_startRequest.php")
+                Text("Меняем название приложения: ")
+                CopyTextView(text: app.newAppName)
             }
-            .padding(.bottom, 30)
-            
             
             Text("Собираем билд, заливаем обновление")
                 .font(.title2)

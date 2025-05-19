@@ -221,8 +221,10 @@ final class TasksListViewModel: ObservableObject {
                 let newAppName = doc["newAppName"] as? String
                 let firstAppName = doc["firstAppName"] as? String
                 let createAccount = doc["createAccount"] as? String
+                let transferAccount = doc["transferAccount"] as? String
                 let creoLink = doc["creoLink"] as? String
                 let webviewDomain = doc["webviewDomain"] as? String
+                let devComp = doc["devComp"] as? String
                 let isDone = doc["isDone"] as? Bool
                 
                 array.append(
@@ -232,8 +234,10 @@ final class TasksListViewModel: ObservableObject {
                         newAppName: newAppName ?? "",
                         firstAppName: firstAppName ?? "",
                         createAccount: createAccount ?? "",
+                        transferAccount: transferAccount ?? "",
                         creoLink: creoLink ?? "",
                         webviewDomain: webviewDomain ?? "",
+                        devComp: devComp ?? "",
                         isDone: isDone ?? false
                     )
                 )

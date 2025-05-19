@@ -54,8 +54,10 @@ struct TaskWebview: View {
                 "firstAppName": app.firstAppName,
                 "newAppName": app.newAppName,
                 "createAccount": app.createAccount,
+                "transferAccount": app.transferAccount ?? "",
                 "creoLink": app.creoLink ?? "",
                 "webviewDomain": app.webviewDomain ?? "",
+                "devComp": app.devComp,
                 "isDone": false
             ], merge: true) { err in
                 if err == nil {

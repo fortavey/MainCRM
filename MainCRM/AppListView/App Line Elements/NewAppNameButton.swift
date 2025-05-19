@@ -17,7 +17,7 @@ struct NewAppNameButton: View {
         Button {
             isPresented = true
         } label: {
-            LineItemView(text: app.newAppName, width: width)
+            LineItemView(text: app.newAppName + "\(app.isUACReady == true ? " - UAC" : "")", width: width)
         }
         .sheet(isPresented: $isPresented) {
             NewAppNameSheet(isPresented: $isPresented, app: app)

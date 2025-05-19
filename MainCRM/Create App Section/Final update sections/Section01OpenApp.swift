@@ -20,14 +20,31 @@ struct Section01OpenApp: View {
                     .resizable()
                     .frame(width: 20, height: 20)
             }
-            Text("Запуск приложение")
+            Text("Запуск приложение на компьютере - \(app.devComp)")
                 .font(.title)
             HStack {
-                Text("Открываем Android studio. Находим приложение \(app.firstAppName) и запускаем его")
+                Text("Открываем Android studio. Находим приложение ")
+                CopyTextView(text: "\(app.firstAppName)")
+                Text(" и запускаем его")
                 Spacer()
             }
-            Text("Убедится что приложение работает корректно")
-            Text("Дожидаемся окончания процесса")
+            Text("Создание Firebase")
+                .font(.title)
+            Text("Открываем трансферный аккаунт - \(app.transferAccount)")
+            HStack{
+                Text("Создаем профиль Firebase: ")
+                CopyTextView(text: "\(app.newAppName)-\(app.firstAppName)")
+            }
+            HStack{
+                Text("ID пакета: ")
+                CopyTextView(text: "\(app.appId)")
+            }
+            
+            HStack{
+                Text("Устанавливаем зависимости")
+                CopyTextView(text: "npm i @react-native-firebase/app @react-native-firebase/analytics @react-native-firebase/remote-config")
+            }
+            
             DefaultButtonView(title: "Готово") {
                 sections.append(index+1)
             }

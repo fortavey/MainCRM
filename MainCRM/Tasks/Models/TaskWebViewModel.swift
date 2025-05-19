@@ -13,7 +13,9 @@ struct TaskWebViewModel: Identifiable {
     var newAppName: String
     var firstAppName: String
     var createAccount: String
+    var transferAccount: String
     var creoLink: String
     var webviewDomain: String
+    var devComp: String
     var isDone: Bool
 }

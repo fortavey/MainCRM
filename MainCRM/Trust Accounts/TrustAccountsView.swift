@@ -51,6 +51,7 @@ struct TrustAccountsView: View {
                         LineItemView(text: acc.email, width: 200)
                         LineItemView(text: acc.developerId, width: 200)
                         LineItemView(text: acc.transactionId, width: 200)
+                        AccBanButton(acc: acc)
                         if acc.isKeyExist {
                             Image(systemName: "key.fill")
                                 .foregroundStyle(Color.green)

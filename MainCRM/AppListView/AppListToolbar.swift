@@ -20,6 +20,7 @@ struct AppListToolbar: View {
     @Binding var isCreoMode: Bool
     @Binding var isPresented: Bool
     @Binding var isBanMode: Bool
+    @Binding var isBanIconMode: Bool
     @Binding var isSelfMode: Bool
     @Binding var isWebviewMode: Bool
     @Binding var isReadyAppMode: Bool
@@ -107,12 +108,17 @@ struct AppListToolbar: View {
             }
             // Кнопка БАН
             Button {
-                isBanMode.toggle()
+                // isBanMode.toggle()
             } label: {
                 MenuIconView(systemName: "circle.slash")
                     .foregroundStyle(isBanMode ? Color.red : Color.white)
                     .contextMenu {
-                        Text("Показать забаненные приложения")
+                        Button("Показать забаненные приложения"){
+                            isBanMode.toggle()
+                        }
+                        Button("Показать кнопку бана"){
+                            isBanIconMode.toggle()
+                        }
                     }
             }
             // Кнопка Самофарм

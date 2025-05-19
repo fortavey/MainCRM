@@ -28,6 +28,8 @@ struct Helpers {
             return Color.approve
         case .reject:
             return Color.red
+        case .publish:
+            return Color.blue
         default:
             return Color.sectionBG
         }
