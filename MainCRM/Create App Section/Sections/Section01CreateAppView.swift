@@ -28,7 +28,7 @@ struct Section01CreateAppView: View {
                 Spacer()
             }
             Text("Вводим команду создания нового приложения:")
-            CopyTextView(text: "npx @react-native-community/cli init \(appName) --version 0.75.4")
+            CopyTextView(text: "npx @react-native-community/cli@latest init \(appName)")
             Text("Дожидаемся окончания процесса")
             DefaultButtonView(title: "Готово") {
                 sections.append(index+1)
