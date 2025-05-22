@@ -24,7 +24,13 @@ struct Section04StartInAndroidStudio: View {
                 Text("Запуск приложения в Andriod Studio")
                     .font(.title)
                 
-                Text("Запускаем Andriod Studio. В Andriod Studio нажимаем 'Open' и выбираем папку \(appName)/android")
+                HStack {
+                    Text("Запуск через терминал. Вводим команду")
+                    CopyTextView(text: "open -a /Applications/Android\\ Studio.app")
+                    Spacer()
+                }
+                
+                Text("В Andriod Studio нажимаем 'Open' и выбираем папку \(appName)/android")
                 
                 Text("Дожидаемся окончания процесса загрузки в правом нижнем углу")
                 
