@@ -42,7 +42,7 @@ struct Section01OpenApp: View {
             
             HStack{
                 Text("Устанавливаем зависимости")
-                CopyTextView(text: "npm i @react-native-firebase/app @react-native-firebase/analytics @react-native-firebase/remote-config")
+                CopyTextView(text: "npm i @react-navigation/elements @react-navigation/native @react-navigation/native-stack react-native-safe-area-context react-native-screens @react-native-firebase/app @react-native-firebase/analytics @react-native-firebase/messaging react-native-webview")
             }
             
             DefaultButtonView(title: "Готово") {

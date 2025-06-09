@@ -22,6 +22,26 @@ struct Section02VSCode: View {
             }
             Text("Редактирование кода в Android Studio")
                 .font(.title)
+            HStack {
+                Text("Запуск через терминал. Вводим команду")
+                CopyTextView(text: "open -a /Applications/Android\\ Studio.app")
+                Spacer()
+            }
+            Divider()
+            Text("gradle.properties")
+                .font(.title)
+            HStack {
+                HStack{
+                    CopyTextView(text: "android.enableJetifier=true")
+                }
+                HStack{
+                    CopyTextView(text: "newArchEnabled=false")
+                }
+                Spacer()
+            }
+            .padding(.bottom, 20)
+            
+            
             Divider()
             Text("CalendarModule")
                 .font(.title)
@@ -237,157 +257,23 @@ class MainActivity : ReactActivity() {
             
             
             Divider()
-            Text("App.tsx vs Firebase")
+            Text("index.js")
                 .font(.title)
             
             HStack{
                 CopyTextView(text: """
-// Скопировать код App.tsx
-import React, {useRef, useState, useEffect} from 'react';
-import {ActivityIndicator, StyleSheet, View, Dimensions,BackHandler, NativeModules} from 'react-native';
-import WebView from 'react-native-webview';
-import App1 from './App1';
-const {CalendarModule} = NativeModules
-import analytics from '@react-native-firebase/analytics';
-import remoteConfig from '@react-native-firebase/remote-config';
+// Скопировать код index.js
 
-const appName = '\(String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased())'
+import {AppRegistry} from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+import App from './App';
+import {name as appName} from './app.json';
 
-const WebScreen = ({weblink, setShowWeb}) => {
-const webViewRef = useRef()
-const [indicator, setIndicator] = useState(true);
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+});
 
-const handleBackButtonPress = () => {
-try {
-webViewRef.current?.goBack()
-} catch (err) {
-console.log("[handleBackButtonPress] Error : ", err.message)
-}
-
-return true;
-}
-
-useEffect(() => {
-BackHandler.addEventListener("hardwareBackPress", handleBackButtonPress)
-return () => {
-BackHandler.removeEventListener("hardwareBackPress", handleBackButtonPress)
-};
-}, []);
-
-return (
-<View style={{flex: 1}}>
-<WebView
-source={{
-uri: weblink,
-}}
-ref={webViewRef}
-onMessage={event => {}}
-javaScriptEnabled={true}
-onLoadEnd={syntheticEvent => {
-setIndicator(false);
-}}
-allowsInlineMediaPlayback={true}
-onHttpError={syntheticEvent => {
-const {nativeEvent} = syntheticEvent;
-if(nativeEvent.statusCode === 404) setShowWeb(false)
-}}
-onError={err => {
-console.log(err);
-}}
-/>
-{indicator && (
-<View style={styles.loader}>
-<ActivityIndicator color="#000" size="large" />
-</View>
-)}
-</View>
-);
-};
-
-function App() {
-const [showWeb, setShowWeb] = useState(false)
-const [showContent, setShowContent] = useState(false)
-const [weblink, setWeblink] = useState("")
-const [referrerLink, setReferrerLink] = useState("")
-const [link, setLink] = useState(null)
-
-useEffect(() => {
-    getLink()
-}, []);
-
-const getLink = async () => {
-await remoteConfig()
-  .setDefaults({
-    link: '',
-  })
-  .then(() => remoteConfig().fetchAndActivate())
-  .then((fetchedRemotely) => {});
-
-  const newLink = await remoteConfig().getValue('link');
-  setLink(newLink.asString())
-}
-
-useEffect(() => {
-    setTimeout(() => {
-        CalendarModule.createCalendarEvent((res) => {
-            setReferrerLink(res)
-        });
-    }, 1000)
-}, [])
-
-useEffect(() => {
-    if(link == null) return
-    if(link == '') {
-        setShowContent(true)
-        return
-    }
-    if(referrerLink){
-        let match = referrerLink.match(/gclid=([^&]+)/);
-        let gclid = match ? match[1] : '123';
-
-        fetch(link + '/' + appName + '_startRequest.php?gclid=' + gclid)
-            .then(res => res.json())
-            .then(data => {
-            if(data.res) {
-                setWeblink(data.weblink)
-                setShowWeb(true)
-            }
-            })
-            .catch(err => setShowWeb(false))
-            .finally(some => setShowContent(true))
-    }
-}, [referrerLink, link])
-
-
-const renderContent = () => {
-return showWeb ? <WebScreen setShowWeb={setShowWeb} weblink={weblink} /> : <App1 />
-}
-
-return showContent ? renderContent() : (
-<View style={styles.cont}>
-<ActivityIndicator size={'large'} />
-</View>
-)
-}
-
-const styles = StyleSheet.create({
-cont: {
-flex:1,
-alignItems:'center',
-justifyContent:'center'
-},
-loader: {
-position: 'absolute',
-width: 55,
-height: 55,
-top: Dimensions.get('window').height / 2 - 25,
-left: Dimensions.get('window').width / 2 - 25,
-},
-})
-
-export default App
-
-
+AppRegistry.registerComponent(appName, () => App);
 """)
             }
             .padding(.bottom, 10)
@@ -400,7 +286,7 @@ export default App
             
             
             Divider()
-            Text("App.tsx vs link")
+            Text("App.tsx")
                 .font(.title)
             
             HStack{
@@ -412,6 +298,8 @@ import WebView from 'react-native-webview';
 import App1 from './App1';
 const {CalendarModule} = NativeModules
 import analytics from '@react-native-firebase/analytics';
+import {PermissionsAndroid} from 'react-native';
+PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
 const server = {
 url: '\(app.webviewDomain)'
@@ -435,7 +323,7 @@ return true;
 useEffect(() => {
 BackHandler.addEventListener("hardwareBackPress", handleBackButtonPress)
 return () => {
-BackHandler.removeEventListener("hardwareBackPress", handleBackButtonPress)
+// BackHandler.removeEventListener("hardwareBackPress", handleBackButtonPress)
 };
 }, []);
 
