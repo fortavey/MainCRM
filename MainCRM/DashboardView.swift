@@ -13,6 +13,7 @@ struct DashboardView: View {
     @EnvironmentObject private var selfAccountsVM: SelfAccountsViewModel
     @EnvironmentObject private var tasksListVM: TasksListViewModel
     @EnvironmentObject private var blankAppsListVM: BlankAppsListViewModel
+    @EnvironmentObject private var parserVM: ParserViewModel
     
     var body: some View {
         VStack{
@@ -88,6 +89,11 @@ struct DashboardView: View {
                         .foregroundStyle(Color.red)
                 }
                 
+            }
+            HStack {
+                Button("Парсер"){
+                    parserVM.changeOpacity()
+                }
             }
         }
         .frame(width: 200)

@@ -15,11 +15,14 @@ struct ContentView: View {
     @EnvironmentObject private var tasksListVM: TasksListViewModel
     @EnvironmentObject private var blankAppsListVM: BlankAppsListViewModel
     @EnvironmentObject private var taskTimerVM: TaskTimerViewModel
+    @EnvironmentObject private var parserVM: ParserViewModel
     
     let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     
     var body: some View {
         ZStack{
+            ParserView()
+                .opacity(parserVM.opacity)
             TabView {
                 HomeView()
                     .tabItem {

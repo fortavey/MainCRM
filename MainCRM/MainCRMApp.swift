@@ -28,6 +28,7 @@ struct MainCRMApp: App {
     @StateObject private var taskTimerVM = TaskTimerViewModel()
     @StateObject private var appUpdate404StatusVM = AppUpdate404StatusViewModel()
     @StateObject private var combineVM = CreateAppCombineViewModel()
+    @StateObject private var parserVM = ParserViewModel()
 
     var body: some Scene {
         WindowGroup {
@@ -41,5 +42,6 @@ struct MainCRMApp: App {
         .environmentObject(taskTimerVM)
         .environmentObject(appUpdate404StatusVM)
         .environmentObject(combineVM)
+        .environmentObject(parserVM)
       }
 }

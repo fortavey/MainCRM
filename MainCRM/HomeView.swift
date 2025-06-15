@@ -41,10 +41,6 @@ struct HomeView: View {
                     .tabItem {
                         Text("Комбайн")
                     }
-                ParserView()
-                    .tabItem {
-                        Text("Парсер")
-                    }
             }
         }
     }

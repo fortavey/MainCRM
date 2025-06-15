@@ -345,11 +345,13 @@ struct ContextMenuOpenWebView: View {
     var popularCountries: [PopularCountry] = [
         PopularCountry(name: "Бразилия", hl: "pt-br", gl: "br"),
         PopularCountry(name: "Германия", hl: "de", gl: "de"),
+        PopularCountry(name: "Испания", hl: "es", gl: "es"),
         PopularCountry(name: "Италия", hl: "it", gl: "it"),
         PopularCountry(name: "Индия", hl: "en", gl: "in"),
         PopularCountry(name: "Польша", hl: "pl", gl: "pl"),
         PopularCountry(name: "США", hl: "en-us", gl: "us"),
         PopularCountry(name: "Турция", hl: "tr", gl: "tr"),
+        PopularCountry(name: "Франция", hl: "fr", gl: "fr"),
     ]
     
     var body: some View {

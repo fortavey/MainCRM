@@ -23,7 +23,7 @@ struct NewAppNameButton: View {
             NewAppNameSheet(isPresented: $isPresented, app: app)
         }
         .buttonStyle(.plain)
-
+        
     }
 }
 
@@ -34,70 +34,52 @@ struct NewAppName: Identifiable {
 }
 
 struct NewAppNameSheet: View {
-    @EnvironmentObject private var brendListVM: BrendListViewModel
+    //    @EnvironmentObject private var brendListVM: BrendListViewModel
     @EnvironmentObject private var appListVM: AppListViewModel
     @State private var langs: [NewAppName] = []
     @State private var mainName = ""
-    @State private var isBrendMode = false
     @Binding var isPresented: Bool
     var app: AppModel
     
     
     var body: some View {
         VStack{
-            HStack {
-                Button("Выбрать бренд"){ isBrendMode = true }
-                Button("Ручной ввод"){ isBrendMode = false }
+            
+            VStack{
+                Text("Введите новое название")
+                    .font(.title)
+                Divider()
+                Text("Основное название")
+                TextField("Название приложения", text: $mainName)
+                Divider()
+                Text("Локальные названия")
+                
+                
+                ForEach($langs.wrappedValue){newAppName in
+                    VStack{
+                        HStack{
+                            Text(newAppName.lang.title)
+                            Text(" - ")
+                            Text(newAppName.value)
+                            Spacer()
+                        }
+                        Divider()
+                    }
+                }
+                
+                AddLocaligationField(langs: $langs)
+                
+                HStack{
+                    Button("Отмена") { isPresented = false }
+                    Button("Сохранить") {
+                        let localizationsArr = langs.map{ "\($0.lang.title) - \($0.value)" }
+                        addNewAppName(id: app.id, newAppName: mainName, localizations: localizationsArr)
+                    }
+                }
+                .padding()
+                
             }
             .padding()
-            if isBrendMode {
-                VStack{
-                    Text("Выберите бренд")
-                        .font(.title)
-                    
-                    List(brendListVM.brendsList, id: \.id){ brend in
-                        Text(brend.name)
-                    }
-                    
-                }
-                .padding()
-            }else {
-                VStack{
-                    Text("Введите новое название")
-                        .font(.title)
-                    Divider()
-                    Text("Основное название")
-                    TextField("Название приложения", text: $mainName)
-                    Divider()
-                    Text("Локальные названия")
-                    
-                    
-                    ForEach($langs.wrappedValue){newAppName in
-                        VStack{
-                            HStack{
-                                Text(newAppName.lang.title)
-                                Text(" - ")
-                                Text(newAppName.value)
-                                Spacer()
-                            }
-                            Divider()
-                        }
-                    }
-                    
-                    AddLocaligationField(langs: $langs)
-                    
-                    HStack{
-                        Button("Отмена") { isPresented = false }
-                        Button("Сохранить") {
-                            let localizationsArr = langs.map{ "\($0.lang.title) - \($0.value)" }
-                            addNewAppName(id: app.id, newAppName: mainName, localizations: localizationsArr)
-                        }
-                    }
-                    .padding()
-
-                }
-                .padding()
-            }
         }
     }
     
@@ -141,7 +123,7 @@ struct AddLocaligationField: View {
             } label: {
                 Image(systemName: "arrowshape.forward.fill")
             }
-
+            
         }
     }
 }

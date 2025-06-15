@@ -34,6 +34,12 @@ struct TaskRename: View {
                     .font(.title)
                     .foregroundStyle(Color.green)
                 
+                HStack {
+                    Button("11:00"){
+                        createTimerTask(seconds: 3600)
+                    }
+                }
+                
                 VStack(alignment: .leading){
                     if let localizations = app.localizations {
                         ForEach(localizations.indices, id: \.self) { index in
@@ -108,6 +114,25 @@ struct TaskRename: View {
                 if err == nil {
                     print("Saved")
                     tasksListVM.getTasksRNList()
+                    self.presentationMode.wrappedValue.dismiss()
+                    isIndicator = false
+                }else{
+                    print("ERR")
+                }
+            }
+    }
+    
+    private func createTimerTask(seconds: Int){
+        isIndicator = true
+        Firestore.firestore()
+            .collection("timers")
+            .document(app.id)
+            .setData([
+                "endTime": Int(Date().timeIntervalSince1970) + seconds,
+                "isDone": false
+            ], merge: true) { err in
+                if err == nil {
+                    print("Saved")
                     self.presentationMode.wrappedValue.dismiss()
                     isIndicator = false
                 }else{
