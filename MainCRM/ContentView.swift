@@ -21,8 +21,10 @@ struct ContentView: View {
     
     var body: some View {
         ZStack{
-            ParserView()
-                .opacity(parserVM.opacity)
+            if MainConfig.isAdmin {
+                ParserView()
+                    .opacity(parserVM.opacity)
+            }
             TabView {
                 HomeView()
                     .tabItem {

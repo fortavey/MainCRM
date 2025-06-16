@@ -90,9 +90,11 @@ struct DashboardView: View {
                 }
                 
             }
-            HStack {
-                Button("Парсер"){
-                    parserVM.changeOpacity()
+            if MainConfig.isAdmin {
+                HStack {
+                    Button("Парсер"){
+                        parserVM.changeOpacity()
+                    }
                 }
             }
         }
