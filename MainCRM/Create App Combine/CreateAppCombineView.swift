@@ -20,26 +20,31 @@ struct CreateAppCombineView: View {
                 TextField("Название приложения", text: $appName)
                     .padding()
                     .disabled(!isEnabledFields)
-                TextField("Префикс приложения", text: $appPrefix)
-                    .padding()
-                    .disabled(!isEnabledFields)
+//                TextField("Префикс приложения", text: $appPrefix)
+//                    .padding()
+//                    .disabled(!isEnabledFields)
             }
             if isEnabledFields{
                 Button("Старт"){
-                    if appName != "" && appPrefix != ""{
+                    if appName != ""{
+                        getPrefix()
                         combineVM.appRealName = appName
                         combineVM.appPrefix = appPrefix
                         isEnabledFields = false
                     }
                 }
             }else {
-                Button("Cброс"){
-                    combineVM.appRealName = ""
-                    combineVM.appPrefix = ""
-                    appName = ""
-                    appPrefix = ""
-                    Helper.shared.refreshProducts()
-                    isEnabledFields = true
+                VStack{
+                    Text("Название - \(appName)")
+                    Text("Префикс - \(appPrefix)")
+                    Button("Cброс"){
+                        combineVM.appRealName = ""
+                        combineVM.appPrefix = ""
+                        appName = ""
+                        appPrefix = ""
+                        Helper.shared.refreshProducts()
+                        isEnabledFields = true
+                    }
                 }
             }
             
@@ -55,8 +60,12 @@ struct CreateAppCombineView: View {
             Spacer()
         }
         .padding()
-        
-        
+    }
+    
+    func getPrefix() {
+        var nameArr = appName.split(separator: " ")
+        var prefix = nameArr[0] + nameArr[1].lowercased()
+        appPrefix = String(prefix)
     }
     
     func attributesOfIcon(){

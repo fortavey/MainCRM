@@ -14,22 +14,20 @@ class IdList {
 }
 
 struct ParserView: View {
-    @State private var idList: [String] = []
     @State private var country: String = ""
     var body: some View {
         VStack{
             HStack{
-                CountryParseView(country: $country, idList: $idList, countryText: "Бразилия", lang: "pt-br", geo: "br")
-                CountryParseView(country: $country, idList: $idList, countryText: "Германия", lang: "de", geo: "de")
-                CountryParseView(country: $country, idList: $idList, countryText: "Испания", lang: "es", geo: "es")
-                CountryParseView(country: $country, idList: $idList, countryText: "Италия", lang: "it", geo: "it")
-                CountryParseView(country: $country, idList: $idList, countryText: "Индия", lang: "en-in", geo: "in")
-                CountryParseView(country: $country, idList: $idList, countryText: "Польша", lang: "pl", geo: "pl")
-                CountryParseView(country: $country, idList: $idList, countryText: "Франция", lang: "fr", geo: "fr")
-                CountryParseView(country: $country, idList: $idList, countryText: "Турция", lang: "tr", geo: "tr")
+                CountryParseView(country: country, countryText: "Бразилия", lang: "pt-br", geo: "br", interval: 100)
+                CountryParseView(country: country, countryText: "Германия", lang: "de", geo: "de", interval: 200)
+                CountryParseView(country: country, countryText: "Испания", lang: "es", geo: "es", interval: 300)
+                CountryParseView(country: country, countryText: "Италия", lang: "it", geo: "it", interval: 400)
             }
-            List(idList.indices, id: \.self){ index in
-                AppIdParserView(country: country, appId: idList[index], number: index+1)
+            HStack{
+                CountryParseView(country: country, countryText: "Индия", lang: "en-in", geo: "in", interval: 500)
+                CountryParseView(country: country, countryText: "Польша", lang: "pl", geo: "pl", interval: 600)
+                CountryParseView(country: country, countryText: "Франция", lang: "fr", geo: "fr", interval: 700)
+                CountryParseView(country: country, countryText: "Турция", lang: "tr", geo: "tr", interval: 800)
             }
         }
     }
@@ -99,16 +97,25 @@ struct AppIdParserView: View {
 }
 
 struct CountryParseView: View {
-    @Binding var country: String
-    @Binding var idList: [String]
+    var country: String
+    @State private var idList: [String] = []
     var countryText: String
     var lang: String
     var geo: String
     var query = "Chicken+Road"
     var requestString = "http://localhost:1717/api/googlePlayRequest"
     let timerV = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    @State private var intervalText = "1000"
-    @State private var interval = 1000
+    @State private var intervalText: String
+    @State private var interval: Int
+    
+    init(country: String, countryText: String, lang: String, geo: String, interval: Int) {
+        self.country = country
+        self.countryText = countryText
+        self.lang = lang
+        self.geo = geo
+        self.interval = interval
+        self.intervalText = "\(interval)"
+    }
     
     var body: some View {
         VStack{
@@ -121,7 +128,6 @@ struct CountryParseView: View {
                 }
             }
             Button(countryText){
-                country = countryText
                 fetch(lang: lang, geo:geo)
                 interval = 1000
             }
@@ -129,11 +135,14 @@ struct CountryParseView: View {
                 .onReceive(timerV) { _ in
                     if interval < 0 {
                         interval = 1000
-                        country = countryText
                         fetch(lang: lang, geo:geo)
                     }
                     interval -= 1
                 }
+            
+            List(idList.indices, id: \.self){ index in
+                AppIdParserView(country: country, appId: idList[index], number: index+1)
+            }
         }
     }
     

@@ -30,66 +30,6 @@ struct DashboardView: View {
                     Text("Сформировать списки")
                 }
             }
-            HStack{
-                Text("Трастовые аккаунты")
-                Spacer()
-                if trustAccountsVM.isLoad() {
-                    Image(systemName: "checkmark.circle")
-                        .foregroundStyle(Color.green)
-                }else {
-                    Image(systemName: "xmark.circle")
-                        .foregroundStyle(Color.red)
-                }
-                
-            }
-            HStack{
-                Text("Список приложений")
-                Spacer()
-                if appListVM.isLoad() {
-                    Image(systemName: "checkmark.circle")
-                        .foregroundStyle(Color.green)
-                }else {
-                    Image(systemName: "xmark.circle")
-                        .foregroundStyle(Color.red)
-                }
-                
-            }
-            HStack{
-                Text("Самофарм аккаунты")
-                Spacer()
-                if selfAccountsVM.isLoad() {
-                    Image(systemName: "checkmark.circle")
-                        .foregroundStyle(Color.green)
-                }else {
-                    Image(systemName: "xmark.circle")
-                        .foregroundStyle(Color.red)
-                }
-                
-            }
-            HStack{
-                Text("Список задач")
-                Spacer()
-                if trustAccountsVM.isLoad() {
-                    Image(systemName: "checkmark.circle")
-                        .foregroundStyle(Color.green)
-                }else {
-                    Image(systemName: "xmark.circle")
-                        .foregroundStyle(Color.red)
-                }
-                
-            }
-            HStack{
-                Text("Список заготовок")
-                Spacer()
-                if blankAppsListVM.isLoad() {
-                    Image(systemName: "checkmark.circle")
-                        .foregroundStyle(Color.green)
-                }else {
-                    Image(systemName: "xmark.circle")
-                        .foregroundStyle(Color.red)
-                }
-                
-            }
             if MainConfig.isAdmin {
                 HStack {
                     Button("Парсер"){

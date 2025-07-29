@@ -289,6 +289,139 @@ AppRegistry.registerComponent(appName, () => App);
             Text("App.tsx")
                 .font(.title)
             
+//            HStack{
+//                CopyTextView(text: """
+//// Скопировать код App.tsx
+//import React, {useRef, useState, useEffect} from 'react';
+//import {ActivityIndicator, StyleSheet, View, Dimensions,BackHandler, NativeModules} from 'react-native';
+//import WebView from 'react-native-webview';
+//import App1 from './App1';
+//const {CalendarModule} = NativeModules
+//import analytics from '@react-native-firebase/analytics';
+//import {PermissionsAndroid} from 'react-native';
+//PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+//
+//const server = {
+//url: '\(app.webviewDomain)'
+//}
+//const appName = '\(String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased())'
+//
+//const WebScreen = ({weblink, setShowWeb}) => {
+//const webViewRef = useRef()
+//const [indicator, setIndicator] = useState(true);
+//
+//const handleBackButtonPress = () => {
+//try {
+//webViewRef.current?.goBack()
+//} catch (err) {
+//console.log("[handleBackButtonPress] Error : ", err.message)
+//}
+//
+//return true;
+//}
+//
+//useEffect(() => {
+//BackHandler.addEventListener("hardwareBackPress", handleBackButtonPress)
+//return () => {
+//// BackHandler.removeEventListener("hardwareBackPress", handleBackButtonPress)
+//};
+//}, []);
+//
+//return (
+//<View style={{flex: 1}}>
+//<WebView
+//source={{
+//uri: weblink,
+//}}
+//ref={webViewRef}
+//onMessage={event => {}}
+//javaScriptEnabled={true}
+//onLoadEnd={syntheticEvent => {
+//setIndicator(false);
+//}}
+//allowsInlineMediaPlayback={true}
+//onHttpError={syntheticEvent => {
+//const {nativeEvent} = syntheticEvent;
+//if(nativeEvent.statusCode === 404) setShowWeb(false)
+//}}
+//onError={err => {
+//console.log(err);
+//}}
+///>
+//{indicator && (
+//<View style={styles.loader}>
+//<ActivityIndicator color="#000" size="large" />
+//</View>
+//)}
+//</View>
+//);
+//};
+//
+//function App() {
+//const [showWeb, setShowWeb] = useState(false)
+//const [showContent, setShowContent] = useState(false)
+//const [weblink, setWeblink] = useState("")
+//const [referrerLink, setReferrerLink] = useState("")
+//
+//useEffect(() => {
+//    setTimeout(() => {
+//        CalendarModule.createCalendarEvent((res) => {
+//            setReferrerLink(res)
+//        });
+//    }, 1000)
+//}, [])
+//
+//useEffect(() => {
+//    if(referrerLink){
+//        let match = referrerLink.match(/gclid=([^&]+)/);
+//        let gclid = match ? match[1] : '123';
+//
+//        fetch(server.url + '/' + appName + '_startRequest.php?gclid=' + gclid)
+//            .then(res => res.json())
+//            .then(data => {
+//            if(data.res) {
+//                setWeblink(data.weblink)
+//                setShowWeb(true)
+//            }
+//            })
+//            .catch(err => setShowWeb(false))
+//            .finally(some => setShowContent(true))
+//    }
+//}, [referrerLink])
+//
+//
+//const renderContent = () => {
+//return showWeb ? <WebScreen setShowWeb={setShowWeb} weblink={weblink} /> : <App1 />
+//}
+//
+//return showContent ? renderContent() : (
+//<View style={styles.cont}>
+//<ActivityIndicator size={'large'} />
+//</View>
+//)
+//}
+//
+//const styles = StyleSheet.create({
+//cont: {
+//flex:1,
+//alignItems:'center',
+//justifyContent:'center'
+//},
+//loader: {
+//position: 'absolute',
+//width: 55,
+//height: 55,
+//top: Dimensions.get('window').height / 2 - 25,
+//left: Dimensions.get('window').width / 2 - 25,
+//},
+//})
+//
+//export default App
+//
+//
+//""")
+//            }
+//            .padding(.bottom, 10)
             HStack{
                 CopyTextView(text: """
 // Скопировать код App.tsx
@@ -296,17 +429,14 @@ import React, {useRef, useState, useEffect} from 'react';
 import {ActivityIndicator, StyleSheet, View, Dimensions,BackHandler, NativeModules} from 'react-native';
 import WebView from 'react-native-webview';
 import App1 from './App1';
-const {CalendarModule} = NativeModules
 import analytics from '@react-native-firebase/analytics';
+import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PlayInstallReferrer } from 'react-native-play-install-referrer';
 import {PermissionsAndroid} from 'react-native';
 PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
-const server = {
-url: '\(app.webviewDomain)'
-}
-const appName = '\(String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased())'
-
-const WebScreen = ({weblink, setShowWeb}) => {
+const WebScreen = ({setShowWeb, webLink}) => {
 const webViewRef = useRef()
 const [indicator, setIndicator] = useState(true);
 
@@ -322,16 +452,14 @@ return true;
 
 useEffect(() => {
 BackHandler.addEventListener("hardwareBackPress", handleBackButtonPress)
-return () => {
-// BackHandler.removeEventListener("hardwareBackPress", handleBackButtonPress)
-};
+return () => {};
 }, []);
 
 return (
-<View style={{flex: 1}}>
+<View style={{flex: 1, paddingTop: 25}}>
 <WebView
 source={{
-uri: weblink,
+uri: webLink,
 }}
 ref={webViewRef}
 onMessage={event => {}}
@@ -341,16 +469,20 @@ setIndicator(false);
 }}
 allowsInlineMediaPlayback={true}
 onHttpError={syntheticEvent => {
-const {nativeEvent} = syntheticEvent;
-if(nativeEvent.statusCode === 404) setShowWeb(false)
+  console.log("ERROR");
+
+    const {nativeEvent} = syntheticEvent;
+    if(nativeEvent.statusCode > 400) setShowWeb(false)
 }}
+
 onError={err => {
+  if(!err.nativeEvent.loading) setShowWeb(false)
 console.log(err);
 }}
 />
 {indicator && (
 <View style={styles.loader}>
-<ActivityIndicator color="#000" size="large" />
+<ActivityIndicator size="large" />
 </View>
 )}
 </View>
@@ -358,47 +490,98 @@ console.log(err);
 };
 
 function App() {
-const [showWeb, setShowWeb] = useState(false)
-const [showContent, setShowContent] = useState(false)
-const [weblink, setWeblink] = useState("")
-const [referrerLink, setReferrerLink] = useState("")
+    const [showWeb, setShowWeb] = useState(null)
+    const [webLink, setWebLink] = useState('')
+    const [webDefaultLink, setWebDefaultLink] = useState('')
+    const [webASO, setWebASO] = useState('')
+    const [webUAC, setWebUAC] = useState('')
+    const [installReferrer, setInstallReferrer] = useState('')
 
-useEffect(() => {
-    setTimeout(() => {
-        CalendarModule.createCalendarEvent((res) => {
-            setReferrerLink(res)
-        });
-    }, 1000)
-}, [])
-
-useEffect(() => {
-    if(referrerLink){
-        let match = referrerLink.match(/gclid=([^&]+)/);
-        let gclid = match ? match[1] : '123';
-
-        fetch(server.url + '/' + appName + '_startRequest.php?gclid=' + gclid)
-            .then(res => res.json())
-            .then(data => {
-            if(data.res) {
-                setWeblink(data.weblink)
-                setShowWeb(true)
-            }
-            })
-            .catch(err => setShowWeb(false))
-            .finally(some => setShowContent(true))
+    async function getFirebase(){
+        const linksCollection = await firestore().collection('links').doc('linkObj').get();
+        const link = await linksCollection.data().link
+        const aso = await linksCollection.data().aso
+        const uac = await linksCollection.data().uac
+        if(link) setWebDefaultLink(link)
+        if(aso) setWebASO(aso)
+        if(uac) setWebUAC(uac)
+        if(!link && !aso && !uac) {
+            setShowWeb(false)
+        }else {
+            getData()
+        }
     }
-}, [referrerLink])
 
+    const getInstallReferrer = async () => {
+        await PlayInstallReferrer.getInstallReferrerInfo((installReferrerInfo, error) => {
+          if (!error) {
+            setInstallReferrer(installReferrerInfo.installReferrer);
+            storeData(installReferrerInfo.installReferrer)
+          } else {
+            console.log("Failed to get install referrer info!");
+          }
+        });
+    }
 
-const renderContent = () => {
-return showWeb ? <WebScreen setShowWeb={setShowWeb} weblink={weblink} /> : <App1 />
-}
+    const storeData = async (value) => {
+      try {
+        await AsyncStorage.setItem('installReferrer', value);
+      } catch (e) {
+        console.log("Error - ", e)
+      }
+    };
 
-return showContent ? renderContent() : (
-<View style={styles.cont}>
-<ActivityIndicator size={'large'} />
-</View>
-)
+    const getData = async () => {
+      try {
+        const value = await AsyncStorage.getItem('installReferrer');
+        if (value !== null) {
+            console.log(value)
+            setInstallReferrer(value)
+        }else {
+            getInstallReferrer()
+        }
+      } catch (e) {
+        console.log("Error - ", e)
+      }
+    };
+
+    useEffect(() => {
+        getFirebase()
+    }, [])
+
+    useEffect(() => {
+        if (installReferrer) {
+            const regex = /gclid=/;
+            let match = regex.test(installReferrer);
+            if(match && webUAC){
+                setWebLink(webUAC)
+            }else if(match && webASO){
+                setWebLink(webASO)
+            }else if(webASO){
+                setWebLink(webASO)
+            }else {
+                setWebLink(webDefaultLink)
+            }
+        }
+    }, [installReferrer])
+
+    useEffect(() => {
+        if (webLink) {
+            setShowWeb(true)
+        }
+    }, [webLink])
+
+    const renderView = () => {
+        if (showWeb == null) {
+            return <View style={{flex:1, justifyContent:'center'}}><ActivityIndicator size='large' /></View>
+        }
+        if (showWeb) {
+            return <WebScreen setShowWeb={setShowWeb} webLink={webLink} />
+        }
+        return <App1 />
+    }
+
+    return renderView()
 }
 
 const styles = StyleSheet.create({
@@ -409,20 +592,20 @@ justifyContent:'center'
 },
 loader: {
 position: 'absolute',
-width: 55,
-height: 55,
-top: Dimensions.get('window').height / 2 - 25,
-left: Dimensions.get('window').width / 2 - 25,
+width: 52,
+height: 52,
+top: Dimensions.get('window').height / 2 - 26,
+left: Dimensions.get('window').width / 2 - 26,
 },
 })
 
 export default App
 
 
+
 """)
             }
             .padding(.bottom, 10)
-            
             
             
             
