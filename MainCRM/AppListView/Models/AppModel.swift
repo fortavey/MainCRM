@@ -14,6 +14,7 @@ struct AppModel: Identifiable {
     var devLink: String
     var createAccount: String
     var transferAccount: String?
+    var locationAccount: String?
     var moderationStatus: String
     var moderationChangeTime: Int
     var updateType: String
@@ -32,6 +33,7 @@ struct AppModel: Identifiable {
     var lastUpdateTime: String?
     var isUACReady: Bool?
     var isAppBaned: Bool?
+    var isUAC: Bool?
     
     mutating func changeIsAppBanned(_ value: Bool?) {
         self.isAppBaned = value

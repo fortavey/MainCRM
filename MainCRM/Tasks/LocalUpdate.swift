@@ -8,7 +8,7 @@
 import SwiftUI
 import FirebaseFirestore
 
-struct TaskAsoMobile: View {
+struct LocalUpdate: View {
     @EnvironmentObject private var appListVM: AppListViewModel
     @EnvironmentObject private var tasksListVM: TasksListViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -19,14 +19,6 @@ struct TaskAsoMobile: View {
     var app: AppModel
     
     var body: some View {
-        let urlString = "https://play.google.com/store/apps/details?id=com.\(String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased())"
-        if let link = URL(string: urlString) {
-            Link(destination: link) {
-                Image("GooglePlayIcon")
-                    .resizable()
-                    .frame(width: 25, height: 25)
-            }
-        }
         
         HStack{
             Button {
@@ -68,7 +60,7 @@ struct TaskAsoMobile: View {
     private func sendCreateTaskRequest(){
         isIndicator = true
         Firestore.firestore()
-            .collection(TaskDB.aso.rawValue)
+            .collection(TaskDB.lo.rawValue)
             .document(app.id)
             .setData([
                 "appLink": "https://play.google.com/store/apps/details?id=com.\(String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased())",
@@ -77,7 +69,7 @@ struct TaskAsoMobile: View {
             ], merge: true) { err in
                 if err == nil {
                     changeAsoMobileStatus()
-                    tasksListVM.getTasksCRList()
+                    tasksListVM.getTasksTOList()
                     self.presentationMode.wrappedValue.dismiss()
                     isIndicator = false
                 }else{

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TaskAsoMobileModel: Identifiable {
+struct TaskLocalModel: Identifiable {
     var id: String
     var appLink: String
     var keys: [String]

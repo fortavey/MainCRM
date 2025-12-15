@@ -17,13 +17,13 @@ struct ListASOTasks: View {
                 Text("Список задач на добавление в ASOMobile").font(.title3)
                 Spacer()
             }
-            List(tasksListVM.tasksASOList){ task in
+            List(tasksListVM.tasksLOList){ task in
                 HStack{
                     if isRemoveMode {
                         RemoveButtonView(
                                 title: "Задача добавления в ASOMobile",
                                 id: task.id,
-                                collection: TaskDB.cr.rawValue
+                                collection: TaskDB.to.rawValue
                         ) {
                             tasksListVM.getTasksASOList()
                         }

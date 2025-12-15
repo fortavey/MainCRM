@@ -136,7 +136,7 @@ struct AppListView: View {
                             
                             // Самофарм аккаунт
                             if isSelfMode {
-                                ChangeSelfAccountButton(app: app, width: 100)
+                                ChangeSelfAccountButton(app: app, width: 120)
                             }
                             
                             // Новое название приложения
@@ -152,27 +152,7 @@ struct AppListView: View {
                             }
                             
                             
-                            // ASO Mobile
-                            if app.updateType == UpdateType.naming.rawValue && app.moderationStatus == ModerationStatus.approve.rawValue {
-                                if app.isAsoMobile == nil || !app.isAsoMobile! {
-                                    Button("+АСО"){
-                                        FirebaseServices().updateDocument(id: app.id,
-                                                                          collection: "apps",
-                                                                          fields: ["isAsoMobile" : true]) { result in
-                                            if result {
-                                                appListVM.getAppsList()
-                                            }else {
-                                                print("Ошибка обновления трастового аккаунта")
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                                                        
-                            // Домен webview
-                            if isWebviewMode {
-                                LineItemWebview(app: app)
-                            }
+                            
                             
                             // Ссылка на приложение в GooglePlay
                             if isPlayStoreMode {
@@ -220,8 +200,12 @@ struct AppListView: View {
                             
                             Spacer()
                             
+                            
+                            
                             // Задачи
                             TasksAppLineElement(app: app)
+                            
+                            AddUACButtonView(app: app)
                             
                         } // Hstack
                         if app.isBan != nil && app.isBan == true{

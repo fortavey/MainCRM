@@ -20,9 +20,6 @@ struct CreateAppCombineView: View {
                 TextField("Название приложения", text: $appName)
                     .padding()
                     .disabled(!isEnabledFields)
-//                TextField("Префикс приложения", text: $appPrefix)
-//                    .padding()
-//                    .disabled(!isEnabledFields)
             }
             if isEnabledFields{
                 Button("Старт"){

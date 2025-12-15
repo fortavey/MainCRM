@@ -56,6 +56,7 @@ struct TaskWebview: View {
                 "createAccount": app.createAccount,
                 "transferAccount": app.transferAccount ?? "",
                 "creoLink": app.creoLink ?? "",
+                "devLink": app.driveLink,
                 "webviewDomain": app.webviewDomain ?? "",
                 "devComp": app.devComp,
                 "isDone": false

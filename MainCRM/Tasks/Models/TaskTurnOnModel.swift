@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TaskCreoModel: Identifiable {
+struct TaskTurnOnModel: Identifiable {
     var id: String
     var firstAppName: String
     var createAccount: String

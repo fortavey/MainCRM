@@ -24,6 +24,7 @@ final class AppListViewModel: ObservableObject {
                 let devLink = doc["devLink"] as? String
                 let createAccount = doc["createAccount"] as? String
                 let transferAccount = doc["transferAccount"] as? String
+                let locationAccount = doc["locationAccount"] as? String
                 let moderationStatus = doc["moderationStatus"] as? String
                 let moderationChangeTime = doc["moderationChangeTime"] as? Int
                 let updateType = doc["updateStatus"] as? String
@@ -41,6 +42,7 @@ final class AppListViewModel: ObservableObject {
                 let renameVersion = doc["renameVersion"] as? Int
                 let lastUpdateTime = doc["lastUpdateTime"] as? String
                 let isUACReady = doc["isUACReady"] as? Bool
+                let isUAC = doc["isUAC"] as? Bool
                 array.append(
                     AppModel(
                         id: id,
@@ -49,6 +51,7 @@ final class AppListViewModel: ObservableObject {
                         devLink: devLink ?? "",
                         createAccount: createAccount ?? "",
                         transferAccount: transferAccount,
+                        locationAccount: locationAccount,
                         moderationStatus: moderationStatus ?? "",
                         moderationChangeTime: moderationChangeTime ?? 1742016421,
                         updateType: updateType ?? "",
@@ -65,7 +68,8 @@ final class AppListViewModel: ObservableObject {
                         isRenamed: isRenamed,
                         renameVersion: renameVersion,
                         lastUpdateTime: Helpers().getTimeCount(timestamp: moderationChangeTime),
-                        isUACReady: isUACReady
+                        isUACReady: isUACReady,
+                        isUAC: isUAC
                     )
                 )
             }

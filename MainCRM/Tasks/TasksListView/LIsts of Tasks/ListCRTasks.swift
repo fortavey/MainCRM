@@ -17,15 +17,15 @@ struct ListCRTasks: View {
                 Text("Список задач на креативы").font(.title3)
                 Spacer()
             }
-            List(tasksListVM.tasksCRList){ task in
+            List(tasksListVM.tasksTOList){ task in
                 HStack{
                     if isRemoveMode {
                         RemoveButtonView(
                             title: "Задача креативы - \(Helpers().getAppStoreId(appName: task.newAppName))",
                                 id: task.id,
-                                collection: TaskDB.cr.rawValue
+                                collection: TaskDB.to.rawValue
                         ) {
-                            tasksListVM.getTasksCRList()
+                            tasksListVM.getTasksTOList()
                         }
                     }
                     LineItemView(text: task.newAppName, width: 150)

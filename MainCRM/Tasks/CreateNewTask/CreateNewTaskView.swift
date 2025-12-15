@@ -10,9 +10,9 @@ import SwiftUI
 enum TaskType {
     case release
     case rename
-    case creo
-    case asomobile
+    case turnon
     case webview
+    case local
     case transfer
 }
 
@@ -38,18 +38,18 @@ struct CreateNewTaskView: View {
                 .background(getButtonColor(taskType: .rename))
                 
                 Button {
-                    taskType = .creo
+                    taskType = .turnon
                 } label: {
-                    Text("Добавление креативов")
+                    Text("Включение приложения")
                 }
-                .background(getButtonColor(taskType: .creo))
+                .background(getButtonColor(taskType: .turnon))
                 
                 Button {
-                    taskType = .asomobile
+                    taskType = .local
                 } label: {
-                    Text("Добавление ASOMobile")
+                    Text("Локальное обновление")
                 }
-                .background(getButtonColor(taskType: .asomobile))
+                .background(getButtonColor(taskType: .local))
                 
                 Button {
                     taskType = .webview
@@ -71,10 +71,10 @@ struct CreateNewTaskView: View {
                 TaskFirstModeration(app: app)
             case .rename:
                 TaskRename(app: app)
-            case .creo:
-                TaskCreo(app: app)
-            case .asomobile:
-                TaskAsoMobile(app: app)
+            case .turnon:
+                TaskTurnOn(app: app)
+            case .local:
+                LocalUpdate(app: app)
             case .transfer:
                 TaskTransfer(app: app)
             case .webview:
@@ -82,6 +82,11 @@ struct CreateNewTaskView: View {
             }
             
             Spacer()
+        }
+        .onAppear(){
+            if app.moderationStatus != "" {
+                taskType = .rename
+            }
         }
     }
     

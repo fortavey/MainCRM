@@ -11,9 +11,15 @@ struct LineItemView: View {
     var text: String
     var width: CGFloat
     var color: Color?
+    var icon: String?
     
     var body: some View {
         HStack{
+            if let icon = icon {
+                Image(icon)
+                    .resizable()
+                    .frame(width: 12, height: 12)
+            }
             Text(text)
                 .foregroundStyle(Color.white)
                 .lineLimit(1)

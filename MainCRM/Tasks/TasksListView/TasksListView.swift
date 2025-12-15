@@ -33,9 +33,9 @@ struct TasksListView: View {
                 
                 if tasksListVM.tasksRNList.count > 0 { ListRNTasks(isRemoveMode: $isRemoveMode) }
                 
-                if tasksListVM.tasksCRList.count > 0 { ListCRTasks(isRemoveMode: $isRemoveMode) }
+                if tasksListVM.tasksTOList.count > 0 { ListCRTasks(isRemoveMode: $isRemoveMode) }
                 
-                if tasksListVM.tasksASOList.count > 0 { ListASOTasks(isRemoveMode: $isRemoveMode) }
+                if tasksListVM.tasksLOList.count > 0 { ListASOTasks(isRemoveMode: $isRemoveMode) }
                 
                 if tasksListVM.tasksTRList.count > 0 { ListTRTasks(isRemoveMode: $isRemoveMode) }
                 
