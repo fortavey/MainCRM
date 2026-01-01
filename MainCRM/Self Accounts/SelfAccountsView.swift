@@ -26,6 +26,14 @@ struct SelfAccountsView: View {
                     .sheet(isPresented: $isPresented) {
                         AddNewSelfAccount(isPresented: $isPresented, selfAccountsVM: selfAccountsVM)
                     }
+                    Button{
+                        isPresented.toggle()
+                    } label: {
+                        MenuIconView(systemName: "plus.rectangle.fill.on.rectangle.fill")
+                    }
+                    .sheet(isPresented: $isPresented) {
+                        AddNewSelfAccounts(isPresented: $isPresented, selfAccountsVM: selfAccountsVM)
+                    }
                     Button {
                         isRemoveMode.toggle()
                     } label: {

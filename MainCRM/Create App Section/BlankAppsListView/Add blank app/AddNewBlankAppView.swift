@@ -10,14 +10,10 @@ import SwiftUI
 import FirebaseFirestore
 
 struct AddNewBlankAppView: View {
-    @State private var name = ""
-    @State private var devLink = ""
-    @State private var driveLink = ""
-        
     @Binding var isPresented: Bool
+    @State private var namesArray: [String] = []
     
     @ObservedObject var blankAppsListVM: BlankAppsListViewModel
-    
     
     var body: some View {
         VStack{
@@ -33,30 +29,38 @@ struct AddNewBlankAppView: View {
                 .buttonStyle(.plain)
             }
 
-            Text("Добавить новое приложение")
+            Text("Добавить новые приложения")
                 .padding()
                 .font(.title)
             
-            TextField("Первое название", text: $name)
-            HStack{
-                TextField("Ссылка исходников", text: $driveLink)
-                if let link = URL(string: "https://drive.google.com/drive/folders/1O38VJSDx0fM1y3yv5G_TznKnhTI8pQlO") {
-                    Link(destination: link) {
-                        Image("GoogleDriveIcon")
-                            .resizable()
-                            .frame(width: 17, height: 17)
+            Button("Собрать") {
+                do {
+                    var zips = try FileManager.default.contentsOfDirectory(atPath: "/Users/Main/NewApps")
+                    zips = zips.filter{ $0 != ".DS_Store" }
+                    zips = zips.map{
+                        $0.replacingOccurrences(of: ".zip", with: "")
                     }
+                    namesArray = zips
+                }catch {
+                    
                 }
             }
-            TextField("Ссылка разработки", text: $devLink)
-            Button {
-                addNewApp()
-            } label: {
-                Text("Добавить")
-                    .padding(5)
+            
+            Divider()
+            
+            ScrollView{
+                ForEach(namesArray, id: \.self) { appName in
+                    AddAppItemView(namesArray: $namesArray, name: appName)
+                    Divider()
+                }
+                Button("Получить список для Дизайнера"){
+                    var listString = ""
+                    blankAppsListVM.appsList.forEach{
+                        listString += "\($0.driveLink)\n\n"
+                    }
+                    copyText(text: listString)
+                }
             }
-            .padding(.top, 30)
-            .disabled(!isValid())
             
             Spacer()
         }
@@ -64,29 +68,9 @@ struct AddNewBlankAppView: View {
         .padding()
     }
     
-    private func isValid() -> Bool{
-        if name != "" && devLink != "" && driveLink.matches("https://drive.google.com/drive/folders") {
-            return true
-        }
-        return false
-    }
-    
-    private func addNewApp(){
-        Firestore.firestore()
-            .collection("newapps")
-            .document()
-            .setData([
-                "name": name,
-                "devLink": devLink,
-                "driveLink": driveLink
-            ], merge: true) { err in
-                if err == nil {
-                    print("Saved")
-                    blankAppsListVM.getAppsList()
-                    isPresented = false
-                }else{
-                    print("ERR")
-                }
-            }
+    func copyText(text: String){
+        let pasteboard = NSPasteboard.general
+        pasteboard.declareTypes([NSPasteboard.PasteboardType.string], owner: nil)
+        pasteboard.setString(text, forType: .string)
     }
 }

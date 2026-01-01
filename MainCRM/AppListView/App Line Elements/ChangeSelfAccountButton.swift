@@ -126,6 +126,18 @@ struct TransferMoveView: View {
     @EnvironmentObject private var appListVM: AppListViewModel
     var app: AppModel
     
+    func getButtonColor() -> Color {
+        var appsWithSameAccount: [AppModel] = appListVM.appsList.filter { $0.createAccount == app.createAccount }
+        
+        var isSomeAppHaveActiveTransfer: [AppModel] = appsWithSameAccount.filter{ $0.isTransfer == false }
+
+        if isSomeAppHaveActiveTransfer.isEmpty {
+            return .red
+        }else {
+            return .clear
+        }
+    }
+    
     var body: some View {
         if app.isTransfer == nil {
             if app.transferAccount != nil {
@@ -146,6 +158,7 @@ struct TransferMoveView: View {
                     }
                 }
                 .frame(width: 30)
+                .background(getButtonColor())
             }else {
                 Button(" "){}
                     .buttonStyle(.plain)

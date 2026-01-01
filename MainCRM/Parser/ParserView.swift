@@ -102,7 +102,7 @@ struct CountryParseView: View {
     var countryText: String
     var lang: String
     var geo: String
-    var query = "Chicken+Road"
+    @State private var query = ""
     var requestString = "http://localhost:1717/api/googlePlayRequest"
     let timerV = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State private var intervalText: String
@@ -119,6 +119,8 @@ struct CountryParseView: View {
     
     var body: some View {
         VStack{
+            TextField("Ключ", text: $query)
+            Text(query)
             HStack {
                 TextField("Инт", text: $intervalText)
                     .frame(width: 50)
@@ -128,6 +130,7 @@ struct CountryParseView: View {
                 }
             }
             Button(countryText){
+                query = query.replacing(" ", with: "+")
                 fetch(lang: lang, geo:geo)
                 interval = 1000
             }
