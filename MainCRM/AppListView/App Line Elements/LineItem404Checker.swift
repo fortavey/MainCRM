@@ -13,31 +13,22 @@ enum App404Status: String {
 }
 
 struct LineItem404Checker: View {
-    @EnvironmentObject private var appUpdate404StatusVM: AppUpdate404StatusViewModel
     var app: AppModel
+    @State private var isActive: Bool = false
     
     var body: some View {
-//        show404Status()
-        Button("Test"){
+        Button(action: {
             fetch()
-        }
-    }
-    
-    private func show404Status() -> some View {
-        if let item = appUpdate404StatusVM.statusCodesList.first(where: {$0.id == app.id}) {
-            if item.response == App404Status.active.rawValue {
-                return Image(systemName: "checkmark")
+        }){
+            if isActive {
+                Image(systemName: "checkmark.circle")
                     .foregroundColor(.green)
-            }else if item.response == App404Status.inactive.rawValue {
-                return Image(systemName: "xmark")
-                    .foregroundColor(.red)
-            }else {
-                return Image(systemName: "exclamationmark.square")
+            }
+            else {
+                Image(systemName: "arrow.trianglehead.clockwise.icloud")
                     .foregroundColor(.yellow)
             }
-        } else {
-            return Image(systemName: "exclamationmark.square")
-                .foregroundColor(.yellow)
+            
         }
     }
     
@@ -49,12 +40,13 @@ struct LineItem404Checker: View {
         request.httpMethod = "GET"
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
+            if error != nil {
                 print("Error Playstore")
             }
             
             if let response = response as? HTTPURLResponse {
                 if response.statusCode == 200 {
+                    isActive = true
                     print("Success Playstore")
                 }else {
                     print("Else Error Playstore")
