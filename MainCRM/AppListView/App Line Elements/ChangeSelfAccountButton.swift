@@ -57,14 +57,11 @@ struct ChangeSelfAccountSheet: View {
     func getEmptyAccountsList() -> [String] {
         var returnArr: [String] = []
         selfAccountsVM.accountsList.forEach{ acc in
-            if acc.alias == "S.FARM-1" { returnArr.append("S.FARM-1") }
-            else {
-                if !appListVM.appsList.contains(where: { $0.transferAccount == acc.alias }) {
+            if !appListVM.appsList.contains(where: { $0.transferAccount == acc.alias }) {
+                returnArr.append(acc.alias)
+            }else {
+                if accountType == "locationAccount" {
                     returnArr.append(acc.alias)
-                }else {
-                    if accountType == "locationAccount" {
-                        returnArr.append(acc.alias)
-                    }
                 }
             }
             
@@ -79,7 +76,7 @@ struct ChangeSelfAccountSheet: View {
                 .font(.title)
             TextField("Введите алиас аккаунта", text: $transferAccount)
             Picker(selection: $transferAccount) {
-                ForEach(getEmptyAccountsList(), id: \.self) { accAlias in
+                ForEach(getEmptyAccountsList().sorted(by: >), id: \.self) { accAlias in
                     Button {
                         print("Аккаунт выбран")
                     } label: {

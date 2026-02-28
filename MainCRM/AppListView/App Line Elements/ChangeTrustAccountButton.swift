@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ChangeTrustAccountButton: View {
+    @EnvironmentObject private var trustAccountsVM: TrustAccountsViewModel
     var app: AppModel
     var width: CGFloat
     @State private var isPresented = false
@@ -16,11 +17,23 @@ struct ChangeTrustAccountButton: View {
         Button {
             isPresented = true
         } label: {
-            LineItemView(text: app.createAccount, width: width)
+            LineItemView(text: getAccountAlias(alias: app.createAccount), width: width)
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $isPresented) {
             ChangeTrustAccountSheet(isPresented: $isPresented, app: app)
+        }
+    }
+    
+    func getAccountAlias(alias: String) -> String {
+        let accList = trustAccountsVM.accountsList.filter{ $0.isBan != true }.filter{ $0.alias == alias }
+        
+        if accList.isEmpty {
+            return ""
+        }else if let isTransferError = accList[0].isTransferError {
+            return "\(alias) !!!"
+        }else {
+            return alias
         }
     }
 }
@@ -33,8 +46,16 @@ struct ChangeTrustAccountSheet: View {
     @Binding var isPresented: Bool
     var app: AppModel
     
-    func getAccountsList() -> [String] {
-        return trustAccountsVM.accountsList.filter{ $0.isBan != true }.map(\.alias)
+    func getAccountsList() -> [TrustAccountModel] {
+        return trustAccountsVM.accountsList.filter{ $0.isBan != true }
+    }
+    
+    func getAccountAlias(acc: TrustAccountModel) -> String {
+        if let isTransferError = acc.isTransferError {
+            return "\(acc.alias) !!!"
+        }else {
+            return acc.alias
+        }
     }
     
     var body: some View {
@@ -42,13 +63,13 @@ struct ChangeTrustAccountSheet: View {
             Text("Выберите аккаунт")
                 .font(.title)
             Picker(selection: $createAccount) {
-                ForEach(getAccountsList(), id: \.self) { alias in
+                ForEach(getAccountsList(), id: \.id) { acc in
                     Button {
                         print("Аккаунт выбран")
                     } label: {
-                        Text(alias)
+                        Text(getAccountAlias(acc: acc))
                     }
-                    .tag(alias)
+                    .tag(acc.alias)
                 }
             } label: {
                 HStack{

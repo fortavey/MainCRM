@@ -17,7 +17,10 @@ struct LineItem404Checker: View {
     var app: AppModel
     
     var body: some View {
-        show404Status()
+//        show404Status()
+        Button("Test"){
+            fetch()
+        }
     }
     
     private func show404Status() -> some View {
@@ -36,5 +39,28 @@ struct LineItem404Checker: View {
             return Image(systemName: "exclamationmark.square")
                 .foregroundColor(.yellow)
         }
+    }
+    
+    func fetch() {
+        let url = URL(string: "https://play.google.com/store/apps/details?id=com." + String(app.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased())!
+        
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "GET"
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error Playstore")
+            }
+            
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode == 200 {
+                    print("Success Playstore")
+                }else {
+                    print("Else Error Playstore")
+                }
+            }
+        }
+        task.resume()
     }
 }

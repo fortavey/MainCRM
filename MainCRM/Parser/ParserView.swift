@@ -45,6 +45,16 @@ struct AppIdParserView: View {
                 .foregroundStyle(isOurApp(from: appId))
             renderAlarm(from: appId)
         }
+        .onTapGesture {
+            copyAppNameToClipboard(id: appId)
+        }
+    }
+    
+    func copyAppNameToClipboard(id: String) {
+        let str = id.split(separator: ".")[1]
+        let pasteboard = NSPasteboard.general
+        pasteboard.declareTypes([NSPasteboard.PasteboardType.string], owner: nil)
+        pasteboard.setString(String(str), forType: .string)
     }
     
     private func isOurApp(from id: String) -> Color{

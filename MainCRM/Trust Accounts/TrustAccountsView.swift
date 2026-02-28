@@ -13,6 +13,10 @@ struct TrustAccountsView: View {
     @State private var isRemoveMode = false
     @State private var isPresented = false
     
+    func getTrustAccountsCount() -> Int {
+        trustAccountsVM.accountsList.filter { $0.isBan == nil }.count
+    }
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -31,6 +35,7 @@ struct TrustAccountsView: View {
                         MenuIconView(systemName: "trash.circle.fill")
                             .foregroundStyle(isRemoveMode ? Color.red : Color.white)
                     }
+                    Text("Количество - \(getTrustAccountsCount())")
                     Spacer()
                     Button {
                         trustAccountsVM.getAccountsList()

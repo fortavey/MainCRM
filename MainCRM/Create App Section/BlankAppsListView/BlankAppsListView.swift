@@ -8,6 +8,41 @@
 import SwiftUI
 import FirebaseFirestore
 
+struct PickerCompView: View {
+    @State private var devComp: String
+    var app: TaskWebViewModel
+    
+    init(app: TaskWebViewModel) {
+        self.devComp = app.devComp
+        self.app = app
+    }
+    
+    var body: some View {
+        Picker("", selection: $devComp) {
+            Text("ANNA").tag("ANNA")
+            Text("KRIS").tag("KRIS")
+        }
+        .frame(width: 100)
+        .onChange(of: devComp, initial: true) { oldValue, newValue in
+            if oldValue != newValue {
+                FirebaseServices().updateDocument(id: app.id,
+                                                  collection: TaskDB.web.rawValue,
+                                                  fields: ["devComp" : devComp]) { result in
+                    if result {
+                        print("Change COMP - \(newValue)")
+                    }else {
+                        print("Ошибка обновления трастового аккаунта")
+                    }
+                }
+            }
+            
+        }
+        .onTapGesture {
+            print("CLICK")
+        }
+    }
+}
+
 struct BlankAppsListView: View {
     @EnvironmentObject private var blankAppsListVM: BlankAppsListViewModel
     @EnvironmentObject private var tasksListVM: TasksListViewModel
@@ -46,6 +81,7 @@ struct BlankAppsListView: View {
                         }
                         List(tasksListVM.tasksWEBList){ app in
                             HStack{
+                                PickerCompView(app: app)
                                 LineItemView(text: app.appId, width: 150)
                                 LineItemView(text: app.newAppName, width: 150)
                                 LineItemView(text: app.createAccount, width: 150)

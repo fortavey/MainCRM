@@ -47,7 +47,7 @@ struct AddAppItemView: View {
     }
     
     private func isValid() -> Bool{
-        if name != "" && devLink != "" && driveLink.matches("https://drive.google.com/drive/folders") {
+        if name != "" && devLink.matches("https://drive.google.com/file") && driveLink.matches("https://drive.google.com/drive/folders") {
             return true
         }
         return false

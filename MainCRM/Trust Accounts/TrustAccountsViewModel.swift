@@ -26,6 +26,7 @@ final class TrustAccountsViewModel: ObservableObject {
                 let transactionId = doc["transactionId"] as? String
                 let isKeyExist = doc["isKeyExist"] as? Bool
                 let isBan = doc["isBan"] as? Bool
+                let isTransferError = doc["isTransferError"] as? Bool
                 array.append(
                     TrustAccountModel(
                         id: id,
@@ -35,7 +36,8 @@ final class TrustAccountsViewModel: ObservableObject {
                         developerId: developerId ?? "",
                         transactionId: transactionId ?? "",
                         isKeyExist: isKeyExist ?? false,
-                        isBan: isBan
+                        isBan: isBan,
+                        isTransferError: isTransferError
                     )
                 )
             }

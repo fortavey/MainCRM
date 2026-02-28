@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TrustAccountModel: Identifiable {
+struct TrustAccountModel: Identifiable, Hashable {
     var id: String
     var alias: String
     var company: String
@@ -16,4 +16,5 @@ struct TrustAccountModel: Identifiable {
     var transactionId: String
     var isKeyExist: Bool
     var isBan: Bool?
+    var isTransferError: Bool?
 }

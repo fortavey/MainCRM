@@ -36,6 +36,8 @@ struct AppListView: View {
     @State private var isInfoMode = false
     
     @State private var sortingType: SortingType = .updateType
+    @State private var searchText: String = ""
+    @State private var updateType: String = "Все"
     
         
     var body: some View {
@@ -56,7 +58,8 @@ struct AppListView: View {
                     isFirstNameMode: $isFirstNameMode,
                     isIdMode: $isIdMode,
                     isCountryMode: $isCountryMode,
-                    isInfoMode: $isInfoMode
+                    isInfoMode: $isInfoMode,
+                    updateType: updateType
                 )
                 
                     
@@ -66,6 +69,14 @@ struct AppListView: View {
                             Text("Всего приложений - \(appListVM.appsList.count) | ")
                             Text("Всего рабочих - \(appListVM.appsList.filter{$0.isBan != true}.count) | ")
                             Text("Всего готовых - \(appListVM.appsList.filter{$0.isBan != true && $0.updateType == "Готово"}.count)")
+                            TextField("Поиск", text: $searchText)
+                            Picker(selection: $updateType, label: Text("Тип обновления:")) {
+                                Text("Все").tag("Все")
+                                Text("Готово").tag("Готово")
+                                Text("Добавлено Webview").tag("Добавлено Webview")
+                                Text("Изменено название").tag("Изменено название")
+                                Text("Первая модерация").tag("Первая модерация")
+                            }.pickerStyle(RadioGroupPickerStyle())
                         }
                     }
                     Spacer()
@@ -87,6 +98,7 @@ struct AppListView: View {
                 List(sortingList()
                         .filter{showBannedApp(app: $0)}
                         .filter{showReadyApp(app: $0)}
+                        .filter{sortingByTypeList(app: $0)}
                 ) { app in
                     ZStack{
                         HStack{
@@ -137,6 +149,17 @@ struct AppListView: View {
                             // Самофарм аккаунт
                             if isSelfMode {
                                 ChangeSelfAccountButton(app: app, width: 120)
+                                    .contextMenu {
+                                        Button("Сброс") {
+                                            FirebaseServices().updateDocument(id: app.id, collection: "apps", fields: ["transferAccount" : "S.FARM-1"]) { result in
+                                                if result {
+                                                    appListVM.getAppsList()
+                                                }else {
+                                                    print("Ошибка обновления аккаунта")
+                                                }
+                                            }
+                                        }
+                                    }
                             }
                             
                             // Новое название приложения
@@ -220,24 +243,33 @@ struct AppListView: View {
             }
             .padding()
         }
+        .searchable(text: $searchText)
     }
     
     private func sortingList() -> [AppModel]{
-        switch sortingType {
-        case .firstAppName:
-            return sortByFirstName()
-        case .newAppName:
-            return sortByNewName()
-        case .createAccount:
-            return sortByCreateAccount()
-        case .devComp:
-            return sortByDevComp()
-        case .updateType:
-            return sortByUpdateType()
-        case .updateDate:
-            return sortByUpdateDate()
+        let searchAr = appListVM.appsList.filter{ $0.firstAppName.lowercased().contains(searchText.lowercased()) }
+        if searchAr.isEmpty{
+            switch sortingType {
+            case .firstAppName:
+                return sortByFirstName()
+            case .newAppName:
+                return sortByNewName()
+            case .createAccount:
+                return sortByCreateAccount()
+            case .devComp:
+                return sortByDevComp()
+            case .updateType:
+                return sortByUpdateType()
+            case .updateDate:
+                return sortByUpdateDate()
+            }
+        }else {
+            return searchAr
         }
+        
     }
+    
+    
     
     func sortByFirstName() -> [AppModel]{
         return appListVM.appsList.sorted{ $0.firstAppName < $1.firstAppName }
@@ -284,6 +316,15 @@ struct AppListView: View {
             return false
         }
         return true
+    }
+    
+    private func sortingByTypeList(app: AppModel) -> Bool{
+        if updateType == "Все" { return true }
+        if app.updateType == updateType {
+            return true
+        }else {
+            return false
+        }
     }
 }
 
