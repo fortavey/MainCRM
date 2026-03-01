@@ -28,7 +28,7 @@ struct AppListToolbar: View {
     @Binding var isIdMode: Bool
     @Binding var isCountryMode: Bool
     @Binding var isInfoMode: Bool
-    var updateType: String
+//    var updateType: String
     
     var body: some View {
         
@@ -199,7 +199,7 @@ struct AppListToolbar: View {
             ServerButtonView()
             
             // Кнопка обновления 404
-            AppUpdate404StatusView(updateType: updateType)
+            AppUpdate404StatusView()
             
             // Кнопка обновления
             Button {

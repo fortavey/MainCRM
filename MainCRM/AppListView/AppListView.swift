@@ -37,9 +37,11 @@ struct AppListView: View {
     
     @State private var sortingType: SortingType = .updateType
     @State private var searchText: String = ""
-    @State private var updateType: String = "Все"
     
-        
+    let options = ["Все", "Готово", "Добавлено Webview", "Изменено название", "Первая модерация"]
+    @State private var selectedOptions: Set<String> = []
+    
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -58,11 +60,10 @@ struct AppListView: View {
                     isFirstNameMode: $isFirstNameMode,
                     isIdMode: $isIdMode,
                     isCountryMode: $isCountryMode,
-                    isInfoMode: $isInfoMode,
-                    updateType: updateType
+                    isInfoMode: $isInfoMode
                 )
                 
-                    
+                
                 HStack{
                     if isInfoMode {
                         HStack{
@@ -70,13 +71,21 @@ struct AppListView: View {
                             Text("Всего рабочих - \(appListVM.appsList.filter{$0.isBan != true}.count) | ")
                             Text("Всего готовых - \(appListVM.appsList.filter{$0.isBan != true && $0.updateType == "Готово"}.count)")
                             TextField("Поиск", text: $searchText)
-                            Picker(selection: $updateType, label: Text("Тип обновления:")) {
-                                Text("Все").tag("Все")
-                                Text("Готово").tag("Готово")
-                                Text("Добавлено Webview").tag("Добавлено Webview")
-                                Text("Изменено название").tag("Изменено название")
-                                Text("Первая модерация").tag("Первая модерация")
-                            }.pickerStyle(RadioGroupPickerStyle())
+                            HStack{
+                                ForEach(options, id: \.self) { option in
+                                    Toggle(option, isOn: Binding(
+                                        get: { selectedOptions.contains(option) },
+                                        set: { isSelected in
+                                            if isSelected {
+                                                selectedOptions.insert(option)
+                                            } else {
+                                                selectedOptions.remove(option)
+                                            }
+                                        }
+                                    ))
+                                    .toggleStyle(CheckboxToggleStyle())
+                                }
+                            }
                         }
                     }
                     Spacer()
@@ -96,9 +105,9 @@ struct AppListView: View {
                 }
                 
                 List(sortingList()
-                        .filter{showBannedApp(app: $0)}
-                        .filter{showReadyApp(app: $0)}
-                        .filter{sortingByTypeList(app: $0)}
+                    .filter{showBannedApp(app: $0)}
+                    .filter{showReadyApp(app: $0)}
+                    .filter{sortingByTypeList(app: $0)}
                 ) { app in
                     ZStack{
                         HStack{
@@ -127,7 +136,7 @@ struct AppListView: View {
                             
                             // Первое название
                             if isFirstNameMode {
-//                                LineItemView(text: app.firstAppName, width: 150)
+                                //                                LineItemView(text: app.firstAppName, width: 150)
                                 CopyTextView(text: app.firstAppName)
                                     .frame(width: 150)
                             }
@@ -167,8 +176,8 @@ struct AppListView: View {
                             
                             // Открыть в поиске
                             OpenPlayButtonView(app: app)
-                           
-                
+                            
+                            
                             // Страны
                             if isCountryMode {
                                 ChooseCountryButtonView(app: app)
@@ -187,7 +196,7 @@ struct AppListView: View {
                                     }
                                 }
                             }
-                                                        
+                            
                             // Cсылка на исходники разработки
                             if isLinkMode {
                                 if let link = URL(string: app.devLink) {
@@ -311,7 +320,7 @@ struct AppListView: View {
             return true
         }
         guard let transfer = app.isTransfer else { return true }
-       
+        
         if transfer == true {
             return false
         }
@@ -319,8 +328,8 @@ struct AppListView: View {
     }
     
     private func sortingByTypeList(app: AppModel) -> Bool{
-        if updateType == "Все" { return true }
-        if app.updateType == updateType {
+        if selectedOptions.contains("Все") || selectedOptions.isEmpty { return true }
+        if selectedOptions.contains(app.updateType) {
             return true
         }else {
             return false

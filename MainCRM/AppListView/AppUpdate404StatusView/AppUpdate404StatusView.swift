@@ -10,14 +10,14 @@ import SwiftUI
 struct AppUpdate404StatusView: View {
     @EnvironmentObject private var appUpdate404StatusVM: AppUpdate404StatusViewModel
     @State private var isPresented: Bool = true
-    var updateType: String
+//    var updateType: String
     
     var body: some View {
         HStack{
             Button {
                 appUpdate404StatusVM.changeRequestErrorStatus(status: false)
                 appUpdate404StatusVM.reset()
-                appUpdate404StatusVM.start(updateType: updateType)
+                appUpdate404StatusVM.start()
             } label: {
                 if appUpdate404StatusVM.statusCodesList.isEmpty {
                     ProgressView()

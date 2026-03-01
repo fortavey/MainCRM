@@ -40,16 +40,8 @@ final class AppUpdate404StatusViewModel: ObservableObject {
         return statusCodesList.count > 0
     }
     
-    func start(updateType: String) {
+    func start() {
         let newArr = StatusCodesHelperClass.listApps.filter{ $0.isBan != true }
-            .filter{
-                if updateType == "Все" { return true }
-                if $0.updateType == updateType {
-                    return true
-                }else {
-                    return false
-                }
-            }
             .map{ RequestPlayStoreModel(
                 id: $0.id,
                 link: "https://play.google.com/store/apps/details?id=com." + String($0.firstAppName.filter { !" \n\t\r".contains($0) }).lowercased()
