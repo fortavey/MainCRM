@@ -9,23 +9,27 @@
 import SwiftUI
 import FirebaseFirestore
 
+struct AccountModelLocal: Identifiable {
+    var id: String { alias }
+    var alias: String
+    var company: String
+    var email: String
+    var developerId: String
+    var transactionId: String
+}
+
 struct AddNewSelfAccounts: View {
-    @State private var alias = ""
-    @State private var company = ""
-    @State private var email = ""
-    @State private var developerId = ""
-    @State private var transactionId = ""
-        
-    @Binding var isPresented: Bool
-    
     @ObservedObject var selfAccountsVM: SelfAccountsViewModel
+    @State private var accountsString: String = ""
+    @State private var accounts: [AccountModelLocal] = []
+    @Binding var isPresentedS: Bool
     
     var body: some View {
-        VStack{
+        VStack {
             HStack{
                 Spacer()
                 Button {
-                    isPresented = false
+                    isPresentedS = false
                 } label: {
                     Image(systemName: "xmark.circle")
                         .resizable()
@@ -33,15 +37,62 @@ struct AddNewSelfAccounts: View {
                 }
                 .buttonStyle(.plain)
             }
+            if accounts.isEmpty {
+                Button("Вставить строки из таблицы"){
+                    let pasteboard = NSPasteboard.general
+                    if let copiedString = pasteboard.string(forType: .string) {
+                        let firstArr = getSplittedArr(str: copiedString)
+                        firstArr.forEach{str in
+                            let newStr = str.replacingOccurrences(of: "\n", with: "")
+                            let secondArr = getAccountsArr(str: newStr)
+                            accounts.append(AccountModelLocal(
+                                alias: secondArr[0],
+                                company: secondArr[1],
+                                email: secondArr[2],
+                                developerId: secondArr[3],
+                                transactionId: secondArr[4]
+                            ))
+                        }
+                    }
+                    
+                }
+            }else {
+                ScrollView{
+                    ForEach(accounts) { acc in
+                        AddNewSelfAccountCopy(account: acc, selfAccountsVM: selfAccountsVM, accounts: $accounts)
+                    }
+                }
+            }
+        }
+        .padding()
+    }
+    
+    func getAccountsArr(str: String) -> [String] {
+        return str.split(separator: "\t").map(String.init)
+    }
+    
+    func getSplittedArr(str: String) -> [String]{
+        return str.split(separator: "***").map(String.init)
+    }
+}
+
+
+struct AddNewSelfAccountCopy: View {
+    var account: AccountModelLocal
+    @ObservedObject var selfAccountsVM: SelfAccountsViewModel
+    @Binding var accounts: [AccountModelLocal]
+    
+    var body: some View {
+        VStack{
 
             Text("Добавить новый аккаунт")
                 .padding()
                 .font(.title)
-            TextField("Название профиля", text: $alias)
-            TextField("Компания", text: $company)
-            TextField("Почта", text: $email)
-            TextField("ID разработчика", text: $developerId)
-            TextField("ID транзакции", text: $transactionId)
+            Text("Название профиля - " + account.alias)
+            Text("Компания - " + account.company)
+            Text("Почта - " + account.email)
+            Text("ID разработчика - " + account.developerId)
+            Text("ID транзакции - " + account.transactionId)
            
             Button {
                 addNewAccount()
@@ -59,7 +110,7 @@ struct AddNewSelfAccounts: View {
     }
     
     private func isValid() -> Bool{
-        if alias != "" && company != "" && email != "" && developerId != "" && transactionId != "" {
+        if account.alias != "" && account.company != "" && account.email != "" && account.developerId != "" && account.transactionId != "" {
             return true
         }
         return false
@@ -70,16 +121,16 @@ struct AddNewSelfAccounts: View {
             .collection("self")
             .document()
             .setData([
-                "alias": alias,
-                "company": company,
-                "email": email,
-                "developerId": developerId,
-                "transactionId": transactionId,
+                "alias": account.alias,
+                "company": account.company,
+                "email": account.email,
+                "developerId": account.developerId,
+                "transactionId": account.transactionId,
             ], merge: true) { err in
                 if err == nil {
                     print("Saved")
                     selfAccountsVM.getAccountsList()
-                    isPresented = false
+                    accounts.removeFirst()
                 }else{
                     print("ERR", err!)
                 }

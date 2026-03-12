@@ -17,7 +17,16 @@ struct NewAppNameButton: View {
         Button {
             isPresented = true
         } label: {
-            LineItemView(text: app.newAppName + "\(app.isUACReady == true ? " - UAC" : "")", width: width)
+            HStack{
+                LineItemView(text: app.newAppName, width: width)
+                Button{
+                    let pasteboard = NSPasteboard.general
+                    pasteboard.declareTypes([NSPasteboard.PasteboardType.string], owner: nil)
+                    pasteboard.setString(app.newAppName, forType: .string)
+                }label: {
+                    Image(systemName: "doc.on.doc")
+                }
+            }
         }
         .sheet(isPresented: $isPresented) {
             NewAppNameSheet(isPresented: $isPresented, app: app)

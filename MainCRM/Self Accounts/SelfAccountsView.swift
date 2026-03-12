@@ -13,6 +13,7 @@ struct SelfAccountsView: View {
     @EnvironmentObject private var appListVM: AppListViewModel
     @State private var isRemoveMode = false
     @State private var isPresented = false
+    @State private var isPresentedS = false
     
     var body: some View {
         NavigationStack {
@@ -27,12 +28,12 @@ struct SelfAccountsView: View {
                         AddNewSelfAccount(isPresented: $isPresented, selfAccountsVM: selfAccountsVM)
                     }
                     Button{
-                        isPresented.toggle()
+                        isPresentedS.toggle()
                     } label: {
                         MenuIconView(systemName: "plus.rectangle.fill.on.rectangle.fill")
                     }
-                    .sheet(isPresented: $isPresented) {
-                        AddNewSelfAccounts(isPresented: $isPresented, selfAccountsVM: selfAccountsVM)
+                    .sheet(isPresented: $isPresentedS) {
+                        AddNewSelfAccounts(selfAccountsVM: selfAccountsVM, isPresentedS: $isPresentedS)
                     }
                     Button {
                         isRemoveMode.toggle()

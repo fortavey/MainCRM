@@ -23,6 +23,17 @@ struct ChangeSelfAccountButton: View {
                 isPresentedTransfer = true
             } label: {
                 LineItemView(text: app.transferAccount ?? "", width: width, icon: "FirebaseIcon")
+                    .contextMenu {
+                        Button("Сброс") {
+                            FirebaseServices().updateDocument(id: app.id, collection: "apps", fields: ["transferAccount" : "S.FARM-1"]) { result in
+                                if result {
+                                    appListVM.getAppsList()
+                                }else {
+                                    print("Ошибка обновления аккаунта")
+                                }
+                            }
+                        }
+                    }
             }
             .buttonStyle(.plain)
             .sheet(isPresented: $isPresentedTransfer) {
@@ -50,6 +61,7 @@ struct ChangeSelfAccountSheet: View {
     @EnvironmentObject private var selfAccountsVM: SelfAccountsViewModel
     @EnvironmentObject private var appListVM: AppListViewModel
     @State private var transferAccount: String = ""
+    @State private var showPicker: Bool = false
     @Binding var isPresented: Bool
     var app: AppModel
     var accountType: String
@@ -70,26 +82,44 @@ struct ChangeSelfAccountSheet: View {
         return returnArr
     }
     
+    func getNumberFromAlias(_ alias: String) -> Int {
+        if let number = alias.split(separator: "-").last {
+            return Int(number) ?? 0
+        }
+        return 0
+    }
+    
     var body: some View {
         VStack{
             Text("Выберите аккаунт")
                 .font(.title)
             TextField("Введите алиас аккаунта", text: $transferAccount)
-            Picker(selection: $transferAccount) {
-                ForEach(getEmptyAccountsList().sorted(by: >), id: \.self) { accAlias in
-                    Button {
-                        print("Аккаунт выбран")
-                    } label: {
-                        Text(accAlias)
+                .onAppear{
+                    let resArr = getEmptyAccountsList().sorted{ getNumberFromAlias($0) > getNumberFromAlias($1) }
+                    transferAccount = resArr.first ?? ""
+                }
+            
+            if accountType == "transferAccount" && showPicker {
+                Picker(selection: $transferAccount) {
+                    ForEach(getEmptyAccountsList().sorted{ getNumberFromAlias($0) > getNumberFromAlias($1) }, id: \.self) { accAlias in
+                        Button {
+                            print("Аккаунт выбран")
+                        } label: {
+                            Text(accAlias)
+                        }
+                        .tag(accAlias)
                     }
-                    .tag(accAlias)
+                } label: {
+                    HStack{
+                        Text("Аккаунт")
+                        Spacer()
+                    }
+                    .frame(width: 150)
                 }
-            } label: {
-                HStack{
-                    Text("Аккаунт")
-                    Spacer()
+            }else {
+                Button("+"){
+                    showPicker = true
                 }
-                .frame(width: 150)
             }
             HStack{
                 Button("Отмена") {

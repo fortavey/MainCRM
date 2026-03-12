@@ -158,17 +158,6 @@ struct AppListView: View {
                             // Самофарм аккаунт
                             if isSelfMode {
                                 ChangeSelfAccountButton(app: app, width: 120)
-                                    .contextMenu {
-                                        Button("Сброс") {
-                                            FirebaseServices().updateDocument(id: app.id, collection: "apps", fields: ["transferAccount" : "S.FARM-1"]) { result in
-                                                if result {
-                                                    appListVM.getAppsList()
-                                                }else {
-                                                    print("Ошибка обновления аккаунта")
-                                                }
-                                            }
-                                        }
-                                    }
                             }
                             
                             // Новое название приложения
@@ -278,7 +267,12 @@ struct AppListView: View {
         
     }
     
-    
+    func getNumberFromAlias(_ alias: String) -> Int {
+        if let number = alias.split(separator: "-").last {
+            return Int(number) ?? 0
+        }
+        return 0
+    }
     
     func sortByFirstName() -> [AppModel]{
         return appListVM.appsList.sorted{ $0.firstAppName < $1.firstAppName }
@@ -290,7 +284,7 @@ struct AppListView: View {
     
     func sortByCreateAccount() -> [AppModel]{
         
-        return appListVM.appsList.sorted{ Helpers().sortAccountNames(accName1: $0.createAccount, accName2: $1.createAccount) }
+        return appListVM.appsList.sorted{ getNumberFromAlias($0.createAccount) < getNumberFromAlias($1.createAccount) }
     }
     
     func sortByDevComp() -> [AppModel]{
@@ -377,15 +371,15 @@ struct ContextMenuOpenWebView: View {
     @Binding var isPresented: Bool
     var app: AppModel
     var popularCountries: [PopularCountry] = [
-        PopularCountry(name: "Бразилия", hl: "pt-br", gl: "br"),
+        PopularCountry(name: "Перу", hl: "es-419", gl: "pe"),
         PopularCountry(name: "Германия", hl: "de", gl: "de"),
         PopularCountry(name: "Испания", hl: "es", gl: "es"),
         PopularCountry(name: "Италия", hl: "it", gl: "it"),
         PopularCountry(name: "Индия", hl: "en", gl: "in"),
         PopularCountry(name: "Польша", hl: "pl", gl: "pl"),
         PopularCountry(name: "США", hl: "en-us", gl: "us"),
-        PopularCountry(name: "Турция", hl: "tr", gl: "tr"),
         PopularCountry(name: "Франция", hl: "fr", gl: "fr"),
+        PopularCountry(name: "Филиппины", hl: "en", gl: "ph"),
     ]
     
     var body: some View {
