@@ -70,25 +70,26 @@ struct AppListView: View {
                             Text("Всего приложений - \(appListVM.appsList.count) | ")
                             Text("Всего рабочих - \(appListVM.appsList.filter{$0.isBan != true}.count) | ")
                             Text("Всего готовых - \(appListVM.appsList.filter{$0.isBan != true && $0.updateType == "Готово"}.count)")
-                            TextField("Поиск", text: $searchText)
-                            HStack{
-                                ForEach(options, id: \.self) { option in
-                                    Toggle(option, isOn: Binding(
-                                        get: { selectedOptions.contains(option) },
-                                        set: { isSelected in
-                                            if isSelected {
-                                                selectedOptions.insert(option)
-                                            } else {
-                                                selectedOptions.remove(option)
-                                            }
-                                        }
-                                    ))
-                                    .toggleStyle(CheckboxToggleStyle())
-                                }
-                            }
                         }
                     }
+                    TextField("Поиск", text: $searchText)
+                        .frame(width: 300)
                     Spacer()
+                    HStack{
+                        ForEach(options, id: \.self) { option in
+                            Toggle(option, isOn: Binding(
+                                get: { selectedOptions.contains(option) },
+                                set: { isSelected in
+                                    if isSelected {
+                                        selectedOptions.insert(option)
+                                    } else {
+                                        selectedOptions.remove(option)
+                                    }
+                                }
+                            ))
+                            .toggleStyle(CheckboxToggleStyle())
+                        }
+                    }
                     Button{
                         sortingType = .updateType
                     }label: {

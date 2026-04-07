@@ -34,37 +34,37 @@ struct AppListToolbar: View {
         
         HStack{
             // Кнопка добавить
-            Button{
-                isPresented.toggle()
-            } label: {
-                MenuIconView(systemName: "plus.circle.fill")
-                    .contextMenu {
-                        Text("Добавить новое приложение")
-                    }
-            }
-            .sheet(isPresented: $isPresented) {
-                AddNewApp(isPresented: $isPresented, appListVM: appListVM)
-            }
+//            Button{
+//                isPresented.toggle()
+//            } label: {
+//                MenuIconView(systemName: "plus.circle.fill")
+//                    .contextMenu {
+//                        Text("Добавить новое приложение")
+//                    }
+//            }
+//            .sheet(isPresented: $isPresented) {
+//                AddNewApp(isPresented: $isPresented, appListVM: appListVM)
+//            }
             // Кнопка ID
-            Button {
-                isIdMode.toggle()
-            } label: {
-                MenuIconView(systemName: "grid.circle.fill")
-                    .foregroundStyle(isIdMode ? Color.red : Color.white)
-                    .contextMenu {
-                        Text("Показать ID приложения")
-                    }
-            }
+//            Button {
+//                isIdMode.toggle()
+//            } label: {
+//                MenuIconView(systemName: "grid.circle.fill")
+//                    .foregroundStyle(isIdMode ? Color.red : Color.white)
+//                    .contextMenu {
+//                        Text("Показать ID приложения")
+//                    }
+//            }
             // Кнопка компьютеры
-            Button {
-                isCompMode.toggle()
-            } label: {
-                MenuIconView(systemName: "macpro.gen3")
-                    .foregroundStyle(isCompMode ? Color.red : Color.white)
-                    .contextMenu {
-                        Text("Показать компьютеры")
-                    }
-            }
+//            Button {
+//                isCompMode.toggle()
+//            } label: {
+//                MenuIconView(systemName: "macpro.gen3")
+//                    .foregroundStyle(isCompMode ? Color.red : Color.white)
+//                    .contextMenu {
+//                        Text("Показать компьютеры")
+//                    }
+//            }
             // Кнопка первое название
             Button {
                 isFirstNameMode.toggle()
@@ -133,26 +133,26 @@ struct AppListToolbar: View {
                     }
             }
             // Кнопка страны
-            Button {
-                isCountryMode.toggle()
-            } label: {
-                MenuIconView(systemName: "globe")
-                    .foregroundStyle(isCountryMode ? Color.red : Color.white)
-                    .contextMenu {
-                        Text("Показать страны")
-                    }
-            }
+//            Button {
+//                isCountryMode.toggle()
+//            } label: {
+//                MenuIconView(systemName: "globe")
+//                    .foregroundStyle(isCountryMode ? Color.red : Color.white)
+//                    .contextMenu {
+//                        Text("Показать страны")
+//                    }
+//            }
             
             // Кнопка Webview
-            Button {
-                isWebviewMode.toggle()
-            } label: {
-                MenuIconView(systemName: "wonsign.gauge.chart.lefthalf.righthalf")
-                    .foregroundStyle(isWebviewMode ? Color.red : Color.white)
-                    .contextMenu {
-                        Text("Показать ссылку Webview")
-                    }
-            }
+//            Button {
+//                isWebviewMode.toggle()
+//            } label: {
+//                MenuIconView(systemName: "wonsign.gauge.chart.lefthalf.righthalf")
+//                    .foregroundStyle(isWebviewMode ? Color.red : Color.white)
+//                    .contextMenu {
+//                        Text("Показать ссылку Webview")
+//                    }
+//            }
             
             // Кнопка готовых приложений
             Button {
@@ -190,16 +190,16 @@ struct AppListToolbar: View {
             Spacer()
             
             // Кнопка Web-интерфейс
-            WebInterfaceButtonView()
+//            WebInterfaceButtonView()
             
             // Кнопка гугл диск
             GoogleDriveButtonView()
             
             // Кнопка сервера
-            ServerButtonView()
+//            ServerButtonView()
             
             // Кнопка обновления 404
-            AppUpdate404StatusView()
+//            AppUpdate404StatusView()
             
             // Кнопка обновления
             Button {

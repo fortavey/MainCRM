@@ -16,14 +16,14 @@ struct HomeView: View {
                     Text("Дашборд")
                 }
                 .navigationTitle("DASH")
+                AppListView()
+                    .tabItem {
+                        Text("Приложения")
+                    }
             if MainConfig.isAdmin {
                 TrustAccountsView()
                     .tabItem {
                         Text("Аккаунты")
-                    }
-                AppListView()
-                    .tabItem {
-                        Text("Приложения")
                     }
                 SelfAccountsView()
                     .tabItem {

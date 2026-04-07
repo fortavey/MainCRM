@@ -30,16 +30,18 @@ struct ContentView: View {
                     .tabItem {
                         Image(systemName: "house")
                     }
-                BlankAppsListView()
-                    .tabItem {
-                        Image(systemName: "plus.square")
-                    }
+                if MainConfig.isAdmin {
+                    BlankAppsListView()
+                        .tabItem {
+                            Image(systemName: "plus.square")
+                        }
+                }
             }
             .onReceive(timer) { firedDate in
                 updateData()
             }
             
-            if tasksListVM.isSomeTaskDone() && MainConfig.isAdmin {
+            if tasksListVM.isSomeTaskDone() {
                 VStack {
                     Spacer()
                     ZStack{

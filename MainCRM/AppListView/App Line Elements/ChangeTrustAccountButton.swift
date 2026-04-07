@@ -28,6 +28,9 @@ struct ChangeTrustAccountButton: View {
     func getAccountAlias(alias: String) -> String {
         let accList = trustAccountsVM.accountsList.filter{ $0.isBan != true }.filter{ $0.alias == alias }
         
+        if alias.contains("S.FARM"){
+            return alias
+        }
         if accList.isEmpty {
             return ""
         }else if let isTransferError = accList[0].isTransferError {
@@ -62,6 +65,7 @@ struct ChangeTrustAccountSheet: View {
         VStack{
             Text("Выберите аккаунт")
                 .font(.title)
+            TextField("Введите алиас аккаунта", text: $createAccount)
             Picker(selection: $createAccount) {
                 ForEach(getAccountsList(), id: \.id) { acc in
                     Button {

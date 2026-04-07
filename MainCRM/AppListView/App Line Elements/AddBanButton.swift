@@ -13,7 +13,11 @@ struct AddBanButton: View {
     
     var body: some View {
         Button {
-            FirebaseServices().updateDocument(id: app.id, collection: "apps", fields: ["isBan": appBanToggle()]) { result in
+            FirebaseServices().updateDocument(id: app.id, collection: "apps", fields: [
+                                                                                        "isBan": appBanToggle(),
+                                                                                        "transferAccount": "S.FARM-1",
+                                                                                        "isTransfer": true
+                                                                                    ]) { result in
                 if result {
                     appListVM.getAppsList()
                 }else {
