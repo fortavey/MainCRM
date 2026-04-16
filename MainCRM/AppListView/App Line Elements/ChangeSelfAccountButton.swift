@@ -126,8 +126,19 @@ struct ChangeSelfAccountSheet: View {
                     print(accountType)
                     isPresented = false
                 }
+                
                 Button("Сохранить") {
-                    FirebaseServices().updateDocument(id: app.id, collection: "apps", fields: [accountType : transferAccount]) { result in
+                    var fieldArr: [String:String] = [:]
+                    if accountType == "transferAccount" {
+                        fieldArr = [
+                            accountType : transferAccount,
+                            "locationAccount" : app.createAccount
+                            ]
+                    }else {
+                        fieldArr = [accountType : transferAccount]
+                    }
+                    
+                    FirebaseServices().updateDocument(id: app.id, collection: "apps", fields: fieldArr) { result in
                         if result {
                             appListVM.getAppsList()
                             isPresented = false

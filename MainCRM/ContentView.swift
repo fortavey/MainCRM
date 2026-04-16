@@ -16,6 +16,7 @@ struct ContentView: View {
     @EnvironmentObject private var blankAppsListVM: BlankAppsListViewModel
     @EnvironmentObject private var taskTimerVM: TaskTimerViewModel
     @EnvironmentObject private var parserVM: ParserViewModel
+    @EnvironmentObject private var brendsVM: BrendsViewModel
     
     let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     
@@ -63,5 +64,6 @@ struct ContentView: View {
         tasksListVM.updateAll()
         blankAppsListVM.getAppsList()
         taskTimerVM.getTimersList()
+        brendsVM.getBrendsList()
     }
 }

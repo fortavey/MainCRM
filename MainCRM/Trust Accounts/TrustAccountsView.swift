@@ -61,11 +61,29 @@ struct TrustAccountsView: View {
                             Image(systemName: "key.fill")
                                 .foregroundStyle(Color.green)
                         }
+                        if isRemoveMode {
+                            Button("Переименовать"){
+                                FirebaseServices().updateDocument(id: acc.id, collection: "trust", fields: ["alias" : getNewAccountNumber(title: acc.alias)]) { result in
+                                    if result {
+                                        trustAccountsVM.getAccountsList()
+                                    }else {
+                                        print("Ошибка обновления трастового аккаунта")
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
             .padding()
         }
+    }
+    
+    func getNewAccountNumber(title: String) -> String {
+        guard let oldAccNumber = Int(title.split(separator: "A.TRUST-").last!) else {
+            return "A.TRUST-999"
+        }
+        return "A.TRUST-\(oldAccNumber + 900)"
     }
 }
 

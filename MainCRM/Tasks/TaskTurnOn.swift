@@ -10,6 +10,7 @@ import FirebaseFirestore
 
 struct TaskTurnOn: View {
     @EnvironmentObject private var tasksListVM: TasksListViewModel
+    @EnvironmentObject private var brendsVM: BrendsViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var app: AppModel
     @State private var isIndicator: Bool = false
@@ -24,6 +25,9 @@ struct TaskTurnOn: View {
         Text("Аккаунт локации - \(app.locationAccount ?? "NAN")")
         TextField("Ссылка трекера", text: $trackerLink)
             .frame(width: 300)
+            .onAppear{
+                trackerLink = getTrackerLink()
+            }
         
         if app.locationAccount != nil && trackerLink != "" && app.transferAccount != nil {
             Button {
@@ -40,6 +44,13 @@ struct TaskTurnOn: View {
         
         if isIndicator {ProgressView()}
        
+    }
+    
+    private func getTrackerLink() -> String {
+        guard let brend = brendsVM.brendsList.first(where: { $0.name == app.newAppName }) else {
+            return ""
+        }
+        return brend.trackerLink
     }
     
     private func sendCreateTaskRequest(){
