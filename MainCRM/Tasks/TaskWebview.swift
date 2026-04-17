@@ -56,7 +56,7 @@ struct TaskWebview: View {
     }
     
     private func getCreoLink() -> String {
-        guard let brend = brendsVM.brendsList.first(where: { $0.name == app.newAppName }) else {
+        guard let brend = brendsVM.brendsList.first(where: { $0.name.lowercased() == app.newAppName.lowercased() }) else {
             return ""
         }
         return brend.creoLink
