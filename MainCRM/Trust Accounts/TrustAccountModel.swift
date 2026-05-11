@@ -17,4 +17,5 @@ struct TrustAccountModel: Identifiable, Hashable {
     var isKeyExist: Bool
     var isBan: Bool?
     var isTransferError: Bool?
+    var cluster: Int
 }

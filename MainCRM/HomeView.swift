@@ -33,14 +33,6 @@ struct HomeView: View {
                     .tabItem {
                         Text("Задачи")
                     }
-                TaskTimerView()
-                    .tabItem {
-                        Text("Таймеры")
-                    }
-                CreateAppCombineView()
-                    .tabItem {
-                        Text("Комбайн")
-                    }
             }
         }
     }

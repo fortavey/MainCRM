@@ -76,7 +76,7 @@ struct TaskWebview: View {
                 "creoLink": creoLink,
                 "devLink": app.driveLink,
                 "webviewDomain": app.webviewDomain ?? "",
-                "devComp": app.devComp,
+                "devComp": "KRIS",
                 "isDone": false
             ], merge: true) { err in
                 if err == nil {

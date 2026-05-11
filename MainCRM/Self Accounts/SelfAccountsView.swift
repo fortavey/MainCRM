@@ -56,12 +56,8 @@ struct SelfAccountsView: View {
                                 selfAccountsVM.getAccountsList()
                             }
                         }
-                        LineItemView(text: acc.alias, width: 100)
-                        LineItemView(text: acc.company, width: 150)
-                        LineItemView(text: acc.email, width: 200)
-                        LineItemView(text: acc.developerId, width: 200)
-                        LineItemView(text: acc.transactionId, width: 200)
                         
+                        SelfAccountItemView(acc: acc)
                         
                         
                         if let app = appListVM.appsList.first(where: { $0.transferAccount == acc.alias }){
@@ -90,3 +86,101 @@ struct SelfAccountsView: View {
     }
 }
 
+struct SelfAccountItemView: View {
+    var acc: SelfAccountModel
+    @State private var isGoToTrustAccount = false
+    
+    var body: some View {
+        HStack{
+            LineItemView(text: acc.alias, width: 100)
+            LineItemView(text: acc.company, width: 150)
+            LineItemView(text: acc.email, width: 200)
+            LineItemView(text: acc.developerId, width: 200)
+            LineItemView(text: acc.transactionId, width: 200)
+            
+            Button("Перенос в A.TRUST"){
+                isGoToTrustAccount = true
+            }
+            .sheet(isPresented: $isGoToTrustAccount) {
+                GoToTrustAccount(company: acc.company, email: acc.email, developerId: acc.developerId, transactionId: acc.transactionId, isGoToTrustAccount: $isGoToTrustAccount)
+            }
+        }
+    }
+}
+
+
+struct GoToTrustAccount: View {
+    @State private var alias = ""
+    var company: String
+    var email: String
+    var developerId: String
+    var transactionId: String
+    var isKeyExist = false
+        
+    @Binding var isGoToTrustAccount: Bool
+        
+    var body: some View {
+        VStack{
+            HStack{
+                Spacer()
+                Button {
+                    isGoToTrustAccount = false
+                } label: {
+                    Image(systemName: "xmark.circle")
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                }
+                .buttonStyle(.plain)
+            }
+
+            Text("Добавить новый аккаунт")
+                .padding()
+                .font(.title)
+            TextField("Название профиля", text: $alias)
+            Text("Компания - \(company)")
+            Text("Почта - \(email)")
+            Text("ID разработчика - \(developerId)")
+            Text("ID транзакции - \(transactionId)")
+                .toggleStyle(.checkbox)
+            Button {
+                addNewAccount()
+            } label: {
+                Text("Добавить")
+                    .padding(5)
+            }
+            .padding(.top, 30)
+            .disabled(!isValid())
+            
+            Spacer()
+        }
+        .frame(width: 500)
+        .padding()
+    }
+    
+    private func isValid() -> Bool{
+        if alias != "" && company != "" && email != "" && developerId != "" && transactionId != "" {
+            return true
+        }
+        return false
+    }
+    
+    private func addNewAccount(){
+        Firestore.firestore()
+            .collection("trust")
+            .document()
+            .setData([
+                "alias": alias,
+                "company": company,
+                "email": email,
+                "developerId": developerId,
+                "transactionId": transactionId,
+                "isKeyExist": isKeyExist
+            ], merge: true) { err in
+                if err == nil {
+                    isGoToTrustAccount = false
+                }else{
+                    print("ERR")
+                }
+            }
+    }
+}
