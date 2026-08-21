@@ -18,4 +18,5 @@ struct TrustAccountModel: Identifiable, Hashable {
     var isBan: Bool?
     var isTransferError: Bool?
     var cluster: Int
+    var domain: String
 }

@@ -28,6 +28,7 @@ final class TrustAccountsViewModel: ObservableObject {
                 let isBan = doc["isBan"] as? Bool
                 let isTransferError = doc["isTransferError"] as? Bool
                 let cluster = doc["cluster"] as? Int
+                let domain = doc["domain"] as? String
                 array.append(
                     TrustAccountModel(
                         id: id,
@@ -39,7 +40,8 @@ final class TrustAccountsViewModel: ObservableObject {
                         isKeyExist: isKeyExist ?? false,
                         isBan: isBan,
                         isTransferError: isTransferError,
-                        cluster: cluster ?? 0
+                        cluster: cluster ?? 0,
+                        domain: domain ?? ""
                     )
                 )
             }

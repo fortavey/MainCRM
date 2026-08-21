@@ -17,8 +17,10 @@ enum SortingType: String, CaseIterable {
 }
 
 struct AppListView: View {
+    @EnvironmentObject private var trustVM: TrustAccountsViewModel
     @EnvironmentObject private var appListVM: AppListViewModel
     @EnvironmentObject private var tasksListVM: TasksListViewModel
+    @EnvironmentObject private var brandsListVM: BrendsViewModel
     @State private var isRemoveMode = false
     @State private var isPlayStoreMode = true
     @State private var isLinkMode = false
@@ -137,9 +139,12 @@ struct AppListView: View {
                             
                             // Первое название
                             if isFirstNameMode {
-                                //                                LineItemView(text: app.firstAppName, width: 150)
-                                CopyTextView(text: app.firstAppName)
-                                    .frame(width: 150)
+                                if let appType = app.appType {
+                                    LineItemView(text: appType, width: 150)
+                                }
+                                
+//                                CopyTextView(text: app.firstAppName)
+//                                    .frame(width: 150)
                             }
                             
                             // Трастовый аккаунт
@@ -189,12 +194,16 @@ struct AppListView: View {
                             
                             // Cсылка на исходники разработки
                             if isLinkMode {
-                                if let link = URL(string: app.devLink) {
-                                    if app.devLink.matches("https"){
-                                        Link(destination: link) {
-                                            Image("Github")
-                                                .resizable()
-                                                .frame(width: 17, height: 17)
+                                let acc = trustVM.accountsList.first(where: { $0.alias == app.createAccount })
+                                let trackerLink = Helpers().getTrackerLinkBy(brend: app.newAppName, brendsList: brandsListVM.brendsList)
+                                if acc != nil {
+                                    if let link = URL(string: acc!.domain + "/change.php?file=com." + app.firstAppName.lowercased() + "&pass=CaHaLviff6&tracker_link=\(trackerLink)" ) {
+                                        if app.devLink.matches("https"){
+                                            Link(destination: link) {
+                                                Image("Github")
+                                                    .resizable()
+                                                    .frame(width: 17, height: 17)
+                                            }
                                         }
                                     }
                                 }

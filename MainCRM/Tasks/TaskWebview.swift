@@ -11,10 +11,12 @@ import FirebaseFirestore
 struct TaskWebview: View {
     @EnvironmentObject private var tasksListVM: TasksListViewModel
     @EnvironmentObject private var brendsVM: BrendsViewModel
+    @EnvironmentObject private var trustVM: TrustAccountsViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var isIndicator: Bool = false
     @State private var isValid: Bool = false
     @State private var creoLink: String = ""
+    @State private var domainLink: String = ""
     var app: AppModel
     
     var body: some View {
@@ -30,11 +32,13 @@ struct TaskWebview: View {
         Text(app.newAppName).font(.title3)
         Text(app.createAccount)
             .onAppear{
-                var link = self.getCreoLink()
-                if link.isEmpty {
+                let link = self.getCreoLink()
+                let domLink = self.getDomainLink()
+                if link == "" || domLink == "" {
                     isValid = false
                 }else {
                     creoLink = link
+                    domainLink = domLink
                     isValid = true
                 }
             }
@@ -50,16 +54,21 @@ struct TaskWebview: View {
             }
             .frame(height: 35)
             .padding(.horizontal, 15)
+        }else {
+            Text(creoLink == "" ? "Нет ссылки на креативы" : "Нет домена для ссыылки вебвью")
         }
         
         if isIndicator {ProgressView()}
     }
     
     private func getCreoLink() -> String {
-        guard let brend = brendsVM.brendsList.first(where: { $0.name.lowercased() == app.newAppName.lowercased() }) else {
-            return ""
-        }
+        guard let brend = brendsVM.brendsList.first(where: { $0.name.lowercased() == app.newAppName.lowercased() }) else {return ""}
         return brend.creoLink
+    }
+    
+    private func getDomainLink() -> String {
+        guard let acc = trustVM.accountsList.first(where: { $0.alias.lowercased() == app.createAccount.lowercased() }) else {return ""}
+        return acc.domain
     }
     
     private func sendCreateTaskRequest(){
@@ -74,6 +83,7 @@ struct TaskWebview: View {
                 "createAccount": app.createAccount,
                 "transferAccount": app.transferAccount ?? "",
                 "creoLink": creoLink,
+                "domainLink": domainLink,
                 "devLink": app.driveLink,
                 "webviewDomain": app.webviewDomain ?? "",
                 "devComp": "KRIS",

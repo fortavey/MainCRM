@@ -8,7 +8,19 @@
 import Foundation
 import SwiftUI
 
-struct Helpers {
+class Helpers {
+    static var shared = Helpers()
+    
+    func getTrackerLinkBy(brend: String, brendsList: [BrendModel]) -> String {
+        var res = ""
+        brendsList.forEach { b in
+            if b.name.lowercased() == brend.lowercased() {
+                res = b.trackerLink
+            }
+        }
+        return res
+    }
+    
     func sortAccountNames(accName1: String, accName2: String) -> Bool {
         guard let stringNumber1 = accName1.split(separator: "-").last else { return false }
         guard let stringNumber2 = accName2.split(separator: "-").last else { return false }
@@ -33,7 +45,6 @@ struct Helpers {
         default:
             return Color.sectionBG
         }
-            
     }
     
     func getSectionImageName(number: Int) -> String {

@@ -60,6 +60,7 @@ struct TrustAccountItemView: View {
     var acc: TrustAccountModel
     var isRemoveMode: Bool
     @State private var isClusterEditable: Bool = false
+    @State private var domain: String = ""
     
     var body: some View {
         HStack{
@@ -86,18 +87,36 @@ struct TrustAccountItemView: View {
                 }
             }
             
-            ForEach(1...15, id: \.self){cluster in
-                Button("\(cluster)"){
-                    FirebaseServices().updateDocument(id: acc.id, collection: "trust", fields: ["cluster" : cluster]) { result in
-                        if result {
-                            trustAccountsVM.getAccountsList()
-                        }else {
-                            print("Ошибка обновления трастового аккаунта")
+            if isClusterEditable{
+                ForEach(1...15, id: \.self){cluster in
+                    Button("\(cluster)"){
+                        FirebaseServices().updateDocument(id: acc.id, collection: "trust", fields: ["cluster" : cluster]) { result in
+                            if result {
+                                trustAccountsVM.getAccountsList()
+                            }else {
+                                print("Ошибка обновления трастового аккаунта")
+                            }
+                        }
+                    }
+                    .disabled(!isClusterEditable)
+                    .foregroundStyle(acc.cluster == cluster ? .red : .gray)
+                }
+            }else {
+                HStack{
+                    TextField("Домен", text: $domain)
+                        .onAppear{
+                            domain = acc.domain
+                        }
+                    Button("Save"){
+                        FirebaseServices().updateDocument(id: acc.id, collection: "trust", fields: ["domain" : domain]) { result in
+                            if result {
+                                trustAccountsVM.getAccountsList()
+                            }else {
+                                print("Ошибка обновления домена аккаунта")
+                            }
                         }
                     }
                 }
-                .disabled(!isClusterEditable)
-                .foregroundStyle(acc.cluster == cluster ? .red : .gray)
             }
             Button(action: {
                 isClusterEditable.toggle()
