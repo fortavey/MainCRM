@@ -85,6 +85,13 @@ final class TasksListViewModel: ObservableObject {
         return nil
     }
     
+    func isAccFull(id: String) -> Bool {
+        if let task = tasksFMList.first(where: {$0.id == id}) {
+            return task.isFull
+        }
+        return false
+    }
+    
     func getTasksFMList(){
         FirebaseServices().getDocuments(collection: "taskfirsmoderation") { docs in
             var array: [TaskFirstModerationModel] = []
@@ -97,6 +104,7 @@ final class TasksListViewModel: ObservableObject {
                 let updateType = doc["updateType"] as? String
                 let driveLink = doc["updateType"] as? String
                 let isDone = doc["isDone"] as? Bool
+                let isFull = doc["isFull"] as? Bool
                 let message = doc["message"] as? String
                 let timestamp = doc["timestamp"] as? Double
                 array.append(
@@ -107,7 +115,8 @@ final class TasksListViewModel: ObservableObject {
                         moderationStatus: moderationStatus ?? "",
                         updateType: updateType ?? "",
                         driveLink: driveLink ?? "",
-                        isDone: isDone ?? false, 
+                        isDone: isDone ?? false,
+                        isFull: isFull ?? false,
                         message: message ?? "",
                         timestamp: timestamp ?? Date().timeIntervalSince1970
                     )

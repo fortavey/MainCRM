@@ -18,8 +18,15 @@ struct TasksAppLineElement: View {
             if let res = tasksListVM.isTaskDone(id: app.id) {
                 if res {
                     HStack{
-                        Image(systemName: "flag.pattern.checkered.2.crossed")
-                            .foregroundStyle(Color.green)
+                        if tasksListVM.isAccFull(id: app.id) {
+                            Text("Не пускает")
+                                .padding(.horizontal, 5)
+                                .background(Color.yellow)
+                                .foregroundStyle(.black)
+                        }else {
+                            Image(systemName: "flag.pattern.checkered.2.crossed")
+                                .foregroundStyle(Color.green)
+                        }
                         
                         if let collection = tasksListVM.getTaskType(id: app.id) {
                             RemoveButtonView(title: "?",
