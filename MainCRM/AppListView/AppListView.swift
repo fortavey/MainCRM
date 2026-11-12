@@ -143,8 +143,8 @@ struct AppListView: View {
                                     LineItemView(text: appType, width: 150)
                                 }
                                 
-//                                CopyTextView(text: app.firstAppName)
-//                                    .frame(width: 150)
+                                CopyTextView(text: app.firstAppName)
+                                    .frame(width: 150)
                             }
                             
                             // Трастовый аккаунт

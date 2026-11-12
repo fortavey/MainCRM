@@ -19,8 +19,9 @@ struct PickerCompView: View {
     
     var body: some View {
         Picker("", selection: $devComp) {
-            Text("ANNA").tag("ANNA")
-            Text("KRIS").tag("KRIS")
+            ForEach(CompsEnum.allCases, id: \.self) { comp in
+                Text(comp.rawValue).tag(comp.rawValue)
+            }
         }
         .frame(width: 100)
         .onChange(of: devComp, initial: true) { oldValue, newValue in
@@ -71,62 +72,71 @@ struct BlankAppsListView: View {
                 }
                 
                 
-                
-                if MainConfig.isAdmin {
-                    if tasksListVM.tasksWEBList.contains(where: { !$0.isDone }) {
+                HStack{
+                    VStack{
+                        if MainConfig.isAdmin {
+                            if tasksListVM.tasksWEBList.contains(where: { !$0.isDone }) {
+                                HStack{
+                                    Text("Финальное обновление")
+                                        .font(.title3)
+                                    Text("\(tasksListVM.tasksWEBList.count)")
+                                        .font(.title3)
+                                    Spacer()
+                                }
+                                List(tasksListVM.tasksWEBList){ app in
+                                    HStack{
+                                        PickerCompView(app: app)
+                                        LineItemView(text: app.appId, width: 150)
+                                        LineItemView(text: app.newAppName, width: 150)
+                                        LineItemView(text: app.createAccount, width: 150)
+                                        NavigationLink {
+                                            CreateFinalUpdate(app: app)
+                                        } label: {
+                                            Label {
+                                                Text("Начать")
+                                            } icon: {
+                                                Image(systemName: "arrow.right.square")
+                                            }
+                                            
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    VStack{
                         HStack{
-                            Text("Финальное обновление")
+                            Text("Cоздание приложений - ")
+                                .font(.title3)
+                            Text("\(blankAppsListVM.appsList.count)")
                                 .font(.title3)
                             Spacer()
                         }
-                        List(tasksListVM.tasksWEBList){ app in
+                        
+                        List(blankAppsListVM.appsList){ app in
                             HStack{
-                                PickerCompView(app: app)
-                                LineItemView(text: app.appId, width: 150)
-                                LineItemView(text: app.newAppName, width: 150)
-                                LineItemView(text: app.createAccount, width: 150)
+                                PickerFirstCompView(app: app)
+                                LineItemView(text: app.name, width: 150)
+                                LineItemView(text: app.devLink, width: 150)
+                                LineItemView(text: app.driveLink, width: 150)
                                 NavigationLink {
-                                    CreateFinalUpdate(app: app)
+                                    CreateNewAppView(delegate: self, app: app)
                                 } label: {
                                     Label {
                                         Text("Начать")
                                     } icon: {
                                         Image(systemName: "arrow.right.square")
                                     }
-
+                                    
                                 }
-
+                                
                             }
                         }
+                        Spacer()
                     }
                 }
-                
-                
-                HStack{
-                    Text("Cоздание приложений")
-                        .font(.title3)
-                    Spacer()
-                }
-                
-                List(blankAppsListVM.appsList){ app in
-                    HStack{
-                        LineItemView(text: app.name, width: 150)
-                        LineItemView(text: app.devLink, width: 150)
-                        LineItemView(text: app.driveLink, width: 150)
-                        NavigationLink {
-                            CreateNewAppView(delegate: self, app: app)
-                        } label: {
-                            Label {
-                                Text("Начать")
-                            } icon: {
-                                Image(systemName: "arrow.right.square")
-                            }
-
-                        }
-
-                    }
-                }
-                Spacer()
             }
             .padding()
         }
@@ -134,6 +144,42 @@ struct BlankAppsListView: View {
     
     func updateList(){
         blankAppsListVM.getAppsList()
+    }
+}
+
+struct PickerFirstCompView: View {
+    @State private var devComp: String
+    var app: BlankAppModel
+    
+    init(app: BlankAppModel) {
+        self.devComp = app.comp
+        self.app = app
+    }
+    
+    var body: some View {
+        Picker("", selection: $devComp) {
+            Text("MM1").tag("MM1")
+            Text("MM2").tag("MM2")
+            Text("MM3").tag("MM3")
+        }
+        .frame(width: 100)
+        .onChange(of: devComp, initial: true) { oldValue, newValue in
+            if oldValue != newValue {
+                FirebaseServices().updateDocument(id: app.id,
+                                                  collection: "newapps",
+                                                  fields: ["comp" : devComp]) { result in
+                    if result {
+                        print("Change COMP - \(newValue)")
+                    }else {
+                        print("Ошибка обновления трастового аккаунта")
+                    }
+                }
+            }
+            
+        }
+        .onTapGesture {
+            print("CLICK")
+        }
     }
 }
 

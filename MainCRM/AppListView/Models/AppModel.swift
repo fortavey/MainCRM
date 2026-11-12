@@ -35,6 +35,7 @@ struct AppModel: Identifiable {
     var isAppBaned: Bool?
     var appType: String?
     var isUAC: Bool?
+    var shortDesc: String
     
     mutating func changeIsAppBanned(_ value: Bool?) {
         self.isAppBaned = value

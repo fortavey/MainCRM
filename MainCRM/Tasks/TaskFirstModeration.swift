@@ -33,6 +33,7 @@ struct TaskFirstModeration: View {
             
             if app.createAccount != "" {
                 Button {
+                    textForTextEditor = app.shortDesc
                     sendCreateTaskRequest()
                 } label: {
                     HStack{

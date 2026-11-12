@@ -21,6 +21,13 @@ struct TaskWebview: View {
     
     var body: some View {
         Text("Создание боевой версии").font(.title2)
+        Picker("Компьютер", selection: $tasksListVM.comp) {
+            ForEach(CompsEnum.allCases, id: \.self) { comp in
+                Text(comp.rawValue).tag(comp)
+            }
+        }
+        .frame(width: 220)
+        .disabled(isIndicator)
         if let link = URL(string: creoLink) {
             Link(destination: link) {
                 Image("GoogleDriveIcon")
@@ -86,7 +93,7 @@ struct TaskWebview: View {
                 "domainLink": domainLink,
                 "devLink": app.driveLink,
                 "webviewDomain": app.webviewDomain ?? "",
-                "devComp": "KRIS",
+                "devComp": tasksListVM.comp.rawValue,
                 "isDone": false
             ], merge: true) { err in
                 if err == nil {

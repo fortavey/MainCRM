@@ -39,6 +39,8 @@ class Helpers {
         case .approve:
             return Color.approve
         case .reject:
+            return Color.orange
+        case .remove:
             return Color.red
         case .publish:
             return Color.blue

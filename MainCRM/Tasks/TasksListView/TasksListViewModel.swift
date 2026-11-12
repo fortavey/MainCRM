@@ -27,6 +27,14 @@ final class TasksListViewModel: ObservableObject {
     var tasksWEBList: [TaskWebViewModel] = []
     var tasksTRList: [TaskTransferModel] = []
     
+    var comp: CompsEnum = .ANNA {
+        willSet {
+            if newValue != comp {
+                objectWillChange.send()
+            }
+        }
+    }
+    
     func isSomeTaskDone() -> Bool {
         let fm = tasksFMList.contains{ $0.isDone }
         let rn = tasksRNList.contains{ $0.isDone }

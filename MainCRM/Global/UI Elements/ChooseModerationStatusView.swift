@@ -12,6 +12,7 @@ enum ModerationStatus: String, CaseIterable {
     case review =  "Модерация"
     case approve = "Одобрено"
     case reject = "Отклон"
+    case remove = "Удалено"
     case publish = "Ожидание публикации"
 }
 
